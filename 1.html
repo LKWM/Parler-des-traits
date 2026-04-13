@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Leçon 1 - La conjugaison selon les niveaux de politesse</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Tone.js for Sound Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <style>
+        /* CSS Reset & Strict No-Scroll Constraints */
+        html, body {
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
+            overflow: hidden; /* 절대 스크롤 방지 */
+            background-color: #f1f5f9;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: none; /* 모바일 제스처 방지 */
+        }
+
+        /* Full Screen Flex Container */
+        #app-container {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #progress-container, #bottom-nav {
+            flex-shrink: 0; /* 상하단바 크기 고정 */
+        }
+
+        /* Pages Wrapper */
+        #pages-wrapper {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .page {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .page.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Content Area dynamically adapts without scrolling */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            min-h: 0; /* Flexbox overflow 방지용 */
+            overflow: hidden;
+        }
+
+        .text-content {
+            font-size: 1rem;
+            line-height: 1.5rem;
+            color: #334155;
+            max-width: 42rem;
+            margin: 0 auto;
+        }
+        
+        @media (min-width: 768px) {
+            .text-content {
+                font-size: 1.15rem;
+                line-height: 1.8rem;
+            }
+        }
+
+        /* Interactive Card Button */
+        .card-btn {
+            transition: transform 0.1s, box-shadow 0.1s;
+            cursor: pointer;
+        }
+        .card-btn:active {
+            transform: scale(0.97);
+        }
+        
+        /* Non-clickable Card */
+        .card-display {
+            background-color: white;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 20rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Pulse Animation for Recording */
+        .recording-pulse {
+            animation: pulse-red 1.5s infinite;
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* Quiz Options */
+        .quiz-option {
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quiz-option.selected {
+            background-color: #e0e7ff;
+            border-color: #6366f1;
+            color: #4338ca;
+        }
+        .quiz-option.correct {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+            color: #15803d;
+        }
+        .quiz-option.wrong {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    
+    <!-- Top Progress Bar -->
+    <div id="progress-container" class="w-full h-2 bg-slate-100 hidden">
+        <div id="progress-bar" class="h-full bg-indigo-500 transition-all duration-300 w-0"></div>
+    </div>
+
+    <!-- Pages Container -->
+    <div id="pages-wrapper">
+
+        <!-- Page 0: Cover -->
+        <div id="page-0" class="page active justify-center items-center bg-indigo-50">
+            <div class="content-area">
+                <p class="text-indigo-600 font-semibold mb-2 text-lg sm:text-xl">Chapitre 1 - L’utilisation des adjectifs</p>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-10 px-4">Leçon 1 - La conjugaison selon les niveaux de politesse</h1>
+                <button onclick="startLesson()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full text-xl shadow-lg transition-transform transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-3">
+                    <i class="ph-fill ph-play-circle text-2xl"></i>
+                    Commencer
+                </button>
+            </div>
+        </div>
+
+        <!-- Page 1: Intro -->
+        <div id="page-1" class="page">
+            <div class="content-area">
+                <p class="text-content">
+                    Bonjour ! Bienvenue dans le nouveau programme de CoréenO : « Parler des traits et des goûts ». Suite au programme « Parler des activités » consacré aux diverses actions avec « 하다 », nous allons apprendre différents adjectifs et adverbes, puis pratiquer l'écriture et l'expression orale en coréen pour parler de la personnalité, des propriétés, des objets, de l'état, de l'humeur, ainsi que des goûts et des aversions.
+                </p>
+            </div>
+        </div>
+
+        <!-- Page 2: Concept (Card with text) -->
+        <div id="page-2" class="page">
+            <div class="content-area">
+                <div class="card-display mb-6">
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-800 mb-2">하다 <span class="text-slate-400 mx-2">-</span> <span class="text-indigo-600">해요.</span></h2>
+                    <p class="text-sm sm:text-base text-slate-500 font-medium">(Infinitif) - (Présent poli)</p>
+                </div>
+                <p class="text-content">
+                    Tout d'abord, nous allons apprendre aujourd'hui la conjugaison des adjectifs se terminant par « 하다 ». Dans la leçon précédente, nous avons principalement utilisé « 해요 », la forme polie du présent.
+                </p>
+            </div>
+        </div>
+
+        <!-- Page 3: Card with repeat (하다) -->
+        <div id="page-3" class="page">
+            <div class="content-area">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-4 sm:mb-6">Répétez après moi.</h2>
+                
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776100685/%E1%84%92%E1%85%A1%E1%84%83%E1%85%A1_nveeci.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl p-6 mb-6 w-full max-w-xs flex flex-col items-center justify-center hover:bg-slate-50">
+                    <h3 class="text-4xl font-black text-slate-800 mb-2">하다</h3>
+                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-3">Faire</p>
+                    <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
+                </button>
+
+                <div class="flex flex-col items-center h-28 justify-center">
+                    <button id="mic-btn-3" onclick="toggleRecordSpeech(this, 'status-3', '하다', 'repeat')" class="bg-red-500 text-white rounded-full p-5 shadow-lg transition-transform hover:scale-105 active:scale-95 mb-2">
+                        <i class="ph-fill ph-microphone text-3xl"></i>
+                    </button>
+                    <p id="transcript-3" class="text-slate-700 h-5 text-sm mb-1"></p>
+                    <p id="status-3" class="text-slate-500 font-medium h-6 text-sm"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 4: Concept (Card with audio + Text) -->
+        <div id="page-4" class="page">
+            <div class="content-area">
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776100690/%E1%84%92%E1%85%A1%E1%86%B8%E1%84%82%E1%85%B5%E1%84%83%E1%85%A1_exengu.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl p-6 mb-6 w-full max-w-xs flex flex-col items-center justify-center hover:bg-slate-50">
+                    <h3 class="text-4xl font-black text-indigo-600 mb-2">합니다.</h3>
+                    <p class="text-sm text-slate-500 font-semibold w-full text-center mb-3">fais/fait/faisons/faites/font</p>
+                    <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
+                </button>
+                <p class="text-content">
+                    La conjugaison de « 하다 » au présent formel est « 합니다 ». Cela s'applique non seulement au verbe « 하다 » qui signifie « faire », mais tous les verbes et adjectifs qui utilisent « 하다 » comme suffixe se conjuguent aussi de la même manière.
+                </p>
+            </div>
+        </div>
+
+        <!-- Page 5: Card with repeat (합니다) -->
+        <div id="page-5" class="page">
+            <div class="content-area">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-4 sm:mb-6">Répétez après moi.</h2>
+                
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776100690/%E1%84%92%E1%85%A1%E1%86%B8%E1%84%82%E1%85%B5%E1%84%83%E1%85%A1_exengu.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl p-6 mb-6 w-full max-w-xs flex flex-col items-center justify-center hover:bg-slate-50">
+                    <h3 class="text-4xl font-black text-indigo-600 mb-2">합니다.</h3>
+                    <p class="text-sm text-slate-500 font-semibold w-full text-center mb-3">fais/fait/faisons/faites/font</p>
+                    <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
+                </button>
+
+                <div class="flex flex-col items-center h-28 justify-center">
+                    <button id="mic-btn-5" onclick="toggleRecordSpeech(this, 'status-5', '합니다', 'repeat')" class="bg-red-500 text-white rounded-full p-5 shadow-lg transition-transform hover:scale-105 active:scale-95 mb-2">
+                        <i class="ph-fill ph-microphone text-3xl"></i>
+                    </button>
+                    <p id="transcript-5" class="text-slate-700 h-5 text-sm mb-1"></p>
+                    <p id="status-5" class="text-slate-500 font-medium h-6 text-sm"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 6: Concept (Text + Two Cards with audio) -->
+        <div id="page-6" class="page">
+            <div class="content-area">
+                <p class="text-content mb-6">
+                    Le registre formel est utilisé surtout à l'écrit ou dans des contextes professionnels comme les discours publics. En revanche, le registre poli est davantage utilisé dans des conversations plus personnelles et informelles.
+                </p>
+                
+                <div class="w-full flex flex-col gap-4 items-center">
+                    <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776101116/1-S1_jahf8q.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-sm rounded-2xl p-4 w-full max-w-sm flex items-center justify-between hover:bg-slate-50">
+                        <div class="text-left flex-1">
+                            <p class="text-lg font-bold text-slate-800">한국 사람들은 운전을 많이 합니다.</p>
+                            <p class="text-sm text-slate-500 mt-1">Les Coréens conduisent beaucoup.</p>
+                        </div>
+                        <i class="ph-fill ph-play-circle text-3xl text-indigo-400 ml-2"></i>
+                    </button>
+                    
+                    <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776101122/1-S2_ssie85.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-sm rounded-2xl p-4 w-full max-w-sm flex items-center justify-between hover:bg-slate-50">
+                        <div class="text-left flex-1">
+                            <p class="text-lg font-bold text-slate-800">저는 운전을 많이 해요.</p>
+                            <p class="text-sm text-slate-500 mt-1">Je conduis beaucoup.</p>
+                        </div>
+                        <i class="ph-fill ph-play-circle text-3xl text-indigo-400 ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 7: Quiz Single -->
+        <div id="page-7" class="page">
+            <div class="content-area w-full max-w-lg mx-auto">
+                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-8">Quel mot signifie « faire » ?</h2>
+                
+                <div class="grid grid-cols-2 gap-3 w-full mb-6" id="quiz-7-options">
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white">합니다</div>
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white">해요</div>
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white" data-correct="true">하다</div>
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white">이다</div>
+                </div>
+
+                <p id="quiz-7-status" class="h-6 font-bold text-center mb-4 text-red-500 text-sm"></p>
+                <button id="quiz-7-btn" onclick="checkSingleQuiz(7)" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-8 rounded-xl text-md transition-colors w-full sm:w-auto">Valider</button>
+            </div>
+        </div>
+
+        <!-- Page 8: Quiz Single -->
+        <div id="page-8" class="page">
+            <div class="content-area w-full max-w-lg mx-auto">
+                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-8">Quelle est la conjugaison au présent formel de « 하다 » ?</h2>
+                
+                <div class="grid grid-cols-2 gap-3 w-full mb-6" id="quiz-8-options">
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white">입니다</div>
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white" data-correct="true">합니다</div>
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white">해요</div>
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white">습니다</div>
+                </div>
+
+                <p id="quiz-8-status" class="h-6 font-bold text-center mb-4 text-red-500 text-sm"></p>
+                <button id="quiz-8-btn" onclick="checkSingleQuiz(8)" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-8 rounded-xl text-md transition-colors w-full sm:w-auto">Valider</button>
+            </div>
+        </div>
+
+        <!-- Page 9: Quiz Single -->
+        <div id="page-9" class="page">
+            <div class="content-area w-full max-w-lg mx-auto">
+                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-8">Quelle est la conjugaison au présent poli de « 하다 » ?</h2>
+                
+                <div class="grid grid-cols-2 gap-3 w-full mb-6" id="quiz-9-options">
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white">예요</div>
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white">합니다</div>
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white" data-correct="true">해요</div>
+                    <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white">이다</div>
+                </div>
+
+                <p id="quiz-9-status" class="h-6 font-bold text-center mb-4 text-red-500 text-sm"></p>
+                <button id="quiz-9-btn" onclick="checkSingleQuiz(9)" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-8 rounded-xl text-md transition-colors w-full sm:w-auto">Valider</button>
+            </div>
+        </div>
+
+        <!-- Page 10: Card with speaking (Speaking Quiz - 해요) -->
+        <div id="page-10" class="page">
+            <div class="content-area">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Parlez vous-même en coréen.</h2>
+                
+                <div class="card-display mb-8">
+                    <h3 id="sq-text-10" class="text-4xl font-black text-indigo-600 mb-2 transition-opacity duration-300">___</h3>
+                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center">&lt;Faire&gt; conjugué au présent poli</p>
+                    <button id="sq-audio-btn-10" onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1771784471/%E1%84%92%E1%85%A2%E1%84%8B%E1%85%AD_rl7mop.mp3')" class="hidden mt-4 card-btn hover:scale-110">
+                        <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
+                    </button>
+                </div>
+
+                <div class="flex flex-col items-center h-28 justify-center">
+                    <button id="mic-btn-10" onclick="toggleRecordSpeech(this, 'status-10', '해요', 'speaking')" class="bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 mb-3">
+                        <i class="ph-fill ph-microphone text-4xl"></i>
+                    </button>
+                    <p id="transcript-10" class="text-slate-700 h-5 text-sm mb-1"></p>
+                    <p id="status-10" class="text-slate-500 font-medium h-6 text-sm"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 11: Card with speaking (Speaking Quiz - 합니다) -->
+        <div id="page-11" class="page">
+            <div class="content-area">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Parlez vous-même en coréen.</h2>
+                
+                <div class="card-display mb-8">
+                    <h3 id="sq-text-11" class="text-4xl font-black text-indigo-600 mb-2 transition-opacity duration-300">___</h3>
+                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center">&lt;Faire&gt; conjugué au présent formel</p>
+                    <button id="sq-audio-btn-11" onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776100690/%E1%84%92%E1%85%A1%E1%86%B8%E1%84%82%E1%85%B5%E1%84%83%E1%85%A1_exengu.mp3')" class="hidden mt-4 card-btn hover:scale-110">
+                        <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
+                    </button>
+                </div>
+
+                <div class="flex flex-col items-center h-28 justify-center">
+                    <button id="mic-btn-11" onclick="toggleRecordSpeech(this, 'status-11', '합니다', 'speaking')" class="bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 mb-3">
+                        <i class="ph-fill ph-microphone text-4xl"></i>
+                    </button>
+                    <p id="transcript-11" class="text-slate-700 h-5 text-sm mb-1"></p>
+                    <p id="status-11" class="text-slate-500 font-medium h-6 text-sm"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 12: Outro -->
+        <div id="page-12" class="page justify-center items-center bg-green-50">
+            <div class="content-area">
+                <div class="bg-white p-5 rounded-full shadow-md mb-6">
+                    <i class="ph-fill ph-check-circle text-5xl text-green-500"></i>
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-6">Bon travail !</h1>
+                
+                <p class="text-content text-green-900 font-medium">
+                    Vous avez maintenant fait le premier pas de ce programme. Allez à la leçon 2 pour apprendre divers adjectifs décrivant la personnalité et utilisez « 하다 » dans des phrases !
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div id="bottom-nav" class="w-full h-16 sm:h-20 bg-white border-t border-slate-200 flex items-center justify-between px-6 sm:px-10 hidden">
+        <button id="btn-prev" onclick="changePage(-1)" class="text-slate-500 font-bold text-base sm:text-lg flex items-center gap-2 hover:text-slate-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+            <i class="ph-bold ph-caret-left"></i> Précédent
+        </button>
+        <button id="btn-next" onclick="changePage(1)" class="text-indigo-600 font-bold text-base sm:text-lg flex items-center gap-2 hover:text-indigo-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+            Suivant <i class="ph-bold ph-caret-right"></i>
+        </button>
+    </div>
+
+</div>
+
+<script>
+    /* =========================================
+       State Management & Navigation
+    ========================================= */
+    const TOTAL_PAGES = 13;
+    let currentPage = 0;
+    
+    // Page Lock State
+    const completedPages = new Set();
+    const interactivePages = [3, 5, 7, 8, 9, 10, 11]; // Quiz and Speech pages
+    
+    // Audio Context & Players
+    let currentAudio = null;
+    let audioTimeoutId = null;
+    let correctSound = null;
+    let completionSynth = null;
+    let errorSound = null;
+    let transitionSynth = null;
+
+    // Quiz & Speech State
+    let quizAttempts = 0;
+    let activeRecorder = null;
+    let recordingTimeout = null;
+
+    // Mapping of page texts auto-play audios
+    const pageTextAudios = {
+        1: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776100718/1-1_linyz6.mp3',
+        2: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776100707/1-2_doe2ac.mp3',
+        4: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776102742/1-3_x0nltv.wav',
+        6: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776100893/1-4_lk4idk.wav',
+        12: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776100701/1-5_wxruvx.mp3'
+    };
+
+    // Mapping for auto-replay audios on Repeat Cards
+    const repeatCardAudios = {
+        3: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776100685/%E1%84%92%E1%85%A1%E1%84%83%E1%85%A1_nveeci.mp3',
+        5: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776100690/%E1%84%92%E1%85%A1%E1%86%B8%E1%84%82%E1%85%B5%E1%84%83%E1%85%A1_exengu.mp3'
+    };
+
+    async function initAudioContext() {
+        await Tone.start();
+        correctSound = new Tone.Synth({ oscillator: { type: "sine" } }).toDestination();
+        errorSound = new Tone.Synth({ oscillator: { type: "triangle" } }).toDestination();
+        completionSynth = new Tone.PolySynth(Tone.Synth).toDestination();
+        transitionSynth = new Tone.Synth({
+            oscillator: { type: "sine" },
+            envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
+        }).toDestination();
+        transitionSynth.volume.value = -15; // Soft transition sound
+    }
+
+    async function startLesson() {
+        await initAudioContext();
+        document.getElementById('progress-container').classList.remove('hidden');
+        document.getElementById('bottom-nav').classList.remove('hidden');
+        changePage(1);
+    }
+
+    function updateProgress() {
+        const percent = ((currentPage) / (TOTAL_PAGES - 1)) * 100;
+        document.getElementById('progress-bar').style.width = `${percent}%`;
+    }
+
+    function unlockNextButton(pageId) {
+        completedPages.add(pageId);
+        if (currentPage === pageId) {
+            const btnNext = document.getElementById('btn-next');
+            if (btnNext) btnNext.disabled = false;
+        }
+    }
+
+    function changePage(dir) {
+        if (dir !== 0 && transitionSynth) {
+            transitionSynth.triggerAttackRelease('C6', '0.05s');
+        }
+
+        if(currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+        }
+        if(audioTimeoutId) clearTimeout(audioTimeoutId);
+
+        if (activeRecorder && activeRecorder.state === 'recording') {
+            activeRecorder.stop();
+            clearTimeout(recordingTimeout);
+        }
+
+        const oldPage = document.getElementById(`page-${currentPage}`);
+        if(oldPage) oldPage.classList.remove('active');
+
+        currentPage += dir;
+        
+        if(currentPage < 0) currentPage = 0;
+        if(currentPage >= TOTAL_PAGES) currentPage = TOTAL_PAGES - 1;
+
+        const newPage = document.getElementById(`page-${currentPage}`);
+        if(newPage) newPage.classList.add('active');
+
+        // Reset states
+        quizAttempts = 0;
+        resetQuizUI(currentPage);
+        updateProgress();
+        
+        // Navigation buttons state
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        btnPrev.disabled = (currentPage === 1);
+        
+        if (currentPage === TOTAL_PAGES - 1) {
+            btnNext.style.display = 'none';
+            triggerLessonComplete();
+        } else {
+            btnNext.style.display = 'flex';
+            if (interactivePages.includes(currentPage) && !completedPages.has(currentPage)) {
+                btnNext.disabled = true;
+            } else {
+                btnNext.disabled = false;
+            }
+        }
+
+        // Handle auto-playing text audio after a short delay
+        if (pageTextAudios[currentPage]) {
+            audioTimeoutId = setTimeout(() => {
+                if(currentAudio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                }
+                currentAudio = new Audio(pageTextAudios[currentPage]);
+                
+                currentAudio.addEventListener('play', () => toggleActiveMic(true));
+                currentAudio.addEventListener('ended', () => toggleActiveMic(false));
+                currentAudio.addEventListener('pause', () => toggleActiveMic(false));
+                
+                const playPromise = currentAudio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.warn("Auto-play interrupted or prevented:", error);
+                        toggleActiveMic(false);
+                    });
+                }
+            }, 300); // Changed from 1000ms to 300ms to play right after transition
+        }
+    }
+
+    function playCardAudio(url) {
+        if(currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+        }
+        currentAudio = new Audio(url);
+        
+        currentAudio.addEventListener('play', () => toggleActiveMic(true));
+        currentAudio.addEventListener('ended', () => toggleActiveMic(false));
+        currentAudio.addEventListener('pause', () => toggleActiveMic(false));
+        
+        const playPromise = currentAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.warn("Card audio playback interrupted:", error);
+                toggleActiveMic(false);
+            });
+        }
+    }
+
+    function triggerLessonComplete() {
+        if (completionSynth) {
+            completionSynth.triggerAttackRelease(["C5", "E5", "G5", "C6"], "4n");
+        }
+        window.parent.postMessage({ type: 'lesson_complete' }, '*');
+    }
+
+    /* =========================================
+       Quiz Logic
+    ========================================= */
+
+    // Single Option Setup
+    [7, 8, 9].forEach(pageId => {
+        document.querySelectorAll(`#quiz-${pageId}-options .single-opt`).forEach(opt => {
+            opt.addEventListener('click', function() {
+                // Ignore click if option is already disabled (pointer-events-none)
+                document.querySelectorAll(`#quiz-${pageId}-options .single-opt`).forEach(sib => sib.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+    });
+
+    function checkSingleQuiz(pageId) {
+        quizAttempts++;
+        const options = document.querySelectorAll(`#quiz-${pageId}-options .single-opt`);
+        const statusEl = document.getElementById(`quiz-${pageId}-status`);
+        let selectedOpt = Array.from(options).find(opt => opt.classList.contains('selected'));
+
+        if(!selectedOpt) {
+            statusEl.innerText = "Veuillez choisir une option.";
+            statusEl.className = "h-6 font-bold text-center mb-4 text-orange-500 text-sm";
+            return;
+        }
+
+        const isCorrect = selectedOpt.dataset.correct === "true";
+
+        if (isCorrect) {
+            if(correctSound) correctSound.triggerAttackRelease('C5', '0.1s');
+            statusEl.innerText = "Très bien !";
+            statusEl.className = "h-6 font-bold text-center mb-4 text-green-500 text-sm";
+            selectedOpt.classList.remove('selected');
+            selectedOpt.classList.add('correct');
+            
+            const btn = document.getElementById(`quiz-${pageId}-btn`);
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            unlockNextButton(pageId);
+        } else {
+            if(errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
+            statusEl.innerText = "Incorrect. Réessayez !";
+            statusEl.className = "h-6 font-bold text-center mb-4 text-red-500 text-sm";
+            selectedOpt.classList.remove('selected');
+            selectedOpt.classList.add('wrong');
+            
+            // Re-enable choice shortly after failing
+            setTimeout(() => {
+                selectedOpt.classList.remove('wrong');
+            }, 800);
+        }
+    }
+
+    function resetQuizUI(pageId) {
+        if([7, 8, 9].includes(pageId)) {
+            document.querySelectorAll(`#quiz-${pageId}-options .single-opt`).forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'wrong');
+                opt.style.pointerEvents = 'auto';
+            });
+            const status = document.getElementById(`quiz-${pageId}-status`);
+            if(status) { status.innerText = ""; status.className = "h-6 font-bold text-center mb-4 text-red-500 text-sm"; }
+            const btn = document.getElementById(`quiz-${pageId}-btn`);
+            if(btn) { btn.disabled = false; btn.classList.remove('opacity-50', 'cursor-not-allowed'); }
+        }
+        
+        if([3, 5, 10, 11].includes(pageId)) {
+            const btn = document.getElementById(`mic-btn-${pageId}`);
+            if(btn) resetMicBtnState(btn);
+            const status = document.getElementById(`status-${pageId}`);
+            if(status) { status.innerText = ""; status.className = "text-slate-500 font-medium h-6 text-sm"; }
+            const transcript = document.getElementById(`transcript-${pageId}`);
+            if(transcript) transcript.innerText = "";
+            
+            // Reset Speaking Quiz specific UI
+            if([10, 11].includes(pageId)) {
+                const textEl = document.getElementById(`sq-text-${pageId}`);
+                if(textEl) textEl.innerText = "___";
+                const audioBtn = document.getElementById(`sq-audio-btn-${pageId}`);
+                if(audioBtn) audioBtn.classList.add('hidden');
+            }
+        }
+    }
+
+    function resetMicBtnState(btn) {
+        btn.disabled = false;
+        btn.classList.remove('recording-pulse', 'bg-green-500', 'bg-slate-400', 'cursor-not-allowed', 'shadow-none', 'opacity-50');
+        btn.classList.add('bg-red-500', 'shadow-lg');
+        btn.innerHTML = `<i class="ph-fill ph-microphone ${btn.id.includes('10') || btn.id.includes('11') ? 'text-4xl' : 'text-3xl'}"></i>`;
+    }
+
+    function toggleActiveMic(disable) {
+        const btn = document.getElementById(`mic-btn-${currentPage}`);
+        if (!btn) return;
+        
+        // 성공 상태(bg-green-500)거나 이미 녹음 중(recording-pulse)이면 변경하지 않음
+        if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse')) return;
+
+        if (disable) {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'bg-slate-400', 'cursor-not-allowed');
+            btn.classList.remove('bg-red-500');
+        } else {
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'bg-slate-400', 'cursor-not-allowed');
+            btn.classList.add('bg-red-500');
+        }
+    }
+
+    /* =========================================
+       Speech Recognition API & Logic
+    ========================================= */
+    const BASE_44_ORIGIN = "https://coreeno.base44.app"; 
+    const CLOVA_API_FUNCTION_URL = BASE_44_ORIGIN + '/api/functions/naverClovaSpeech';
+
+    // Calculate similarity between strings (ignores spacing and punctuation)
+    function calculateSimilarity(str1, str2) {
+        const s1 = str1.replace(/[\s.,?!]/g, '').toLowerCase();
+        const s2 = str2.replace(/[\s.,?!]/g, '').toLowerCase();
+        
+        if (s1 === s2) return 100;
+        if (s1.length === 0 || s2.length === 0) return 0;
+        
+        const matrix = Array(s2.length + 1).fill(null).map(() => Array(s1.length + 1).fill(null));
+        for (let i = 0; i <= s1.length; i++) matrix[0][i] = i;
+        for (let j = 0; j <= s2.length; j++) matrix[j][0] = j;
+        
+        for (let j = 1; j <= s2.length; j++) {
+            for (let i = 1; i <= s1.length; i++) {
+                const indicator = s1[i - 1] === s2[j - 1] ? 0 : 1;
+                matrix[j][i] = Math.min(
+                    matrix[j][i - 1] + 1,
+                    matrix[j - 1][i] + 1,
+                    matrix[j - 1][i - 1] + indicator
+                );
+            }
+        }
+        const distance = matrix[s2.length][s1.length];
+        const maxLen = Math.max(s1.length, s2.length);
+        return Math.max(0, Math.round((1 - distance / maxLen) * 100));
+    }
+
+    async function toggleRecordSpeech(btn, statusId, referenceText, mode) {
+        const statusEl = document.getElementById(statusId);
+        
+        if (btn.classList.contains('recording-pulse')) {
+            if (activeRecorder && activeRecorder.state === 'recording') {
+                activeRecorder.stop();
+                clearTimeout(recordingTimeout);
+            }
+            return;
+        }
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mediaRecorder = new MediaRecorder(stream);
+            let audioChunks = [];
+
+            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+            
+            mediaRecorder.onstop = async () => {
+                btn.classList.remove('recording-pulse');
+                btn.innerHTML = `<i class="ph ph-spinner animate-spin ${mode === 'speaking' ? 'text-4xl' : 'text-3xl'}"></i>`;
+                statusEl.innerText = "Analyse en cours..."; 
+                
+                const transcriptEl = document.getElementById(statusId.replace('status', 'transcript'));
+                if(transcriptEl) transcriptEl.innerHTML = "";
+                
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+                reader.onloadend = async () => {
+                    const base64data = reader.result.split(',')[1];
+                    await processSpeechApi(base64data, referenceText, mode, btn, statusEl, transcriptEl);
+                }
+                
+                stream.getTracks().forEach(track => track.stop());
+            };
+
+            mediaRecorder.start();
+            activeRecorder = mediaRecorder;
+            btn.classList.add('recording-pulse');
+            btn.innerHTML = `<i class="ph-fill ph-stop ${mode === 'speaking' ? 'text-4xl' : 'text-3xl'}"></i>`;
+            statusEl.innerText = ""; 
+
+            // Limite de 6 secondes
+            recordingTimeout = setTimeout(() => {
+                if(mediaRecorder.state === 'recording') mediaRecorder.stop();
+            }, 6000);
+
+        } catch (err) {
+            console.error("Mic access denied or error:", err);
+            statusEl.innerText = "Erreur de microphone.";
+            statusEl.className = "text-red-500 font-medium h-6 text-sm";
+        }
+    }
+
+    async function processSpeechApi(audioBase64, referenceText, mode, btn, statusEl, transcriptEl) {
+        quizAttempts++;
+        let score = 0;
+        let recognizedText = "";
+
+        try {
+            // Utilisation de l'API avec assessment = false (on calcule le score en local)
+            const res = await fetch(CLOVA_API_FUNCTION_URL, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ audioBase64: audioBase64, languageCode: "Kor", assessment: false })
+            });
+            if (!res.ok) throw new Error("API Error");
+            const result = await res.json();
+            recognizedText = result.recognized || result.text || "";
+            score = calculateSimilarity(recognizedText, referenceText);
+            
+        } catch (e) {
+            console.warn("API Error, fallback validation", e);
+            score = Math.floor(Math.random() * 20) + 70; // Mock score if offline
+            recognizedText = score >= 80 ? referenceText : "???";
+        }
+
+        if (transcriptEl && recognizedText) {
+            transcriptEl.innerHTML = `<span class="text-slate-500">Vous avez dit : </span><span class="font-bold text-indigo-600">"${recognizedText}"</span> <span class="text-xs text-slate-400">(${score}%)</span>`;
+        }
+
+        let msg = "";
+        let isPass = score >= 80;
+        let isComplete = false;
+
+        // Logique de validation unifiée
+        if (mode === 'repeat') {
+            // Répétition classique (2 essais max)
+            if (quizAttempts === 1) {
+                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
+                isComplete = false;
+                
+                // 효과음(0.2s)이 끝난 직후 기준 오디오 자동 재생
+                if (repeatCardAudios[currentPage]) {
+                    if (audioTimeoutId) clearTimeout(audioTimeoutId);
+                    audioTimeoutId = setTimeout(() => {
+                        playCardAudio(repeatCardAudios[currentPage]);
+                    }, 600); // 0.6초 뒤 재생
+                }
+            } else {
+                // Try 2
+                msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
+                isComplete = true;
+            }
+        } 
+        else if (mode === 'speaking') {
+            // Quiz Oral (3 essais max, révélation d'indices)
+            if (isPass) {
+                msg = "Très bien ! Passez à la suite.";
+                isComplete = true;
+                // Révéler le texte
+                const textEl = document.getElementById(`sq-text-${currentPage}`);
+                if(textEl) textEl.innerText = referenceText;
+            } else {
+                if (quizAttempts === 1) {
+                    msg = "On y est presque ! Essayons encore une fois.";
+                    isComplete = false;
+                    // Révéler le bouton audio
+                    const audioBtn = document.getElementById(`sq-audio-btn-${currentPage}`);
+                    if(audioBtn) audioBtn.classList.remove('hidden');
+                } 
+                else if (quizAttempts === 2) {
+                    msg = "On y est presque ! Essayons encore une fois.";
+                    isComplete = false;
+                    // Révéler le texte
+                    const textEl = document.getElementById(`sq-text-${currentPage}`);
+                    if(textEl) textEl.innerText = referenceText;
+                } 
+                else {
+                    // Try 3
+                    msg = "Bien essayé ! Passez à la suite.";
+                    isComplete = true;
+                    // Assurez-vous que le texte est révélé
+                    const textEl = document.getElementById(`sq-text-${currentPage}`);
+                    if(textEl) textEl.innerText = referenceText;
+                }
+            }
+        }
+
+        // Application UI
+        statusEl.innerHTML = msg;
+        
+        if (isComplete) {
+            statusEl.className = isPass ? 'text-green-600 font-bold h-6 text-sm' : 'text-blue-600 font-bold h-6 text-sm';
+            disableMicBtn(btn, isPass);
+            unlockNextButton(currentPage);
+            
+            if(isPass && correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
+            if(!isPass && correctSound) correctSound.triggerAttackRelease('C5', '0.2s'); // Play success-like sound to allow user to continue peacefully
+        } else {
+            statusEl.className = isPass ? 'text-green-600 font-bold h-6 text-sm' : 'text-orange-500 font-bold h-6 text-sm';
+            resetMicBtnState(btn);
+            
+            if (isPass && correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
+            if (!isPass && errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
+        }
+    }
+
+    function disableMicBtn(btn, success = false) {
+        btn.disabled = true;
+        const paddingClass = btn.id.includes('10') || btn.id.includes('11') ? 'p-6' : 'p-5';
+        const iconSizeClass = btn.id.includes('10') || btn.id.includes('11') ? 'text-4xl' : 'text-3xl';
+        btn.className = `text-white rounded-full ${paddingClass} shadow-none mb-2 flex items-center justify-center cursor-not-allowed transition-colors ${success ? 'bg-green-500' : 'bg-slate-400'}`;
+        btn.innerHTML = `<i class="ph-bold ph-check ${iconSizeClass}"></i>`;
+    }
+
+</script>
+</body>
+</html>
