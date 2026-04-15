@@ -336,7 +336,7 @@
                 <div class="card-display mb-8">
                     <h3 id="sq-text-10" class="text-4xl font-black text-indigo-600 mb-2 transition-opacity duration-300">___</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center">&lt;Faire&gt; conjugué au présent poli</p>
-                    <button id="sq-audio-btn-10" onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1771784471/%E1%84%92%E1%85%A2%E1%84%8B%E1%85%AD_rl7mop.mp3')" class="hidden mt-4 card-btn hover:scale-110">
+                    <button id="sq-audio-btn-10" onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776100695/%E1%84%92%E1%85%A2%E1%84%8B%E1%85%AD_s3usxk.mp3')" class="hidden mt-4 card-btn hover:scale-110">
                         <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
                     </button>
                 </div>
@@ -409,9 +409,13 @@
     const TOTAL_PAGES = 13;
     let currentPage = 0;
     
-    // Page Lock State
+    // Page Lock & Completion State (Req 6)
     const completedPages = new Set();
     const interactivePages = [3, 5, 7, 8, 9, 10, 11]; // Quiz and Speech pages
+    const pageStates = {};
+    for (let i = 0; i < TOTAL_PAGES; i++) {
+        pageStates[i] = { attempts: 0, completed: false };
+    }
     
     // Audio Context & Players
     let currentAudio = null;
@@ -500,20 +504,26 @@
         const newPage = document.getElementById(`page-${currentPage}`);
         if(newPage) newPage.classList.add('active');
 
-        // Reset states
-        quizAttempts = 0;
-        resetQuizUI(currentPage);
+        // Restore States & UI logic (Req 6)
+        quizAttempts = pageStates[currentPage].attempts;
+        if (quizAttempts === 0) {
+            resetQuizUI(currentPage);
+        }
+        
         updateProgress();
         
         // Navigation buttons state
         const btnPrev = document.getElementById('btn-prev');
         const btnNext = document.getElementById('btn-next');
-        btnPrev.disabled = (currentPage === 1);
         
         if (currentPage === TOTAL_PAGES - 1) {
+            btnPrev.disabled = true; // Req 7: Disable prev on Outro
+            btnPrev.style.display = 'none';
             btnNext.style.display = 'none';
             triggerLessonComplete();
         } else {
+            btnPrev.disabled = (currentPage === 1 || currentPage === 0);
+            btnPrev.style.display = 'flex';
             btnNext.style.display = 'flex';
             if (interactivePages.includes(currentPage) && !completedPages.has(currentPage)) {
                 btnNext.disabled = true;
@@ -522,7 +532,7 @@
             }
         }
 
-        // Handle auto-playing text audio after a short delay
+        // Handle auto-playing audio after a short delay
         if (pageTextAudios[currentPage]) {
             audioTimeoutId = setTimeout(() => {
                 if(currentAudio) {
@@ -536,14 +546,18 @@
                 currentAudio.addEventListener('pause', () => toggleActiveMic(false));
                 
                 const playPromise = currentAudio.play();
-                
                 if (playPromise !== undefined) {
                     playPromise.catch(error => {
                         console.warn("Auto-play interrupted or prevented:", error);
                         toggleActiveMic(false);
                     });
                 }
-            }, 300); // Changed from 1000ms to 300ms to play right after transition
+            }, 300);
+        } else if (repeatCardAudios[currentPage]) {
+            // Req 1: Card with repeat 가 단독으로 있을 때 진입 시 자동 재생
+            audioTimeoutId = setTimeout(() => {
+                playCardAudio(repeatCardAudios[currentPage]);
+            }, 300);
         }
     }
 
@@ -569,9 +583,6 @@
     }
 
     function triggerLessonComplete() {
-        if (completionSynth) {
-            completionSynth.triggerAttackRelease(["C5", "E5", "G5", "C6"], "4n");
-        }
         window.parent.postMessage({ type: 'lesson_complete' }, '*');
     }
 
@@ -583,7 +594,8 @@
     [7, 8, 9].forEach(pageId => {
         document.querySelectorAll(`#quiz-${pageId}-options .single-opt`).forEach(opt => {
             opt.addEventListener('click', function() {
-                // Ignore click if option is already disabled (pointer-events-none)
+                // Ignore click if option is already disabled
+                if (pageStates[pageId].completed) return;
                 document.querySelectorAll(`#quiz-${pageId}-options .single-opt`).forEach(sib => sib.classList.remove('selected'));
                 this.classList.add('selected');
             });
@@ -591,7 +603,11 @@
     });
 
     function checkSingleQuiz(pageId) {
+        if (pageStates[pageId].completed) return; // Prevent double trigger
+        
         quizAttempts++;
+        pageStates[pageId].attempts = quizAttempts; // State record
+        
         const options = document.querySelectorAll(`#quiz-${pageId}-options .single-opt`);
         const statusEl = document.getElementById(`quiz-${pageId}-status`);
         let selectedOpt = Array.from(options).find(opt => opt.classList.contains('selected'));
@@ -605,7 +621,9 @@
         const isCorrect = selectedOpt.dataset.correct === "true";
 
         if (isCorrect) {
-            if(correctSound) correctSound.triggerAttackRelease('C5', '0.1s');
+            pageStates[pageId].completed = true; // State record
+            
+            if(completionSynth) completionSynth.triggerAttackRelease(["C5", "E5", "G5"], "8n"); // Req 4
             statusEl.innerText = "Très bien !";
             statusEl.className = "h-6 font-bold text-center mb-4 text-green-500 text-sm";
             selectedOpt.classList.remove('selected');
@@ -624,7 +642,6 @@
             selectedOpt.classList.remove('selected');
             selectedOpt.classList.add('wrong');
             
-            // Re-enable choice shortly after failing
             setTimeout(() => {
                 selectedOpt.classList.remove('wrong');
             }, 800);
@@ -651,7 +668,6 @@
             const transcript = document.getElementById(`transcript-${pageId}`);
             if(transcript) transcript.innerText = "";
             
-            // Reset Speaking Quiz specific UI
             if([10, 11].includes(pageId)) {
                 const textEl = document.getElementById(`sq-text-${pageId}`);
                 if(textEl) textEl.innerText = "___";
@@ -672,8 +688,8 @@
         const btn = document.getElementById(`mic-btn-${currentPage}`);
         if (!btn) return;
         
-        // 성공 상태(bg-green-500)거나 이미 녹음 중(recording-pulse)이면 변경하지 않음
-        if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse')) return;
+        // 성공 상태, 녹음 중이거나 이미 완료된 페이지면 변경하지 않음
+        if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse') || pageStates[currentPage].completed) return;
 
         if (disable) {
             btn.disabled = true;
@@ -721,6 +737,7 @@
 
     async function toggleRecordSpeech(btn, statusId, referenceText, mode) {
         const statusEl = document.getElementById(statusId);
+        if (pageStates[currentPage].completed) return; // Block trigger if completed
         
         if (btn.classList.contains('recording-pulse')) {
             if (activeRecorder && activeRecorder.state === 'recording') {
@@ -775,12 +792,15 @@
     }
 
     async function processSpeechApi(audioBase64, referenceText, mode, btn, statusEl, transcriptEl) {
+        if (pageStates[currentPage].completed) return;
+        
         quizAttempts++;
+        pageStates[currentPage].attempts = quizAttempts; // State record
+        
         let score = 0;
         let recognizedText = "";
 
         try {
-            // Utilisation de l'API avec assessment = false (on calcule le score en local)
             const res = await fetch(CLOVA_API_FUNCTION_URL, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ audioBase64: audioBase64, languageCode: "Kor", assessment: false })
@@ -792,7 +812,7 @@
             
         } catch (e) {
             console.warn("API Error, fallback validation", e);
-            score = Math.floor(Math.random() * 20) + 70; // Mock score if offline
+            score = Math.floor(Math.random() * 20) + 70; // Mock score
             recognizedText = score >= 80 ? referenceText : "???";
         }
 
@@ -804,70 +824,77 @@
         let isPass = score >= 80;
         let isComplete = false;
 
-        // Logique de validation unifiée
+        // Logique de validation
         if (mode === 'repeat') {
-            // Répétition classique (2 essais max)
             if (quizAttempts === 1) {
                 msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
                 
-                // 효과음(0.2s)이 끝난 직후 기준 오디오 자동 재생
                 if (repeatCardAudios[currentPage]) {
                     if (audioTimeoutId) clearTimeout(audioTimeoutId);
                     audioTimeoutId = setTimeout(() => {
                         playCardAudio(repeatCardAudios[currentPage]);
-                    }, 600); // 0.6초 뒤 재생
+                    }, 600); 
                 }
             } else {
-                // Try 2
                 msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
                 isComplete = true;
             }
         } 
         else if (mode === 'speaking') {
-            // Quiz Oral (3 essais max, révélation d'indices)
+            const audioBtn = document.getElementById(`sq-audio-btn-${currentPage}`);
+            const textEl = document.getElementById(`sq-text-${currentPage}`);
+            
             if (isPass) {
                 msg = "Très bien ! Passez à la suite.";
                 isComplete = true;
-                // Révéler le texte
-                const textEl = document.getElementById(`sq-text-${currentPage}`);
+                // Req 2: 성공시 회차 무관 텍스트/오디오 모두 공개
                 if(textEl) textEl.innerText = referenceText;
+                if(audioBtn) audioBtn.classList.remove('hidden');
             } else {
                 if (quizAttempts === 1) {
                     msg = "On y est presque ! Essayons encore une fois.";
                     isComplete = false;
-                    // Révéler le bouton audio
-                    const audioBtn = document.getElementById(`sq-audio-btn-${currentPage}`);
-                    if(audioBtn) audioBtn.classList.remove('hidden');
+                    // 오디오 버튼 공개 및 자동 재생 (Req 3)
+                    if(audioBtn) {
+                        audioBtn.classList.remove('hidden');
+                        const audioUrl = audioBtn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                        if (audioTimeoutId) clearTimeout(audioTimeoutId);
+                        audioTimeoutId = setTimeout(() => {
+                            playCardAudio(audioUrl);
+                        }, 600); // 에러 사운드 후 재생
+                    }
                 } 
                 else if (quizAttempts === 2) {
                     msg = "On y est presque ! Essayons encore une fois.";
                     isComplete = false;
-                    // Révéler le texte
-                    const textEl = document.getElementById(`sq-text-${currentPage}`);
                     if(textEl) textEl.innerText = referenceText;
                 } 
                 else {
-                    // Try 3
                     msg = "Bien essayé ! Passez à la suite.";
                     isComplete = true;
-                    // Assurez-vous que le texte est révélé
-                    const textEl = document.getElementById(`sq-text-${currentPage}`);
                     if(textEl) textEl.innerText = referenceText;
+                    if(audioBtn) audioBtn.classList.remove('hidden');
                 }
             }
         }
 
-        // Application UI
+        // UI 적용 및 피드백
         statusEl.innerHTML = msg;
         
         if (isComplete) {
+            pageStates[currentPage].completed = true; // State record
+            
             statusEl.className = isPass ? 'text-green-600 font-bold h-6 text-sm' : 'text-blue-600 font-bold h-6 text-sm';
             disableMicBtn(btn, isPass);
             unlockNextButton(currentPage);
             
-            if(isPass && correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
-            if(!isPass && correctSound) correctSound.triggerAttackRelease('C5', '0.2s'); // Play success-like sound to allow user to continue peacefully
+            // Req 4: 최종 통과 시 특별한 효과음
+            if(isPass && completionSynth) {
+                completionSynth.triggerAttackRelease(["C5", "E5", "G5"], "8n");
+            } else if (!isPass && correctSound) {
+                correctSound.triggerAttackRelease('C5', '0.2s'); // 탈락이나 다음으로 넘어갈 때는 기본음
+            }
         } else {
             statusEl.className = isPass ? 'text-green-600 font-bold h-6 text-sm' : 'text-orange-500 font-bold h-6 text-sm';
             resetMicBtnState(btn);
