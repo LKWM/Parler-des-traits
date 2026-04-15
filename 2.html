@@ -417,7 +417,7 @@
             </div>
         </div>
 
-        <!-- Page 16: Single Card with repeat (S1) -->
+        <!-- Page 16: Single Card with repeat (S1) - Different Condition (repeat_sentence) -->
         <div id="page-16" class="page">
             <div class="content-area">
                 <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
@@ -429,7 +429,7 @@
                 </button>
 
                 <div class="flex flex-col items-center h-28 justify-center">
-                    <button id="mic-btn-16" onclick="toggleRecordSpeech(this, 'status-16', '언니는 조용해요', 'repeat')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 mb-2">
+                    <button id="mic-btn-16" onclick="toggleRecordSpeech(this, 'status-16', '언니는 조용해요', 'repeat_sentence')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 mb-2">
                         <i class="ph-fill ph-microphone text-4xl"></i>
                     </button>
                     <p id="transcript-16" class="text-slate-700 h-5 text-sm mb-1"></p>
@@ -438,7 +438,7 @@
             </div>
         </div>
 
-        <!-- Page 17: Single Card with repeat (S2) -->
+        <!-- Page 17: Single Card with repeat (S2) - Different Condition (repeat_sentence) -->
         <div id="page-17" class="page">
             <div class="content-area">
                 <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
@@ -450,7 +450,7 @@
                 </button>
 
                 <div class="flex flex-col items-center h-28 justify-center">
-                    <button id="mic-btn-17" onclick="toggleRecordSpeech(this, 'status-17', '친구는 똑똑해요', 'repeat')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 mb-2">
+                    <button id="mic-btn-17" onclick="toggleRecordSpeech(this, 'status-17', '친구는 똑똑해요', 'repeat_sentence')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 mb-2">
                         <i class="ph-fill ph-microphone text-4xl"></i>
                     </button>
                     <p id="transcript-17" class="text-slate-700 h-5 text-sm mb-1"></p>
@@ -791,7 +791,7 @@
             if(status) status.innerText = "";
         }
 
-        // Speech Mics (Standardized formatting for all single cards)
+        // Speech Mics
         const mics = document.querySelectorAll(`#page-${pageId} .mic-req`);
         mics.forEach(btn => resetMicBtnState(btn));
         
@@ -1118,7 +1118,7 @@
         }
 
         let msg = "";
-        let targetThreshold = mode === 'speaking_fill' ? 85 : 80;
+        let targetThreshold = (mode === 'speaking_fill') ? 85 : 80;
         let isPass = score >= targetThreshold;
         let isComplete = false;
 
@@ -1130,7 +1130,6 @@
                 // Extract audio url dynamically from the sibling play button if exists
                 const cardParent = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                 let playBtn = null;
-                // Identify correct play button by matching string
                 cardParent.forEach(b => {
                     const textContent = b.querySelector('h3').innerText.trim();
                     if(textContent === referenceData || textContent.includes(referenceData)) {
@@ -1148,6 +1147,36 @@
                 isComplete = true;
             }
         } 
+        else if (mode === 'repeat_sentence') {
+            if (isPass) {
+                msg = "Très bien !";
+                isComplete = true;
+            } else {
+                if (currentAttempts === 1) {
+                    msg = "On y est presque !";
+                    isComplete = false;
+                    
+                    // Extract audio url dynamically from the sibling play button if exists
+                    const cardParent = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
+                    let playBtn = null;
+                    cardParent.forEach(b => {
+                        const textContent = b.querySelector('h3').innerText.trim();
+                        if(textContent === referenceData || textContent.includes(referenceData)) {
+                            playBtn = b;
+                        }
+                    });
+
+                    if(playBtn) {
+                        const audioUrl = playBtn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                        if (audioTimeoutId) clearTimeout(audioTimeoutId);
+                        audioTimeoutId = setTimeout(() => { playCardAudio(audioUrl); }, 600);
+                    }
+                } else {
+                    msg = "Bien essayé !";
+                    isComplete = true;
+                }
+            }
+        }
         else if (mode === 'speaking_fill') {
             const textEl = document.getElementById(`sq-text-${currentPage}`);
             const answerStr = Array.isArray(referenceData) ? referenceData.join(" / ") : referenceData;
