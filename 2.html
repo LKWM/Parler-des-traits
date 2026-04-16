@@ -768,6 +768,12 @@
         const btnNext = document.getElementById('btn-next');
         
         if (currentPage === TOTAL_PAGES - 1) {
+            // Outro 진입 시 축하 효과음 재생
+            if (completionSynth && dir > 0) {
+                setTimeout(() => {
+                    completionSynth.triggerAttackRelease(["C5", "E5", "G5", "C6"], "2n");
+                }, 100);
+            }
             btnPrev.disabled = true;
             btnPrev.style.display = 'none';
             btnNext.style.display = 'none';
@@ -1084,7 +1090,12 @@
             statusEl.className = "absolute inset-0 font-bold text-center text-green-500 text-sm w-full transition-colors";
             inputEl.disabled = true;
             inputEl.classList.add('text-green-600', 'border-green-500');
-            document.getElementById(`write-btn-${pageId}`).disabled = true;
+            
+            // Valider 버튼 시각적 비활성화 추가
+            const btn = document.getElementById(`write-btn-${pageId}`);
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            
             unlockNextButton(pageId);
         } else {
             if(errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
@@ -1095,7 +1106,12 @@
                 inputEl.value = correctAnswersArray[0];
                 inputEl.disabled = true;
                 inputEl.classList.add('text-blue-600', 'border-blue-500');
-                document.getElementById(`write-btn-${pageId}`).disabled = true;
+                
+                // 정답 공개 시에도 Valider 버튼 시각적 비활성화 추가
+                const btn = document.getElementById(`write-btn-${pageId}`);
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                
                 unlockNextButton(pageId);
             } else {
                 statusEl.innerText = "Incorrect. Réessayez !";
