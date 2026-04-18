@@ -1162,13 +1162,33 @@
         let isPass = score >= targetThreshold;
         let isComplete = false;
 
-        if (mode === 'repeat' || mode === 'repeat_sentence') {
+        if (mode === 'repeat') {
+            // 단어 카드: 점수 무관하게 무조건 2회 시도
+            if (currentAttempts === 1) {
+                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
+                isComplete = false;
+                
+                // Extract audio url dynamically from the sibling play button if exists
+                const container = btn.closest('.content-area') || btn.closest('.flex');
+                const playBtn = container.querySelector('button[onclick^="playCardAudio"]');
+
+                if(playBtn) {
+                    const audioUrl = playBtn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                    if (audioTimeoutId) clearTimeout(audioTimeoutId);
+                    audioTimeoutId = setTimeout(() => { playCardAudio(audioUrl); }, 600);
+                }
+            } else {
+                msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
+                isComplete = true;
+            }
+        } else if (mode === 'repeat_sentence') {
+            // 문장 카드 (S3~S6): 80점 이상 시 즉시 통과, 실패 시 최대 2회 시도
             if (isPass) {
-                msg = "Très bien !";
+                msg = "Très bien ! Passez à la suite.";
                 isComplete = true;
             } else {
                 if (currentAttempts === 1) {
-                    msg = "On y est presque !";
+                    msg = "On y est presque ! Essayons encore une fois.";
                     isComplete = false;
                     
                     // Extract audio url dynamically from the sibling play button if exists
@@ -1181,7 +1201,7 @@
                         audioTimeoutId = setTimeout(() => { playCardAudio(audioUrl); }, 600);
                     }
                 } else {
-                    msg = "Bien essayé !";
+                    msg = "Bien essayé ! Passez à la suite.";
                     isComplete = true;
                 }
             }
