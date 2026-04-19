@@ -260,8 +260,8 @@
                     </button>
                 </div>
 
-                <!-- Dropzone -->
-                <div id="builder-7-selected" class="flex flex-wrap items-center gap-3 min-h-[4rem] p-3 border-b-4 border-slate-300 w-full mb-6">
+                <!-- Dropzone (고정 높이로 밀림 방지) -->
+                <div id="builder-7-selected" class="flex flex-wrap items-start content-start gap-3 h-20 sm:h-24 p-3 border-b-4 border-slate-300 w-full mb-6 overflow-hidden">
                 </div>
 
                 <!-- Options -->
@@ -278,9 +278,9 @@
                     <button class="word-btn" onclick="handleWordClick(this, 7)">intelligent</button>
                 </div>
 
-                <div class="relative w-full flex flex-col items-center mt-2 mb-4">
+                <div class="relative w-full flex flex-col items-center mt-2 mb-4 h-6">
                     <p class="invisible font-bold text-center text-base w-full">Très bien !</p>
-                    <p id="builder-7-status" class="absolute inset-0 font-bold text-center text-base w-full"></p>
+                    <p id="builder-7-status" class="absolute inset-0 font-bold text-center text-base w-full transition-colors"></p>
                 </div>
                 
                 <button id="builder-7-btn" onclick="checkBuilderQuiz(7, ['la', 'maison', 'est', 'propre'])" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 px-10 rounded-xl text-lg transition-colors w-full sm:w-auto shadow-md">Valider</button>
@@ -291,9 +291,13 @@
         <div id="page-8" class="page">
             <div class="content-area w-full max-w-lg mx-auto">
                 <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-8">Choisissez le bon mot pour compléter la phrase.</h2>
-                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8 w-full">
+                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8 w-full flex flex-col items-center">
                     <p class="text-2xl font-bold text-indigo-900">[ 사과가 ____. ]</p>
-                    <p id="quiz-8-trad" class="text-base font-medium text-slate-500 mt-3 hidden">Trad : La pomme est dure</p>
+                    <!-- 미리 공간 확보해 밀림 방지 -->
+                    <div class="relative w-full mt-3 h-6">
+                        <p class="invisible text-base font-medium text-center w-full">Trad : La pomme est dure</p>
+                        <p id="quiz-8-trad" class="absolute inset-0 text-base font-medium text-slate-500 text-center w-full opacity-0 transition-opacity duration-300">Trad : La pomme est dure</p>
+                    </div>
                 </div>
                 
                 <div class="flex flex-col gap-4 w-full mb-8" id="quiz-8-options">
@@ -303,9 +307,9 @@
                     <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-5 font-bold text-lg text-slate-700 bg-white">깨끗입니다</div>
                 </div>
 
-                <div class="relative w-full flex flex-col items-center mt-2 mb-4">
+                <div class="relative w-full flex flex-col items-center mt-2 mb-4 h-6">
                     <p class="invisible font-bold text-center text-base w-full">Très bien !</p>
-                    <p id="quiz-8-status" class="absolute inset-0 font-bold text-center text-base w-full"></p>
+                    <p id="quiz-8-status" class="absolute inset-0 font-bold text-center text-base w-full transition-colors"></p>
                 </div>
                 
                 <button id="quiz-8-btn" onclick="checkFillQuiz(8)" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 px-10 rounded-xl text-lg transition-colors w-full sm:w-auto shadow-md">Valider</button>
@@ -444,8 +448,8 @@
                     </button>
                 </div>
 
-                <!-- Dropzone -->
-                <div id="builder-13-selected" class="flex flex-wrap items-center gap-3 min-h-[4rem] p-3 border-b-4 border-slate-300 w-full mb-6">
+                <!-- Dropzone (고정 높이로 밀림 방지) -->
+                <div id="builder-13-selected" class="flex flex-wrap items-start content-start gap-3 h-20 sm:h-24 p-3 border-b-4 border-slate-300 w-full mb-6 overflow-hidden">
                 </div>
 
                 <!-- Options -->
@@ -465,9 +469,9 @@
                     <button class="word-btn" onclick="handleWordClick(this, 13)">propre</button>
                 </div>
 
-                <div class="relative w-full flex flex-col items-center mt-2 mb-4">
+                <div class="relative w-full flex flex-col items-center mt-2 mb-4 h-6">
                     <p class="invisible font-bold text-center text-base w-full">Très bien !</p>
-                    <p id="builder-13-status" class="absolute inset-0 font-bold text-center text-base w-full"></p>
+                    <p id="builder-13-status" class="absolute inset-0 font-bold text-center text-base w-full transition-colors"></p>
                 </div>
                 
                 <button id="builder-13-btn" onclick="checkBuilderQuiz(13, ['La', 'chambre', 'est', 'fraîche'])" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 px-10 rounded-xl text-lg transition-colors w-full sm:w-auto shadow-md">Valider</button>
@@ -478,9 +482,13 @@
         <div id="page-14" class="page">
             <div class="content-area w-full max-w-lg mx-auto">
                 <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-8">Choisissez le bon mot pour compléter la phrase.</h2>
-                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8 w-full">
+                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8 w-full flex flex-col items-center">
                     <p class="text-2xl font-bold text-indigo-900">[ 우유가 ____. ]</p>
-                    <p id="quiz-14-trad" class="text-base font-medium text-slate-500 mt-3 hidden">Trad : Le lait est frais.</p>
+                    <!-- 미리 공간 확보해 밀림 방지 -->
+                    <div class="relative w-full mt-3 h-6">
+                        <p class="invisible text-base font-medium text-center w-full">Trad : Le lait est frais.</p>
+                        <p id="quiz-14-trad" class="absolute inset-0 text-base font-medium text-slate-500 text-center w-full opacity-0 transition-opacity duration-300">Trad : Le lait est frais.</p>
+                    </div>
                 </div>
                 
                 <div class="flex flex-col gap-4 w-full mb-8" id="quiz-14-options">
@@ -491,9 +499,9 @@
                     <div class="quiz-option single-opt border-2 border-slate-200 rounded-xl p-5 font-bold text-lg text-slate-700 bg-white">깨끗합니다</div>
                 </div>
 
-                <div class="relative w-full flex flex-col items-center mt-2 mb-4">
+                <div class="relative w-full flex flex-col items-center mt-2 mb-4 h-6">
                     <p class="invisible font-bold text-center text-base w-full">Très bien !</p>
-                    <p id="quiz-14-status" class="absolute inset-0 font-bold text-center text-base w-full"></p>
+                    <p id="quiz-14-status" class="absolute inset-0 font-bold text-center text-base w-full transition-colors"></p>
                 </div>
                 
                 <button id="quiz-14-btn" onclick="checkFillQuiz(14)" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 px-10 rounded-xl text-lg transition-colors w-full sm:w-auto shadow-md">Valider</button>
@@ -862,7 +870,7 @@
             const status = document.getElementById(`quiz-${pageId}-status`);
             if(status) { status.innerText = ""; status.className = "absolute inset-0 font-bold text-center text-base w-full transition-colors"; }
             const trad = document.getElementById(`quiz-${pageId}-trad`);
-            if(trad) trad.classList.add('hidden');
+            if(trad) trad.classList.add('opacity-0');
         }
         
         // Builder Quizzes (7, 13)
@@ -870,13 +878,16 @@
             const selectedContainer = document.getElementById(`builder-${pageId}-selected`);
             const optionsContainer = document.getElementById(`builder-${pageId}-options`);
             if (selectedContainer && optionsContainer) {
-                Array.from(selectedContainer.children).forEach(btn => {
-                    btn.classList.remove('in-slot');
-                    optionsContainer.appendChild(btn);
+                selectedContainer.innerHTML = '';
+                Array.from(optionsContainer.children).forEach(btn => {
+                    btn.classList.remove('invisible');
+                    btn.style.pointerEvents = 'auto';
                 });
             }
             const status = document.getElementById(`builder-${pageId}-status`);
             if(status) { status.innerText = ""; status.className = "absolute inset-0 font-bold text-center text-base w-full transition-colors"; }
+            const btn = document.getElementById(`builder-${pageId}-btn`);
+            if(btn) { btn.disabled = false; btn.classList.remove('opacity-50', 'cursor-not-allowed'); }
         }
 
         // Speech Mics
@@ -903,15 +914,23 @@
     function handleWordClick(btn, pageId) {
         if (pageStates[pageId].completed) return;
         const selectedContainer = document.getElementById(`builder-${pageId}-selected`);
-        const optionsContainer = document.getElementById(`builder-${pageId}-options`);
 
-        if (btn.parentElement === optionsContainer) {
-            btn.classList.add('in-slot');
-            selectedContainer.appendChild(btn);
-        } else {
-            btn.classList.remove('in-slot');
-            optionsContainer.appendChild(btn);
-        }
+        // 원본 버튼을 투명하게 만들어 레이아웃 공간은 그대로 유지
+        btn.classList.add('invisible');
+        
+        // 상단 드롭존에 새 버튼 생성 (클론)
+        const clone = document.createElement('button');
+        clone.className = 'word-btn in-slot';
+        clone.innerText = btn.innerText;
+        
+        // 상단 드롭존 단어 클릭 시 다시 제거하고 원래 버튼 복구
+        clone.onclick = function() {
+            if (pageStates[pageId].completed) return;
+            selectedContainer.removeChild(clone);
+            btn.classList.remove('invisible');
+        };
+        
+        selectedContainer.appendChild(clone);
     }
 
     function checkBuilderQuiz(pageId, expectedArray) {
@@ -941,7 +960,10 @@
             statusEl.className = "absolute inset-0 font-bold text-center text-green-500 text-base w-full transition-colors";
             validerBtn.disabled = true;
             validerBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            // 모든 버튼 잠금
             Array.from(selectedContainer.children).forEach(btn => btn.style.pointerEvents = 'none');
+            Array.from(optionsContainer.children).forEach(btn => btn.style.pointerEvents = 'none');
             unlockNextButton(pageId);
         } else {
             if(errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
@@ -952,21 +974,25 @@
                 statusEl.innerText = "Voici la bonne réponse.";
                 statusEl.className = "absolute inset-0 font-bold text-center text-blue-500 text-base w-full transition-colors";
                 
-                // Move everything back first
-                Array.from(selectedContainer.children).forEach(btn => {
-                    btn.classList.remove('in-slot');
-                    optionsContainer.appendChild(btn);
-                });
+                // Clear and restore
+                selectedContainer.innerHTML = '';
+                Array.from(optionsContainer.children).forEach(b => b.classList.remove('invisible'));
                 
                 // Construct the correct answer
                 expectedArray.forEach(word => {
-                    const btn = Array.from(optionsContainer.children).find(b => b.innerText.trim().toLowerCase() === word.toLowerCase());
-                    if (btn) {
-                        btn.classList.add('in-slot');
-                        btn.style.pointerEvents = 'none';
-                        selectedContainer.appendChild(btn);
+                    const originalBtn = Array.from(optionsContainer.children).find(b => 
+                        !b.classList.contains('invisible') && b.innerText.trim().toLowerCase() === word.toLowerCase()
+                    );
+                    if (originalBtn) {
+                        originalBtn.classList.add('invisible');
+                        const clone = document.createElement('button');
+                        clone.className = 'word-btn in-slot';
+                        clone.innerText = originalBtn.innerText;
+                        clone.style.pointerEvents = 'none';
+                        selectedContainer.appendChild(clone);
                     }
                 });
+                
                 // Disable remaining options
                 Array.from(optionsContainer.children).forEach(btn => btn.style.pointerEvents = 'none');
                 validerBtn.disabled = true;
@@ -976,12 +1002,10 @@
             } else {
                 statusEl.innerText = "Incorrect. Réessayez !";
                 statusEl.className = "absolute inset-0 font-bold text-center text-red-500 text-base w-full transition-colors";
-                // Reset DOM
+                // Reset DOM on error
                 setTimeout(() => {
-                    Array.from(selectedContainer.children).forEach(btn => {
-                        btn.classList.remove('in-slot');
-                        optionsContainer.appendChild(btn);
-                    });
+                    selectedContainer.innerHTML = '';
+                    Array.from(optionsContainer.children).forEach(b => b.classList.remove('invisible'));
                 }, 800);
             }
         }
@@ -1024,7 +1048,8 @@
             statusEl.className = "absolute inset-0 font-bold text-center text-green-500 text-base w-full transition-colors";
             selectedOpt.classList.remove('selected');
             selectedOpt.classList.add('correct');
-            if(tradEl) tradEl.classList.remove('hidden');
+            
+            if(tradEl) tradEl.classList.remove('opacity-0'); // 번역 텍스트 공개
             
             const btn = document.getElementById(`quiz-${pageId}-btn`);
             btn.disabled = true; btn.classList.add('opacity-50', 'cursor-not-allowed');
@@ -1034,7 +1059,7 @@
             if(errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
             
             if (quizAttempts >= 2 && tradEl) {
-                tradEl.classList.remove('hidden');
+                tradEl.classList.remove('opacity-0'); // 2회 오답시 번역 텍스트 공개
             }
 
             statusEl.innerText = "Incorrect. Réessayez !";
@@ -1168,7 +1193,7 @@
                 msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
                 
-                // Extract audio url dynamically from the sibling play button if exists
+                // 자동 재생 처리
                 const container = btn.closest('.content-area') || btn.closest('.flex');
                 const playBtn = container.querySelector('button[onclick^="playCardAudio"]');
 
@@ -1191,7 +1216,6 @@
                     msg = "On y est presque ! Essayons encore une fois.";
                     isComplete = false;
                     
-                    // Extract audio url dynamically from the sibling play button if exists
                     const container = btn.closest('.content-area') || btn.closest('.flex');
                     const playBtn = container.querySelector('button[onclick^="playCardAudio"]');
 
