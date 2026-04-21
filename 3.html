@@ -255,14 +255,14 @@
         </div>
 
         <!-- ══════════════════════════════
-             PAGE 7 — Word-order : 집이 깨끗합니다. → La maison est propre.
+             PAGE 7 — Word-order : 저는 행복합니다. → Je suis heureux.
         ══════════════════════════════ -->
         <div id="page-7" class="page">
             <div class="content-area gap-3">
                 <h2 class="consigne">Traduisez la phrase en français.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267530/3-s1_grlnpj.mp3')"
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776689716/4-S1_wl33ds.mp3')"
                     class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
-                    <h3 class="text-xl sm:text-2xl font-black text-slate-800">집이 깨끗합니다.</h3>
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-800">저는 행복합니다.</h3>
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
                 </button>
                 <div id="answer-area-7" class="flex flex-wrap justify-center gap-2 min-h-[3rem] mt-1 px-2"></div>
@@ -270,18 +270,16 @@
                     <button class="word-token" onclick="placeToken(this,7)">suis</button>
                     <button class="word-token" onclick="placeToken(this,7)">dur</button>
                     <button class="word-token" onclick="placeToken(this,7)">est</button>
-                    <button class="word-token" onclick="placeToken(this,7)">propre</button>
-                    <button class="word-token" onclick="placeToken(this,7)">la</button>
-                    <button class="word-token" onclick="placeToken(this,7)">maison</button>
-                    <button class="word-token" onclick="placeToken(this,7)">le</button>
-                    <button class="word-token" onclick="placeToken(this,7)">livre</button>
-                    <button class="word-token" onclick="placeToken(this,7)">des</button>
-                    <button class="word-token" onclick="placeToken(this,7)">intelligent</button>
+                    <button class="word-token" onclick="placeToken(this,7)">heureux</button>
+                    <button class="word-token" onclick="placeToken(this,7)">je</button>
+                    <button class="word-token" onclick="placeToken(this,7)">tu</button>
+                    <button class="word-token" onclick="placeToken(this,7)">fatigué</button>
+                    <button class="word-token" onclick="placeToken(this,7)">être</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="word-status-7" class="font-bold text-sm text-center w-full transition-colors"></p>
                 </div>
-                <button id="word-btn-7" onclick="checkWordOrder(7,['la','maison','est','propre'])"
+                <button id="word-btn-7" onclick="checkWordOrder(7,['je','suis','heureux'])"
                     class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
                     Valider
                 </button>
@@ -748,7 +746,7 @@
 
             // Word-order pages: auto-play sentence audio
             if (currentPage === 7) {
-                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267530/3-s1_grlnpj.mp3'), 300);
+                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776689716/4-S1_wl33ds.mp3'), 300);
             }
             if (currentPage === 14) {
                 audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267532/3-S2_kni0nt.mp3'), 300);
