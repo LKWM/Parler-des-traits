@@ -214,10 +214,10 @@
         <div id="page-5" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776689749/%E1%84%91%E1%85%B5%E1%84%80%E1%85%A9%E1%86%ABv_twikym.mp3')"
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776689742/%E1%84%91%E1%85%B5%E1%84%80%E1%85%A9%E1%86%ABf_pvkcg6.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">피곤합니다.</h3>
-                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est heureux.</p>
+                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est fatigué.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
                 <button id="mic-btn-5" onclick="toggleRecordSpeech(this,'status-5','피곤합니다','repeat')"
@@ -278,7 +278,7 @@
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="word-status-7" class="font-bold text-sm text-center w-full transition-colors"></p>
                 </div>
-                <button id="word-btn-7" onclick="checkWordOrder(7,['je','suis','heureux'])"
+                <button id="word-btn-7" onclick="checkWordOrder(7, wordAnswers[7])"
                     class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
                     Valider
                 </button>
@@ -298,10 +298,10 @@
                 <!-- Trad placeholder — always reserves space -->
                 <p id="trad-8" class="text-slate-400 italic text-sm" style="min-height:1.25rem;"></p>
                 <div id="quiz-8-options" class="quiz-grid grid grid-cols-2 gap-3 w-full max-w-sm">
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">아빠는 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">엄마는 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">엄마가 피곤이에요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">아빠를 피곤합니다.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false" onclick="selectQuizOpt(this,8)">아빠는 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true" onclick="selectQuizOpt(this,8)">엄마는 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false" onclick="selectQuizOpt(this,8)">엄마가 피곤이에요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false" onclick="selectQuizOpt(this,8)">아빠를 피곤합니다.</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="quiz-8-status" class="font-bold text-center text-sm w-full transition-colors"></p>
@@ -460,7 +460,7 @@
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="word-status-14" class="font-bold text-sm text-center w-full transition-colors"></p>
                 </div>
-                <button id="word-btn-14" onclick="checkWordOrder(14,[\"L'\",\"étudiant\",\"n'\",\"est\",\"pas\",\"libre\"])"
+                <button id="word-btn-14" onclick="checkWordOrder(14, wordAnswers[14])"
                     class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
                     Valider
                 </button>
@@ -479,10 +479,10 @@
                 <!-- Trad placeholder — always reserves space -->
                 <p id="trad-15" class="text-slate-400 italic text-sm" style="min-height:1.25rem;">Je suis ennuyé maintenant.</p>
                 <div id="quiz-15-options" class="quiz-grid grid grid-cols-2 gap-3 w-full max-w-sm">
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">심심합니다</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">딱딱해요</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">심심하요</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">딱딱하다예요</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true" onclick="selectQuizOpt(this,15)">심심합니다</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false" onclick="selectQuizOpt(this,15)">딱딱해요</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false" onclick="selectQuizOpt(this,15)">심심하요</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false" onclick="selectQuizOpt(this,15)">딱딱하다예요</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="quiz-15-status" class="font-bold text-center text-sm w-full transition-colors"></p>
@@ -654,7 +654,7 @@
     const repeatCardAudios = {
         3:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776689763/%E1%84%92%E1%85%A2%E1%86%BC%E1%84%87%E1%85%A9%E1%86%A8f_ofbic7.mp3',
         4:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776689766/%E1%84%92%E1%85%A2%E1%86%BC%E1%84%87%E1%85%A9%E1%86%A8p_ihreli.mp3',
-        5:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776689749/%E1%84%91%E1%85%B5%E1%84%80%E1%85%A9%E1%86%ABv_twikym.mp3',
+        5:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776689742/%E1%84%91%E1%85%B5%E1%84%80%E1%85%A9%E1%86%ABf_pvkcg6.mp3',
         6:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776689745/%E1%84%91%E1%85%B5%E1%84%80%E1%85%A9%E1%86%ABp_womnj3.mp3',
         10: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776689732/%E1%84%89%E1%85%B5%E1%86%B7%E1%84%89%E1%85%B5%E1%86%B7f_ed44ee.mp3',
         11: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776689736/%E1%84%89%E1%85%B5%E1%86%B7%E1%84%89%E1%85%B5%E1%86%B7p_ydiwe0.mp3',
@@ -669,6 +669,12 @@
     // Word-order state
     const wordOrderState = {};
     [7, 14].forEach(id => { wordOrderState[id] = { placed: [], attempts: 0 }; });
+
+    // Correct answers (stored in JS to avoid HTML apostrophe escape issues)
+    const wordAnswers = {
+        7:  ['je', 'suis', 'heureux'],
+        14: ["L'", 'étudiant', "n'", 'est', 'pas', 'libre'],
+    };
 
     /* ═══════════════════════════════════════
        INIT
@@ -825,15 +831,12 @@
     /* ═══════════════════════════════════════
        MCQ QUIZ
     ═══════════════════════════════════════ */
-    [8, 15].forEach(pageId => {
-        document.querySelectorAll(`#quiz-${pageId}-options .single-opt`).forEach(opt => {
-            opt.addEventListener('click', function () {
-                if (pageStates[pageId].completed) return;
-                document.querySelectorAll(`#quiz-${pageId}-options .single-opt`).forEach(s => s.classList.remove('selected'));
-                this.classList.add('selected');
-            });
-        });
-    });
+    // selectQuizOpt: onclick으로 직접 선택 처리 (addEventListener 대신 안전한 방식)
+    function selectQuizOpt(btn, pageId) {
+        if (pageStates[pageId].completed) return;
+        document.querySelectorAll(`#quiz-${pageId}-options .single-opt`).forEach(s => s.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
 
     function checkSingleQuiz(pageId) {
         if (pageStates[pageId].completed) return;
