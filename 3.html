@@ -1114,14 +1114,19 @@
             const allDone = Array.from(allMics).every(b => b.disabled);
             if (allDone) {
                 pageStates[currentPage].completed = true;
-                if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+                // 2차 완료(페이지 전체): 통과 → 짠(completionSynth), 실패 → 둥(errorSound)
+                if (isPass && completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+                else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4','0.15s');
                 unlockNextButton(currentPage);
             } else {
-                if (correctSound) correctSound.triggerAttackRelease('C5','0.2s');
+                // 2차 완료(일부 남음): 통과 → 삑(correctSound), 실패 → 둥(errorSound)
+                if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
+                if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.15s');
             }
         } else {
             statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-orange-500'}`;
             resetMicBtnState(btn);
+            // 1차: 통과 → 삑(correctSound), 실패 → 둥(errorSound)
             if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
             if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.1s');
         }
