@@ -348,7 +348,7 @@
         <div id="page-10" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267545/%E1%84%84%E1%85%A1%E1%84%84%E1%85%B3%E1%86%BAf_e5ohyl.mp3')"
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267548/%E1%84%84%E1%85%A1%E1%84%84%E1%85%B3%E1%86%BAf_u8uowx.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">따뜻합니다.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est chaud.</p>
@@ -577,7 +577,7 @@
                     <i class="ph-fill ph-check-circle text-5xl text-green-500"></i>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-6">Bon travail !</h1>
-                <p class="text-content text-green-900 font-medium">
+                <p class="text-content text-green-900 font-medium text-sm sm:text-base leading-relaxed text-justify">
                     Vous avez appris quatre nouveaux adjectifs pour décrire un espace ou un objet. N'oubliez pas de réviser la leçon d'aujourd'hui. Dans la prochaine leçon, nous découvrirons des adjectifs pour parler des états et des sentiments.
                 </p>
             </div>
@@ -711,15 +711,20 @@
         const btnNext = document.getElementById('btn-next');
 
         if (currentPage === TOTAL_PAGES - 1) {
-            // Outro page
+            // Outro page — hide entire bottom nav bar
+            document.getElementById('bottom-nav').classList.add('hidden');
             if (completionSynth && dir > 0) {
-                setTimeout(() => completionSynth.triggerAttackRelease(["C5","E5","G5","C6"], "4n"), 100);
+                // 완료 효과음(짠) 재생 후 설명 오디오 재생
+                completionSynth.triggerAttackRelease(["C5","E5","G5","C6"], "4n");
+                const outroAudio = pageTextAudios[TOTAL_PAGES - 1];
+                if (outroAudio) {
+                    // Tone.js 4n ≈ 500ms at 120BPM — 700ms 후 재생
+                    audioTimeoutId = setTimeout(() => playCardAudio(outroAudio), 700);
+                }
             }
-            btnPrev.disabled = true;
-            btnPrev.style.display = 'none';
-            btnNext.style.display = 'none';
             triggerLessonComplete();
         } else {
+            document.getElementById('bottom-nav').classList.remove('hidden');
             btnPrev.style.display = 'flex';
             btnNext.style.display = 'flex';
             btnPrev.disabled = (currentPage <= 1);
@@ -730,21 +735,23 @@
             }
         }
 
-        // Auto-play audio
-        const textAudio   = pageTextAudios[currentPage];
-        const repeatAudio = repeatCardAudios[currentPage];
-        if (textAudio) {
-            audioTimeoutId = setTimeout(() => playCardAudio(textAudio), 300);
-        } else if (repeatAudio) {
-            audioTimeoutId = setTimeout(() => playCardAudio(repeatAudio), 300);
-        }
+        // Auto-play audio (Outro 제외)
+        if (currentPage < TOTAL_PAGES - 1) {
+            const textAudio   = pageTextAudios[currentPage];
+            const repeatAudio = repeatCardAudios[currentPage];
+            if (textAudio) {
+                audioTimeoutId = setTimeout(() => playCardAudio(textAudio), 300);
+            } else if (repeatAudio) {
+                audioTimeoutId = setTimeout(() => playCardAudio(repeatAudio), 300);
+            }
 
-        // Word-order pages: auto-play sentence audio
-        if (currentPage === 7) {
-            audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267530/3-s1_grlnpj.mp3'), 300);
-        }
-        if (currentPage === 14) {
-            audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267532/3-S2_kni0nt.mp3'), 300);
+            // Word-order pages: auto-play sentence audio
+            if (currentPage === 7) {
+                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267530/3-s1_grlnpj.mp3'), 300);
+            }
+            if (currentPage === 14) {
+                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267532/3-S2_kni0nt.mp3'), 300);
+            }
         }
     }
 
