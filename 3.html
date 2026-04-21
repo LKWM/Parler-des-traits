@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leçon 3 - Décrire un espace et un objet</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- Tone.js for Sound Effects -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 
     <style>
@@ -20,59 +17,80 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             touch-action: none;
         }
-
         #app-container {
             width: 100%; height: 100%;
             background-color: #ffffff;
             display: flex; flex-direction: column;
             overflow: hidden;
         }
-
         #progress-container, #bottom-nav { flex-shrink: 0; }
-
         #pages-wrapper {
             flex: 1; position: relative; width: 100%; display: flex; overflow: hidden;
         }
-
         .page {
             display: none; flex-direction: column; width: 100%; height: 100%;
             animation: fadeIn 0.3s ease-out forwards;
         }
         .page.active { display: flex; }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
-
         .content-area {
             flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 1rem 1.25rem; text-align: center; min-height: 0; overflow: hidden;
         }
-
+        /* Responsive scaling for large screens */
+        @media (min-width: 768px) {
+            .content-area { padding: 2rem 3rem; }
+        }
+        @media (min-width: 1024px) {
+            .content-area { padding: 2.5rem 6rem; }
+        }
         .text-content {
             font-size: 1rem; line-height: 1.6rem; color: #334155; max-width: 42rem; margin: 0 auto;
         }
         @media (min-width: 768px) {
             .text-content { font-size: 1.15rem; line-height: 1.85rem; }
         }
-
+        @media (min-width: 1024px) {
+            .text-content { font-size: 1.25rem; line-height: 2rem; }
+        }
+        /* Card scaling */
         .card-btn { transition: transform 0.1s, box-shadow 0.1s; cursor: pointer; }
         .card-btn:active { transform: scale(0.97); }
+        @media (min-width: 1024px) {
+            .card-btn { max-width: 26rem !important; }
+            .card-btn h3 { font-size: 2rem !important; }
+            .card-btn p  { font-size: 1.1rem !important; }
+            .card-btn i  { font-size: 3rem !important; }
+            .mic-btn-lg  { padding: 2rem !important; }
+            .mic-btn-lg i { font-size: 3.5rem !important; }
+        }
+        /* Consigne heading — same size as "Répétez après moi." */
+        .consigne {
+            font-size: 1.25rem; line-height: 1.75rem;
+            font-weight: 700; color: #1e293b;
+            margin-bottom: 1.25rem;
+        }
+        @media (min-width: 640px)  { .consigne { font-size: 1.5rem; } }
+        @media (min-width: 1024px) { .consigne { font-size: 1.75rem; margin-bottom: 1.75rem; } }
 
         .recording-pulse { animation: pulse-red 1.5s infinite; }
         @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+            0%   { box-shadow: 0 0 0 0   rgba(239,68,68,0.7); }
+            70%  { box-shadow: 0 0 0 15px rgba(239,68,68,0);  }
+            100% { box-shadow: 0 0 0 0   rgba(239,68,68,0);   }
         }
-
         .quiz-option { transition: all 0.2s; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .quiz-option.selected { background-color: #e0e7ff; border-color: #6366f1; color: #4338ca; }
-        .quiz-option.correct { background-color: #dcfce7; border-color: #22c55e; color: #15803d; }
-        .quiz-option.wrong { background-color: #fee2e2; border-color: #ef4444; color: #b91c1c; }
-
-        /* Word-order quiz tokens */
+        .quiz-option.selected { background-color:#e0e7ff; border-color:#6366f1; color:#4338ca; }
+        .quiz-option.correct  { background-color:#dcfce7; border-color:#22c55e; color:#15803d; }
+        .quiz-option.wrong    { background-color:#fee2e2; border-color:#ef4444; color:#b91c1c; }
+        @media (min-width: 1024px) {
+            .quiz-option { font-size: 1.1rem; padding: 1rem 1.25rem !important; }
+            .quiz-grid   { max-width: 28rem !important; gap: 0.875rem !important; }
+        }
+        /* Word-order tokens */
         .word-token {
             cursor: pointer; transition: all 0.15s;
             background: white; border: 2px solid #e2e8f0;
@@ -80,31 +98,28 @@
             font-size: 0.9rem; font-weight: 600; color: #334155;
             user-select: none;
         }
-        .word-token:hover { border-color: #6366f1; background: #eef2ff; color: #4338ca; }
-        .word-token.placed { background: #e0e7ff; border-color: #6366f1; color: #4338ca; }
-        .word-token.correct-token { background: #dcfce7; border-color: #22c55e; color: #15803d; pointer-events: none; }
-        .word-token.wrong-token { background: #fee2e2; border-color: #ef4444; color: #b91c1c; }
-        .answer-slot {
-            min-width: 3.5rem; height: 2.4rem; border-bottom: 2.5px solid #6366f1;
-            display: inline-flex; align-items: center; justify-content: center;
-            margin: 0.2rem 0.2rem; font-size: 0.9rem; font-weight: 600; color: #4338ca;
-            cursor: pointer;
+        .word-token:hover { border-color:#6366f1; background:#eef2ff; color:#4338ca; }
+        .word-token.placed  { background:#e0e7ff; border-color:#6366f1; color:#4338ca; }
+        .word-token.correct-token { background:#dcfce7; border-color:#22c55e; color:#15803d; pointer-events:none; }
+        .word-token.wrong-token   { background:#fee2e2; border-color:#ef4444; color:#b91c1c; }
+        @media (min-width: 1024px) {
+            .word-token { font-size: 1.05rem; padding: 0.55rem 1rem; }
         }
-        .answer-slot.filled { border-bottom-color: #4338ca; }
     </style>
 </head>
 <body>
-
 <div id="app-container">
 
-    <!-- Progress Bar -->
-    <div id="progress-container" class="w-full h-2 bg-slate-100">
+    <!-- Progress Bar (hidden until lesson starts) -->
+    <div id="progress-container" class="w-full h-2 bg-slate-100 hidden">
         <div id="progress-bar" class="h-full bg-indigo-500 transition-all duration-300 w-0"></div>
     </div>
 
     <div id="pages-wrapper">
 
-        <!-- Page 0: Cover -->
+        <!-- ══════════════════════════════
+             PAGE 0 — Cover
+        ══════════════════════════════ -->
         <div id="page-0" class="page active justify-center items-center bg-indigo-50">
             <div class="content-area">
                 <p class="text-indigo-600 font-semibold mb-2 text-lg sm:text-xl">Chapitre 1 - L'utilisation des adjectifs</p>
@@ -116,7 +131,9 @@
             </div>
         </div>
 
-        <!-- Page 1: Intro Text -->
+        <!-- ══════════════════════════════
+             PAGE 1 — Intro text
+        ══════════════════════════════ -->
         <div id="page-1" class="page">
             <div class="content-area">
                 <p class="text-content">
@@ -125,15 +142,19 @@
             </div>
         </div>
 
-        <!-- Page 2: Card with audio — 깨끗하다 / 딱딱하다 -->
+        <!-- ══════════════════════════════
+             PAGE 2 — Card audio × 2 : 깨끗하다 / 딱딱하다
+        ══════════════════════════════ -->
         <div id="page-2" class="page">
             <div class="content-area gap-4">
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267544/%E1%84%81%E1%85%A2%E1%84%81%E1%85%B3%E1%86%BAv_hjkgwl.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267544/%E1%84%81%E1%85%A2%E1%84%81%E1%85%B3%E1%86%BAv_hjkgwl.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">깨끗하다</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Être propre</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267555/%E1%84%84%E1%85%A1%E1%86%A8%E1%84%84%E1%85%A1%E1%86%A8v_eaxfal.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267555/%E1%84%84%E1%85%A1%E1%86%A8%E1%84%84%E1%85%A1%E1%86%A8v_eaxfal.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">딱딱하다</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Être dur</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
@@ -141,600 +162,647 @@
             </div>
         </div>
 
-        <!-- Page 3: Repeat — 깨끗합니다 -->
+        <!-- ══════════════════════════════
+             PAGE 3 — Repeat : 깨끗합니다
+        ══════════════════════════════ -->
         <div id="page-3" class="page">
             <div class="content-area">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267540/%E1%84%81%E1%85%A2%E1%84%81%E1%85%B3%E1%86%BAf_ejy16c.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267540/%E1%84%81%E1%85%A2%E1%84%81%E1%85%B3%E1%86%BAf_ejy16c.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">깨끗합니다.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est propre.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-3" onclick="toggleRecordSpeech(this, 'status-3', '깨끗합니다', 'repeat')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-3" onclick="toggleRecordSpeech(this,'status-3','깨끗합니다','repeat')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-3" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-3" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-3"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-3" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
 
-        <!-- Page 4: Repeat — 딱딱합니다 -->
+        <!-- ══════════════════════════════
+             PAGE 4 — Repeat : 딱딱합니다
+        ══════════════════════════════ -->
         <div id="page-4" class="page">
             <div class="content-area">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267551/%E1%84%84%E1%85%A1%E1%86%A8%E1%84%84%E1%85%A1%E1%86%A8f_dddojx.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267551/%E1%84%84%E1%85%A1%E1%86%A8%E1%84%84%E1%85%A1%E1%86%A8f_dddojx.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">딱딱합니다.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est dur.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-4" onclick="toggleRecordSpeech(this, 'status-4', '딱딱합니다', 'repeat')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-4" onclick="toggleRecordSpeech(this,'status-4','딱딱합니다','repeat')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-4" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-4" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-4"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-4" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
 
-        <!-- Page 5: Repeat — 깨끗해요 -->
+        <!-- ══════════════════════════════
+             PAGE 5 — Repeat : 깨끗해요
+        ══════════════════════════════ -->
         <div id="page-5" class="page">
             <div class="content-area">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267542/%E1%84%81%E1%85%A2%E1%84%81%E1%85%B3%E1%86%BAp_iygccu.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267542/%E1%84%81%E1%85%A2%E1%84%81%E1%85%B3%E1%86%BAp_iygccu.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">깨끗해요.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est propre.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-5" onclick="toggleRecordSpeech(this, 'status-5', '깨끗해요', 'repeat')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-5" onclick="toggleRecordSpeech(this,'status-5','깨끗해요','repeat')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-5" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-5" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-5"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-5" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
 
-        <!-- Page 6: Repeat — 딱딱해요 -->
+        <!-- ══════════════════════════════
+             PAGE 6 — Repeat : 딱딱해요
+        ══════════════════════════════ -->
         <div id="page-6" class="page">
             <div class="content-area">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267552/%E1%84%84%E1%85%A1%E1%86%A8%E1%84%84%E1%85%A1%E1%86%A8p_ejnlxs.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267552/%E1%84%84%E1%85%A1%E1%86%A8%E1%84%84%E1%85%A1%E1%86%A8p_ejnlxs.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">딱딱해요.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est dur.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-6" onclick="toggleRecordSpeech(this, 'status-6', '딱딱해요', 'repeat')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-6" onclick="toggleRecordSpeech(this,'status-6','딱딱해요','repeat')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-6" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-6" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-6"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-6" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
 
-        <!-- Page 7: Word Order Quiz — 집이 깨끗합니다. → La maison est propre. -->
+        <!-- ══════════════════════════════
+             PAGE 7 — Word-order : 집이 깨끗합니다. → La maison est propre.
+        ══════════════════════════════ -->
         <div id="page-7" class="page">
             <div class="content-area gap-3">
-                <p class="text-slate-500 font-semibold text-sm sm:text-base mb-1">Traduisez la phrase en français.</p>
-
-                <!-- Korean sentence (auto-play audio) -->
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267530/3-s1_grlnpj.mp3')" class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
+                <h2 class="consigne">Traduisez la phrase en français.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267530/3-s1_grlnpj.mp3')"
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
                     <h3 class="text-xl sm:text-2xl font-black text-slate-800">집이 깨끗합니다.</h3>
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
                 </button>
-
-                <!-- Answer slots -->
                 <div id="answer-area-7" class="flex flex-wrap justify-center gap-2 min-h-[3rem] mt-1 px-2"></div>
-
-                <!-- Word bank -->
                 <div id="bank-7" class="flex flex-wrap justify-center gap-2 mt-1 px-2">
-                    <button class="word-token" onclick="placeToken(this, 7)">suis</button>
-                    <button class="word-token" onclick="placeToken(this, 7)">dur</button>
-                    <button class="word-token" onclick="placeToken(this, 7)">est</button>
-                    <button class="word-token" onclick="placeToken(this, 7)">propre</button>
-                    <button class="word-token" onclick="placeToken(this, 7)">la</button>
-                    <button class="word-token" onclick="placeToken(this, 7)">maison</button>
-                    <button class="word-token" onclick="placeToken(this, 7)">le</button>
-                    <button class="word-token" onclick="placeToken(this, 7)">livre</button>
-                    <button class="word-token" onclick="placeToken(this, 7)">des</button>
-                    <button class="word-token" onclick="placeToken(this, 7)">intelligent</button>
+                    <button class="word-token" onclick="placeToken(this,7)">suis</button>
+                    <button class="word-token" onclick="placeToken(this,7)">dur</button>
+                    <button class="word-token" onclick="placeToken(this,7)">est</button>
+                    <button class="word-token" onclick="placeToken(this,7)">propre</button>
+                    <button class="word-token" onclick="placeToken(this,7)">la</button>
+                    <button class="word-token" onclick="placeToken(this,7)">maison</button>
+                    <button class="word-token" onclick="placeToken(this,7)">le</button>
+                    <button class="word-token" onclick="placeToken(this,7)">livre</button>
+                    <button class="word-token" onclick="placeToken(this,7)">des</button>
+                    <button class="word-token" onclick="placeToken(this,7)">intelligent</button>
                 </div>
-
-                <!-- Status -->
-                <div class="relative flex items-center justify-center w-full" style="min-height:1.5rem;">
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="word-status-7" class="font-bold text-sm text-center w-full transition-colors"></p>
                 </div>
-
-                <button id="word-btn-7" onclick="checkWordOrder(7, ['la','maison','est','propre'])" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                <button id="word-btn-7" onclick="checkWordOrder(7,['la','maison','est','propre'])"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
                     Valider
                 </button>
             </div>
         </div>
 
-        <!-- Page 8: MCQ — 사과가 ____. -->
+        <!-- ══════════════════════════════
+             PAGE 8 — MCQ : 사과가 ____.
+        ══════════════════════════════ -->
         <div id="page-8" class="page">
             <div class="content-area gap-4">
-                <p class="text-slate-500 font-semibold text-sm sm:text-base">Choisissez le bon mot pour compléter la phrase.</p>
+                <h2 class="consigne">Choisissez le bon mot pour compléter la phrase.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">사과가 ____.</p>
                 </div>
-                <div id="quiz-8-options" class="grid grid-cols-2 gap-3 w-full max-w-sm">
+                <!-- Trad placeholder — always reserves space -->
+                <p id="trad-8" class="text-slate-400 italic text-sm" style="min-height:1.25rem;">La pomme est dure.</p>
+                <div id="quiz-8-options" class="quiz-grid grid grid-cols-2 gap-3 w-full max-w-sm">
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">딱딱해요</button>
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">깨끗해요</button>
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">딱딱하다</button>
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">깨끗입니다</button>
                 </div>
-                <!-- Hidden trad -->
-                <p id="trad-8" class="text-slate-500 italic text-sm hidden">La pomme est dure.</p>
-                <div class="relative flex items-center justify-center w-full" style="min-height:1.5rem;">
-                    <p id="quiz-8-status" class="absolute inset-0 font-bold text-center text-sm w-full transition-colors"></p>
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="quiz-8-status" class="font-bold text-center text-sm w-full transition-colors"></p>
                 </div>
-                <button id="quiz-8-btn" onclick="checkSingleQuiz(8)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                <button id="quiz-8-btn" onclick="checkSingleQuiz(8)"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
                     Valider
                 </button>
             </div>
         </div>
 
-        <!-- Page 9: Card with audio — 따뜻하다 / 시원하다 + Text explanation -->
+        <!-- ══════════════════════════════
+             PAGE 9 — Card audio × 2 + text explanation : 따뜻하다 / 시원하다
+        ══════════════════════════════ -->
         <div id="page-9" class="page">
             <div class="content-area gap-4">
+                <!-- Two vocab cards side-by-side -->
                 <div class="flex gap-3 w-full justify-center shrink-0">
-                    <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267549/%E1%84%84%E1%85%A1%E1%84%84%E1%85%B3%E1%86%BAv_u8uowx.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-5 flex flex-col items-center justify-center hover:bg-slate-50 flex-1 max-w-[10rem]">
+                    <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267549/%E1%84%84%E1%85%A1%E1%84%84%E1%85%B3%E1%86%BAv_u8uowx.mp3')"
+                        class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-5 flex flex-col items-center justify-center hover:bg-slate-50 flex-1 max-w-[10rem]">
                         <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1">따뜻하다</h3>
                         <p class="text-xs sm:text-sm text-slate-500 font-semibold text-center mb-2">Être chaud</p>
                         <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
                     </button>
-                    <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267561/%E1%84%89%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%ABv_fcqhtc.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-5 flex flex-col items-center justify-center hover:bg-slate-50 flex-1 max-w-[10rem]">
+                    <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267561/%E1%84%89%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%ABv_fcqhtc.mp3')"
+                        class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-5 flex flex-col items-center justify-center hover:bg-slate-50 flex-1 max-w-[10rem]">
                         <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1">시원하다</h3>
                         <p class="text-xs sm:text-sm text-slate-500 font-semibold text-center mb-2">Être frais</p>
                         <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
                     </button>
                 </div>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267529/3-2_edakk3.wav')" class="card-btn bg-slate-50 border border-slate-200 rounded-2xl p-4 w-full max-w-sm flex items-start gap-3 text-left hover:bg-slate-100 shrink-0">
+                <!-- Explanation card with audio -->
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267529/3-2_edakk3.wav')"
+                    class="card-btn bg-slate-50 border border-slate-200 rounded-2xl p-4 w-full max-w-sm flex items-start gap-3 text-left hover:bg-slate-100 shrink-0">
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 mt-0.5 shrink-0"></i>
-                    <p class="text-content text-sm leading-relaxed">
+                    <p class="text-content text-sm leading-relaxed text-left">
                         « 따뜻하다 » et « 시원하다 » sont des mots servant à indiquer la température. Contrairement aux températures très chaudes ou froides, ce sont des expressions positives qui désignent un niveau de chaleur ou de fraîcheur agréable. Ils peuvent être utilisés pour parler de la météo, d'un objet ou de la température corporelle.
                     </p>
                 </button>
             </div>
         </div>
 
-        <!-- Page 10: Repeat — 따뜻합니다 -->
+        <!-- ══════════════════════════════
+             PAGE 10 — Repeat : 따뜻합니다
+        ══════════════════════════════ -->
         <div id="page-10" class="page">
             <div class="content-area">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267549/%E1%84%84%E1%85%A1%E1%84%84%E1%85%B3%E1%86%BAv_u8uowx.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267548/%E1%84%84%E1%85%A1%E1%84%84%E1%85%B3%E1%86%BAf_u8uowx.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">따뜻합니다.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est chaud.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-10" onclick="toggleRecordSpeech(this, 'status-10', '따뜻합니다', 'repeat')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-10" onclick="toggleRecordSpeech(this,'status-10','따뜻합니다','repeat')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-10" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-10" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-10"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-10" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
 
-        <!-- Page 11: Repeat — 시원합니다 -->
+        <!-- ══════════════════════════════
+             PAGE 11 — Repeat : 시원합니다
+        ══════════════════════════════ -->
         <div id="page-11" class="page">
             <div class="content-area">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267557/%E1%84%89%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%ABf_bhtqfx.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267557/%E1%84%89%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%ABf_bhtqfx.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">시원합니다.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est frais.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-11" onclick="toggleRecordSpeech(this, 'status-11', '시원합니다', 'repeat')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-11" onclick="toggleRecordSpeech(this,'status-11','시원합니다','repeat')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-11" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-11" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-11"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-11" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
 
-        <!-- Page 12: Repeat — 따뜻해요 + 시원해요 (double) -->
+        <!-- ══════════════════════════════
+             PAGE 12 — Repeat : 따뜻해요
+        ══════════════════════════════ -->
         <div id="page-12" class="page">
-            <div class="content-area gap-5">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Répétez après moi.</h2>
-                <!-- 따뜻해요 -->
-                <div class="flex flex-col items-center w-full gap-3 shrink-0">
-                    <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267547/%E1%84%84%E1%85%A1%E1%84%84%E1%85%B3%E1%86%BAp_lkgs6w.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50">
-                        <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1">따뜻해요.</h3>
-                        <p class="text-sm text-slate-500 font-semibold text-center mb-1">… est chaud.</p>
-                        <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
-                    </button>
-                    <button id="mic-btn-12a" onclick="toggleRecordSpeech(this, 'status-12a', '따뜻해요', 'repeat')" class="mic-req bg-red-500 text-white rounded-full p-5 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10">
-                        <i class="ph-fill ph-microphone text-3xl"></i>
-                    </button>
-                    <div class="relative flex flex-col items-center w-full" style="min-height: 2.5rem;">
-                        <p id="status-12a" class="absolute top-0 left-0 right-0 text-slate-500 font-bold text-sm text-center transition-colors"></p>
-                        <p id="transcript-12a" class="absolute top-5 left-0 right-0 text-slate-700 text-xs text-center px-4"></p>
-                    </div>
-                </div>
-                <!-- 시원해요 -->
-                <div class="flex flex-col items-center w-full gap-3 shrink-0">
-                    <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267560/%E1%84%89%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%ABp_xfbct4.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50">
-                        <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1">시원해요.</h3>
-                        <p class="text-sm text-slate-500 font-semibold text-center mb-1">… est frais.</p>
-                        <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
-                    </button>
-                    <button id="mic-btn-12b" onclick="toggleRecordSpeech(this, 'status-12b', '시원해요', 'repeat')" class="mic-req bg-red-500 text-white rounded-full p-5 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10">
-                        <i class="ph-fill ph-microphone text-3xl"></i>
-                    </button>
-                    <div class="relative flex flex-col items-center w-full" style="min-height: 2.5rem;">
-                        <p id="status-12b" class="absolute top-0 left-0 right-0 text-slate-500 font-bold text-sm text-center transition-colors"></p>
-                        <p id="transcript-12b" class="absolute top-5 left-0 right-0 text-slate-700 text-xs text-center px-4"></p>
-                    </div>
+            <div class="content-area">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267547/%E1%84%84%E1%85%A1%E1%84%84%E1%85%B3%E1%86%BAp_lkgs6w.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">따뜻해요.</h3>
+                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est chaud.</p>
+                    <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
+                </button>
+                <button id="mic-btn-12" onclick="toggleRecordSpeech(this,'status-12','따뜻해요','repeat')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                    <i class="ph-fill ph-microphone text-4xl"></i>
+                </button>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-12"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-12" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
 
-        <!-- Page 13: Word Order Quiz — 방이 시원해요. → La chambre est fraîche. -->
+        <!-- ══════════════════════════════
+             PAGE 13 — Repeat : 시원해요
+        ══════════════════════════════ -->
         <div id="page-13" class="page">
+            <div class="content-area">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267560/%E1%84%89%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%ABp_xfbct4.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">시원해요.</h3>
+                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… est frais.</p>
+                    <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
+                </button>
+                <button id="mic-btn-13" onclick="toggleRecordSpeech(this,'status-13','시원해요','repeat')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                    <i class="ph-fill ph-microphone text-4xl"></i>
+                </button>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-13"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-13" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             PAGE 14 — Word-order : 방이 시원해요. → La chambre est fraîche.
+        ══════════════════════════════ -->
+        <div id="page-14" class="page">
             <div class="content-area gap-3">
-                <p class="text-slate-500 font-semibold text-sm sm:text-base mb-1">Traduisez la phrase en français.</p>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267532/3-S2_kni0nt.mp3')" class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
+                <h2 class="consigne">Traduisez la phrase en français.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267532/3-S2_kni0nt.mp3')"
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
                     <h3 class="text-xl sm:text-2xl font-black text-slate-800">방이 시원해요.</h3>
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
                 </button>
-                <div id="answer-area-13" class="flex flex-wrap justify-center gap-2 min-h-[3rem] mt-1 px-2"></div>
-                <div id="bank-13" class="flex flex-wrap justify-center gap-2 mt-1 px-2">
-                    <button class="word-token" onclick="placeToken(this, 13)">dur</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">maison</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">le</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">frais</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">chaud</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">la</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">fraîche</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">chambre</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">être</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">faire</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">est</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">pain</button>
-                    <button class="word-token" onclick="placeToken(this, 13)">propre</button>
+                <div id="answer-area-14" class="flex flex-wrap justify-center gap-2 min-h-[3rem] mt-1 px-2"></div>
+                <div id="bank-14" class="flex flex-wrap justify-center gap-2 mt-1 px-2">
+                    <button class="word-token" onclick="placeToken(this,14)">dur</button>
+                    <button class="word-token" onclick="placeToken(this,14)">maison</button>
+                    <button class="word-token" onclick="placeToken(this,14)">le</button>
+                    <button class="word-token" onclick="placeToken(this,14)">frais</button>
+                    <button class="word-token" onclick="placeToken(this,14)">chaud</button>
+                    <button class="word-token" onclick="placeToken(this,14)">la</button>
+                    <button class="word-token" onclick="placeToken(this,14)">fraîche</button>
+                    <button class="word-token" onclick="placeToken(this,14)">chambre</button>
+                    <button class="word-token" onclick="placeToken(this,14)">être</button>
+                    <button class="word-token" onclick="placeToken(this,14)">faire</button>
+                    <button class="word-token" onclick="placeToken(this,14)">est</button>
+                    <button class="word-token" onclick="placeToken(this,14)">pain</button>
+                    <button class="word-token" onclick="placeToken(this,14)">propre</button>
                 </div>
-                <div class="relative flex items-center justify-center w-full" style="min-height:1.5rem;">
-                    <p id="word-status-13" class="font-bold text-sm text-center w-full transition-colors"></p>
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="word-status-14" class="font-bold text-sm text-center w-full transition-colors"></p>
                 </div>
-                <button id="word-btn-13" onclick="checkWordOrder(13, ['la','chambre','est','fraîche'])" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                <button id="word-btn-14" onclick="checkWordOrder(14,['la','chambre','est','fraîche'])"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
                     Valider
                 </button>
             </div>
         </div>
 
-        <!-- Page 14: MCQ — 우유가 ____. -->
-        <div id="page-14" class="page">
+        <!-- ══════════════════════════════
+             PAGE 15 — MCQ : 우유가 ____.
+        ══════════════════════════════ -->
+        <div id="page-15" class="page">
             <div class="content-area gap-4">
-                <p class="text-slate-500 font-semibold text-sm sm:text-base">Choisissez le bon mot pour compléter la phrase.</p>
+                <h2 class="consigne">Choisissez le bon mot pour compléter la phrase.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">우유가 ____.</p>
                 </div>
-                <div id="quiz-14-options" class="grid grid-cols-2 gap-3 w-full max-w-sm">
+                <!-- Trad placeholder — always reserves space -->
+                <p id="trad-15" class="text-slate-400 italic text-sm" style="min-height:1.25rem;">Le lait est frais.</p>
+                <div id="quiz-15-options" class="quiz-grid grid grid-cols-2 gap-3 w-full max-w-sm">
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">딱딱합니다</button>
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">시원해요</button>
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">따뜻이에요</button>
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">시원하다</button>
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700 col-span-2" data-correct="false">깨끗합니다</button>
                 </div>
-                <p id="trad-14" class="text-slate-500 italic text-sm hidden">Le lait est frais.</p>
-                <div class="relative flex items-center justify-center w-full" style="min-height:1.5rem;">
-                    <p id="quiz-14-status" class="absolute inset-0 font-bold text-center text-sm w-full transition-colors"></p>
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="quiz-15-status" class="font-bold text-center text-sm w-full transition-colors"></p>
                 </div>
-                <button id="quiz-14-btn" onclick="checkSingleQuiz(14)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                <button id="quiz-15-btn" onclick="checkSingleQuiz(15)"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
                     Valider
                 </button>
             </div>
         </div>
 
-        <!-- Page 15: Repeat sentence — 옷이 깨끗합니다. (S3) -->
-        <div id="page-15" class="page">
+        <!-- ══════════════════════════════
+             PAGE 16 — Repeat sentence : 옷이 깨끗합니다. (S3)
+        ══════════════════════════════ -->
+        <div id="page-16" class="page">
             <div class="content-area">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267534/3-S3_yniysw.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267534/3-S3_yniysw.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">옷이 깨끗합니다.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Le vêtement est propre.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-15" onclick="toggleRecordSpeech(this, 'status-15', '옷이 깨끗합니다', 'repeat_sentence')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-16" onclick="toggleRecordSpeech(this,'status-16','옷이 깨끗합니다','repeat_sentence')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-15" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-15" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-16"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-16" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
 
-        <!-- Page 16: Repeat sentence — 집이 따뜻해요. (S4) -->
-        <div id="page-16" class="page">
+        <!-- ══════════════════════════════
+             PAGE 17 — Repeat sentence : 집이 따뜻해요. (S4)
+        ══════════════════════════════ -->
+        <div id="page-17" class="page">
             <div class="content-area">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267535/3-S4_fcarta.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267535/3-S4_fcarta.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">집이 따뜻해요.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">La maison est chaude.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-16" onclick="toggleRecordSpeech(this, 'status-16', '집이 따뜻해요', 'repeat_sentence')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-17" onclick="toggleRecordSpeech(this,'status-17','집이 따뜻해요','repeat_sentence')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-16" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-16" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-17"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-17" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
 
-        <!-- Page 17: Repeat sentence — 커피가 시원합니다. (S5) + Completion -->
-        <div id="page-17" class="page">
+        <!-- ══════════════════════════════
+             PAGE 18 — Repeat sentence : 커피가 시원합니다. (S5)
+        ══════════════════════════════ -->
+        <div id="page-18" class="page">
             <div class="content-area">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267537/3-S5_blln64.mp3')" class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                <h2 class="consigne">Répétez après moi.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267537/3-S5_blln64.mp3')"
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">커피가 시원합니다.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Le café est frais.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-17" onclick="toggleRecordSpeech(this, 'status-17', '커피가 시원합니다', 'repeat_sentence')" class="mic-req bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-18" onclick="toggleRecordSpeech(this,'status-18','커피가 시원합니다','repeat_sentence')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-17" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-17" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
+                    <p id="status-18"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-18" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             PAGE 19 — Outro
+        ══════════════════════════════ -->
+        <div id="page-19" class="page justify-center items-center bg-green-50">
+            <div class="content-area">
+                <div class="bg-white p-5 rounded-full shadow-md mb-6">
+                    <i class="ph-fill ph-check-circle text-5xl text-green-500"></i>
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-6">Bon travail !</h1>
+                <p class="text-content text-green-900 font-medium">
+                    Vous avez appris quatre nouveaux adjectifs pour décrire un espace ou un objet. N'oubliez pas de réviser la leçon d'aujourd'hui. Dans la prochaine leçon, nous découvrirons des adjectifs pour parler des états et des sentiments.
+                </p>
             </div>
         </div>
 
     </div><!-- end pages-wrapper -->
 
-    <!-- Bottom Navigation -->
-    <div id="bottom-nav" class="w-full h-20 px-6 md:px-12 flex justify-between items-center bg-white border-t border-slate-100 z-40 shrink-0">
-        <button id="prev-btn" onclick="goToPrev()" class="bg-slate-100 text-slate-600 w-12 h-12 rounded-full flex items-center justify-center hover:bg-slate-200 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
-            <i class="ph ph-arrow-left text-xl font-bold"></i>
+    <!-- Bottom Navigation (hidden on cover, shown after startLesson()) -->
+    <div id="bottom-nav" class="w-full h-16 sm:h-20 bg-white border-t border-slate-200 flex items-center justify-between px-6 sm:px-10 hidden">
+        <button id="btn-prev" onclick="changePage(-1)"
+            class="text-slate-500 font-bold text-base sm:text-lg flex items-center gap-2 hover:text-slate-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+            <i class="ph-bold ph-caret-left"></i> Précédent
         </button>
-        <button id="next-btn" onclick="goToNext()" class="bg-indigo-600 text-white px-6 py-3 rounded-full font-bold shadow-lg flex items-center gap-2 hover:bg-indigo-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-            Continuer <i class="ph ph-arrow-right font-bold"></i>
+        <button id="btn-next" onclick="changePage(1)"
+            class="text-indigo-600 font-bold text-base sm:text-lg flex items-center gap-2 hover:text-indigo-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+            Suivant <i class="ph-bold ph-caret-right"></i>
         </button>
     </div>
 
 </div><!-- end app-container -->
 
 <script>
-    /* =========================================
-       State & Configuration
-    ========================================= */
-    const TOTAL_PAGES = 17;
-    let currentPage = 0;
-    let currentAudio = null;
-    let activeRecorder = null;
-    let recordingTimeout = null;
-    let audioTimeoutId = null;
-    let quizAttempts = 0;
+    /* ═══════════════════════════════════════
+       STATE & CONFIG
+    ═══════════════════════════════════════ */
+    const TOTAL_PAGES = 20; // pages 0–19
 
-    // Per-page state tracking
+    // Pages that lock "Suivant" until completed
+    const interactivePages = new Set([3,4,5,6,7,8,10,11,12,13,14,15,16,17,18]);
+
+    const completedPages = new Set();
     const pageStates = {};
-    for (let i = 0; i <= TOTAL_PAGES; i++) {
-        pageStates[i] = { completed: false, attempts: 0 };
+    for (let i = 0; i < TOTAL_PAGES; i++) {
+        pageStates[i] = { attempts: 0, completed: false };
     }
 
-    // Pages that require an action before "Continuer" unlocks
-    // Pages 2 & 9 are info-only (audio cards) — always unlocked
-    const LOCKED_PAGES = new Set([3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17]);
+    let currentPage = 0;
+    let currentAudio = null;
+    let audioTimeoutId = null;
+    let activeRecorder = null;
+    let recordingTimeout = null;
+    let quizAttempts = 0;
 
-    /* =========================================
-       Sound Effects
-    ========================================= */
-    let completionSynth, correctSound, errorSound;
-    try {
+    // Tone.js sounds
+    let correctSound = null, errorSound = null, completionSynth = null, transitionSynth = null;
+
+    // Auto-play audio on page entry
+    // Text-explanation pages (auto-play the narration)
+    const pageTextAudios = {
+        1: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776267527/3-1_gwa73u.mp3',
+        9: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776267529/3-2_edakk3.wav',
+    };
+
+    // Single repeat-card pages: auto-play the card audio
+    const repeatCardAudios = {
+        3:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776267540/%E1%84%81%E1%85%A2%E1%84%81%E1%85%B3%E1%86%BAf_ejy16c.mp3',
+        4:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776267551/%E1%84%84%E1%85%A1%E1%86%A8%E1%84%84%E1%85%A1%E1%86%A8f_dddojx.mp3',
+        5:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776267542/%E1%84%81%E1%85%A2%E1%84%81%E1%85%B3%E1%86%BAp_iygccu.mp3',
+        6:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776267552/%E1%84%84%E1%85%A1%E1%86%A8%E1%84%84%E1%85%A1%E1%86%A8p_ejnlxs.mp3',
+        10: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776267548/%E1%84%84%E1%85%A1%E1%84%84%E1%85%B3%E1%86%BAf_u8uowx.mp3',
+        11: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776267557/%E1%84%89%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%ABf_bhtqfx.mp3',
+        12: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776267547/%E1%84%84%E1%85%A1%E1%84%84%E1%85%B3%E1%86%BAp_lkgs6w.mp3',
+        13: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776267560/%E1%84%89%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%ABp_xfbct4.mp3',
+        16: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776267534/3-S3_yniysw.mp3',
+        17: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776267535/3-S4_fcarta.mp3',
+        18: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776267537/3-S5_blln64.mp3',
+    };
+
+    // Word-order state
+    const wordOrderState = {};
+    [7, 14].forEach(id => { wordOrderState[id] = { placed: [], attempts: 0 }; });
+
+    /* ═══════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════ */
+    async function initAudioContext() {
+        await Tone.start();
+        correctSound    = new Tone.Synth({ oscillator: { type: 'sine'     } }).toDestination();
+        errorSound      = new Tone.Synth({ oscillator: { type: 'triangle' } }).toDestination();
         completionSynth = new Tone.PolySynth(Tone.Synth).toDestination();
-        correctSound    = new Tone.Synth({ oscillator: { type: "triangle" }, envelope: { attack: 0.02, decay: 0.1, sustain: 0, release: 0.1 } }).toDestination();
-        errorSound      = new Tone.Synth({ oscillator: { type: "square" }, envelope: { attack: 0.02, decay: 0.08, sustain: 0, release: 0.08 } }).toDestination();
-        correctSound.volume.value  = -10;
-        errorSound.volume.value    = -10;
-        completionSynth.volume.value = -8;
-    } catch(e) { console.warn("Tone.js not available:", e); }
+        transitionSynth = new Tone.Synth({
+            oscillator: { type: 'sine' },
+            envelope:   { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
+        }).toDestination();
+        transitionSynth.volume.value = -15;
+    }
 
-    /* =========================================
-       Navigation
-    ========================================= */
-    function updateProgressBar() {
-        const pct = TOTAL_PAGES > 0 ? (currentPage / TOTAL_PAGES) * 100 : 0;
+    async function startLesson() {
+        await initAudioContext();
+        document.getElementById('progress-container').classList.remove('hidden');
+        document.getElementById('bottom-nav').classList.remove('hidden');
+        changePage(1);
+    }
+
+    /* ═══════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════ */
+    function updateProgress() {
+        const pct = ((currentPage) / (TOTAL_PAGES - 1)) * 100;
         document.getElementById('progress-bar').style.width = pct + '%';
     }
 
-    function startLesson() {
-        goToPage(1);
+    function unlockNextButton(pageId) {
+        completedPages.add(pageId);
+        if (currentPage === pageId) {
+            document.getElementById('btn-next').disabled = false;
+        }
     }
 
-    function goToPage(pageIndex) {
+    function changePage(dir) {
+        // Play transition sound
+        if (dir !== 0 && transitionSynth) transitionSynth.triggerAttackRelease('C6', '0.05s');
+
+        // Stop audio immediately on page leave
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+        if (audioTimeoutId) { clearTimeout(audioTimeoutId); audioTimeoutId = null; }
+        if (activeRecorder && activeRecorder.state === 'recording') {
+            activeRecorder.stop(); clearTimeout(recordingTimeout);
+        }
+
+        // Deactivate old page
         document.getElementById(`page-${currentPage}`).classList.remove('active');
-        currentPage = pageIndex;
+        currentPage = Math.max(1, Math.min(currentPage + dir, TOTAL_PAGES - 1));
         document.getElementById(`page-${currentPage}`).classList.add('active');
 
-        // Reset quiz attempts counter on page change
-        quizAttempts = 0;
+        quizAttempts = pageStates[currentPage].attempts;
 
-        // Nav visibility
-        document.getElementById('prev-btn').disabled = (currentPage === 0);
-        document.getElementById('bottom-nav').style.display = (currentPage === 0) ? 'none' : 'flex';
+        updateProgress();
 
-        // Lock/unlock next button
-        const nextBtn = document.getElementById('next-btn');
-        if (currentPage === TOTAL_PAGES) {
-            nextBtn.disabled = true;
-            nextBtn.classList.add('opacity-40', 'cursor-not-allowed');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+
+        if (currentPage === TOTAL_PAGES - 1) {
+            // Outro page
+            if (completionSynth && dir > 0) {
+                setTimeout(() => completionSynth.triggerAttackRelease(["C5","E5","G5","C6"], "4n"), 100);
+            }
+            btnPrev.disabled = true;
+            btnPrev.style.display = 'none';
+            btnNext.style.display = 'none';
             triggerLessonComplete();
-        } else if (LOCKED_PAGES.has(currentPage) && !pageStates[currentPage].completed) {
-            nextBtn.disabled = true;
-            nextBtn.classList.add('opacity-40', 'cursor-not-allowed');
         } else {
-            nextBtn.disabled = false;
-            nextBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+            btnPrev.style.display = 'flex';
+            btnNext.style.display = 'flex';
+            btnPrev.disabled = (currentPage <= 1);
+            if (interactivePages.has(currentPage) && !completedPages.has(currentPage)) {
+                btnNext.disabled = true;
+            } else {
+                btnNext.disabled = false;
+            }
         }
 
-        updateProgressBar();
-
-        // Auto-play audio on page 1
-        if (currentPage === 1) {
-            setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267527/3-1_gwa73u.mp3'), 400);
+        // Auto-play audio
+        const textAudio   = pageTextAudios[currentPage];
+        const repeatAudio = repeatCardAudios[currentPage];
+        if (textAudio) {
+            audioTimeoutId = setTimeout(() => playCardAudio(textAudio), 300);
+        } else if (repeatAudio) {
+            audioTimeoutId = setTimeout(() => playCardAudio(repeatAudio), 300);
         }
-        // Auto-play on page 7 (S1 audio)
+
+        // Word-order pages: auto-play sentence audio
         if (currentPage === 7) {
-            setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267530/3-s1_grlnpj.mp3'), 400);
+            audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267530/3-s1_grlnpj.mp3'), 300);
         }
-        // Auto-play on page 13 (S2 audio)
-        if (currentPage === 13) {
-            setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267532/3-S2_kni0nt.mp3'), 400);
-        }
-    }
-
-    function goToNext() {
-        if (currentPage < TOTAL_PAGES) goToPage(currentPage + 1);
-    }
-
-    function goToPrev() {
-        if (currentPage > 1) goToPage(currentPage - 1);
-    }
-
-    function unlockNextButton(pageId) {
-        if (pageId === currentPage) {
-            const nextBtn = document.getElementById('next-btn');
-            nextBtn.disabled = false;
-            nextBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        if (currentPage === 14) {
+            audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776267532/3-S2_kni0nt.mp3'), 300);
         }
     }
 
-    // Init nav
-    document.getElementById('bottom-nav').style.display = 'none';
-    updateProgressBar();
-
-    /* =========================================
-       Audio
-    ========================================= */
+    /* ═══════════════════════════════════════
+       AUDIO
+    ═══════════════════════════════════════ */
     function playCardAudio(url) {
-        if (currentAudio) {
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
-        }
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
         currentAudio = new Audio(url);
         currentAudio.addEventListener('play',  () => toggleActiveMic(true));
         currentAudio.addEventListener('ended', () => toggleActiveMic(false));
         currentAudio.addEventListener('pause', () => toggleActiveMic(false));
         const p = currentAudio.play();
-        if (p !== undefined) p.catch(e => { console.warn("Audio interrupted:", e); toggleActiveMic(false); });
+        if (p !== undefined) p.catch(e => { console.warn('Audio:', e); toggleActiveMic(false); });
     }
 
     function triggerLessonComplete() {
         window.parent.postMessage({ type: 'lesson_complete' }, '*');
     }
 
-    /* =========================================
-       Mic UI helpers
-    ========================================= */
+    /* ═══════════════════════════════════════
+       MIC UI HELPERS
+    ═══════════════════════════════════════ */
     function toggleActiveMic(disable) {
-        const mics = document.querySelectorAll(`#page-${currentPage} .mic-req`);
-        mics.forEach(btn => {
+        document.querySelectorAll(`#page-${currentPage} .mic-req`).forEach(btn => {
             if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse')) return;
             if (disable) {
                 btn.disabled = true;
-                btn.classList.add('opacity-50', 'bg-slate-400', 'cursor-not-allowed');
+                btn.classList.add('opacity-50','bg-slate-400','cursor-not-allowed');
                 btn.classList.remove('bg-red-500');
             } else {
                 btn.disabled = false;
-                btn.classList.remove('opacity-50', 'bg-slate-400', 'cursor-not-allowed');
+                btn.classList.remove('opacity-50','bg-slate-400','cursor-not-allowed');
                 btn.classList.add('bg-red-500');
             }
         });
     }
 
-    function disableMicBtn(btn, success = false) {
+    function disableMicBtn(btn, success) {
         btn.disabled = true;
-        btn.className = `mic-req text-white rounded-full shadow-none transition-colors relative z-10 ${success ? 'bg-green-500 p-6' : 'bg-slate-400 p-6'}`;
+        btn.className = `mic-req mic-btn-lg text-white rounded-full p-6 shadow-none transition-colors relative z-10 ${success ? 'bg-green-500' : 'bg-slate-400'}`;
         btn.innerHTML = `<i class="ph-bold ph-check text-4xl"></i>`;
-    }
-
-    function disableMicBtnSmall(btn, success = false) {
-        btn.disabled = true;
-        btn.className = `mic-req text-white rounded-full shadow-none transition-colors relative z-10 ${success ? 'bg-green-500 p-5' : 'bg-slate-400 p-5'}`;
-        btn.innerHTML = `<i class="ph-bold ph-check text-3xl"></i>`;
     }
 
     function resetMicBtnState(btn) {
         btn.disabled = false;
-        const isSmall = btn.classList.contains('p-5');
-        btn.classList.remove('recording-pulse', 'bg-green-500', 'bg-slate-400', 'cursor-not-allowed', 'shadow-none', 'opacity-50');
-        btn.classList.add('bg-red-500', 'shadow-xl', isSmall ? 'p-5' : 'p-6');
-        btn.innerHTML = isSmall
-            ? `<i class="ph-fill ph-microphone text-3xl"></i>`
-            : `<i class="ph-fill ph-microphone text-4xl"></i>`;
+        btn.className = 'mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0';
+        btn.innerHTML = `<i class="ph-fill ph-microphone text-4xl"></i>`;
     }
 
-    /* =========================================
-       MCQ Quiz Logic
-    ========================================= */
-    [8, 14].forEach(pageId => {
+    /* ═══════════════════════════════════════
+       MCQ QUIZ
+    ═══════════════════════════════════════ */
+    [8, 15].forEach(pageId => {
         document.querySelectorAll(`#quiz-${pageId}-options .single-opt`).forEach(opt => {
             opt.addEventListener('click', function () {
                 if (pageStates[pageId].completed) return;
@@ -749,93 +817,88 @@
         quizAttempts++;
         pageStates[pageId].attempts = quizAttempts;
 
-        const options   = document.querySelectorAll(`#quiz-${pageId}-options .single-opt`);
-        const statusEl  = document.getElementById(`quiz-${pageId}-status`);
-        const tradEl    = document.getElementById(`trad-${pageId}`);
-        const selected  = Array.from(options).find(o => o.classList.contains('selected'));
+        const options  = document.querySelectorAll(`#quiz-${pageId}-options .single-opt`);
+        const statusEl = document.getElementById(`quiz-${pageId}-status`);
+        const tradEl   = document.getElementById(`trad-${pageId}`);
+        const selected = Array.from(options).find(o => o.classList.contains('selected'));
 
         if (!selected) {
             statusEl.innerText = "Veuillez choisir une option.";
-            statusEl.className = "absolute inset-0 font-bold text-center text-orange-500 text-sm w-full transition-colors";
+            statusEl.className = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
             return;
         }
 
         const isCorrect = selected.dataset.correct === "true";
+
+        const showTrad = () => {
+            if (tradEl) { tradEl.classList.remove('text-slate-400'); tradEl.classList.add('text-slate-500'); }
+        };
+
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
             statusEl.innerText = "Très bien !";
-            statusEl.className = "absolute inset-0 font-bold text-center text-green-500 text-sm w-full transition-colors";
+            statusEl.className = "font-bold text-center text-green-500 text-sm w-full transition-colors";
             selected.classList.remove('selected'); selected.classList.add('correct');
             document.getElementById(`quiz-${pageId}-btn`).disabled = true;
             document.getElementById(`quiz-${pageId}-btn`).classList.add('opacity-40','cursor-not-allowed');
             options.forEach(o => o.style.pointerEvents = 'none');
-            if (tradEl) tradEl.classList.remove('hidden');
+            showTrad();
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
             selected.classList.remove('selected'); selected.classList.add('wrong');
             setTimeout(() => selected.classList.remove('wrong'), 800);
-
             if (quizAttempts >= 2) {
-                // Show translation hint after 2 fails
-                if (tradEl) tradEl.classList.remove('hidden');
+                pageStates[pageId].completed = true;
                 statusEl.innerText = "Voici la bonne réponse.";
-                statusEl.className = "absolute inset-0 font-bold text-center text-blue-500 text-sm w-full transition-colors";
-                // Highlight correct
+                statusEl.className = "font-bold text-center text-blue-500 text-sm w-full transition-colors";
                 options.forEach(o => {
-                    if (o.dataset.correct === "true") { o.classList.add('correct'); }
+                    if (o.dataset.correct === "true") o.classList.add('correct');
                     o.style.pointerEvents = 'none';
                 });
-                pageStates[pageId].completed = true;
                 document.getElementById(`quiz-${pageId}-btn`).disabled = true;
                 document.getElementById(`quiz-${pageId}-btn`).classList.add('opacity-40','cursor-not-allowed');
+                showTrad();
                 unlockNextButton(pageId);
             } else {
                 statusEl.innerText = "Incorrect. Réessayez !";
-                statusEl.className = "absolute inset-0 font-bold text-center text-red-500 text-sm w-full transition-colors";
+                statusEl.className = "font-bold text-center text-red-500 text-sm w-full transition-colors";
             }
         }
     }
 
-    /* =========================================
-       Word Order Quiz Logic
-    ========================================= */
-    const wordOrderState = {};
-    [7, 13].forEach(id => { wordOrderState[id] = { placed: [], attempts: 0 }; });
-
+    /* ═══════════════════════════════════════
+       WORD-ORDER QUIZ
+    ═══════════════════════════════════════ */
     function placeToken(btn, pageId) {
-        if (btn.disabled) return;
+        if (btn.disabled || pageStates[pageId].completed) return;
         const state = wordOrderState[pageId];
         const word  = btn.innerText;
-        btn.disabled = true;
-        btn.classList.add('opacity-30', 'cursor-not-allowed');
 
-        // Create slot in answer area
+        // Give source btn a stable id
+        if (!btn.id) btn.id = `wt-${pageId}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        btn.disabled = true;
+        btn.classList.add('opacity-30','cursor-not-allowed');
+
         const answerArea = document.getElementById(`answer-area-${pageId}`);
         const slot = document.createElement('button');
         slot.className = 'word-token placed';
         slot.innerText = word;
-        slot.dataset.sourceId = btn.id || '';
-        slot.onclick = () => removeToken(slot, btn, pageId);
+        slot.dataset.srcId = btn.id;
+        slot.onclick = () => removeToken(slot, pageId);
         answerArea.appendChild(slot);
-
-        // Give source btn an id if missing
-        if (!btn.id) btn.id = `bank-token-${pageId}-${Date.now()}`;
-        slot.dataset.sourceId = btn.id;
         state.placed.push(word);
 
-        // Reset status
         document.getElementById(`word-status-${pageId}`).innerText = '';
     }
 
-    function removeToken(slot, sourceBtn, pageId) {
+    function removeToken(slot, pageId) {
         if (pageStates[pageId].completed) return;
         const state = wordOrderState[pageId];
         const idx   = state.placed.indexOf(slot.innerText);
         if (idx !== -1) state.placed.splice(idx, 1);
-        // Re-enable source token
-        const src = document.getElementById(slot.dataset.sourceId);
+        const src = document.getElementById(slot.dataset.srcId);
         if (src) { src.disabled = false; src.classList.remove('opacity-30','cursor-not-allowed'); }
         slot.remove();
         document.getElementById(`word-status-${pageId}`).innerText = '';
@@ -843,54 +906,47 @@
 
     function checkWordOrder(pageId, correctAnswer) {
         if (pageStates[pageId].completed) return;
-        const state     = wordOrderState[pageId];
-        const statusEl  = document.getElementById(`word-status-${pageId}`);
-        const placed    = state.placed;
+        const state    = wordOrderState[pageId];
+        const statusEl = document.getElementById(`word-status-${pageId}`);
 
-        if (placed.length === 0) {
+        if (state.placed.length === 0) {
             statusEl.innerText = "Placez des mots dans la réponse.";
             statusEl.className = "font-bold text-sm text-center w-full text-orange-500 transition-colors";
             return;
         }
 
         state.attempts++;
-        const isCorrect = placed.length === correctAnswer.length &&
-            placed.every((w, i) => w.toLowerCase() === correctAnswer[i].toLowerCase());
+        const isCorrect = state.placed.length === correctAnswer.length &&
+            state.placed.every((w, i) => w.toLowerCase() === correctAnswer[i].toLowerCase());
 
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
             statusEl.innerText = "Très bien !";
             statusEl.className = "font-bold text-sm text-center w-full text-green-500 transition-colors";
-            // Style placed tokens green
-            document.querySelectorAll(`#answer-area-${pageId} .word-token`).forEach(t => {
-                t.className = 'word-token correct-token'; t.onclick = null;
-            });
+            document.querySelectorAll(`#answer-area-${pageId} .word-token`).forEach(t => { t.className = 'word-token correct-token'; t.onclick = null; });
             document.getElementById(`word-btn-${pageId}`).disabled = true;
             document.getElementById(`word-btn-${pageId}`).classList.add('opacity-40','cursor-not-allowed');
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
-            // Flash red
             document.querySelectorAll(`#answer-area-${pageId} .word-token`).forEach(t => {
                 t.classList.add('wrong-token');
                 setTimeout(() => t.classList.remove('wrong-token'), 700);
             });
-
             if (state.attempts >= 3) {
                 // Show correct answer
                 const answerArea = document.getElementById(`answer-area-${pageId}`);
                 answerArea.innerHTML = '';
                 correctAnswer.forEach(w => {
                     const t = document.createElement('span');
-                    t.className = 'word-token correct-token';
-                    t.innerText = w; answerArea.appendChild(t);
+                    t.className = 'word-token correct-token'; t.innerText = w;
+                    answerArea.appendChild(t);
                 });
                 statusEl.innerText = "Voici la bonne réponse.";
                 statusEl.className = "font-bold text-sm text-center w-full text-blue-500 transition-colors";
                 document.getElementById(`word-btn-${pageId}`).disabled = true;
                 document.getElementById(`word-btn-${pageId}`).classList.add('opacity-40','cursor-not-allowed');
-                // Disable bank
                 document.querySelectorAll(`#bank-${pageId} .word-token`).forEach(b => {
                     b.disabled = true; b.classList.add('opacity-30','cursor-not-allowed');
                 });
@@ -899,10 +955,10 @@
             } else {
                 statusEl.innerText = "Incorrect. Réessayez !";
                 statusEl.className = "font-bold text-sm text-center w-full text-red-500 transition-colors";
-                // Reset placed tokens back to bank
+                // Return placed tokens to bank
                 const answerArea = document.getElementById(`answer-area-${pageId}`);
                 Array.from(answerArea.children).forEach(slot => {
-                    const src = document.getElementById(slot.dataset.sourceId);
+                    const src = document.getElementById(slot.dataset.srcId);
                     if (src) { src.disabled = false; src.classList.remove('opacity-30','cursor-not-allowed'); }
                 });
                 answerArea.innerHTML = '';
@@ -911,27 +967,26 @@
         }
     }
 
-    /* =========================================
-       Speech Recognition
-    ========================================= */
+    /* ═══════════════════════════════════════
+       SPEECH RECOGNITION
+    ═══════════════════════════════════════ */
     const BASE_44_ORIGIN = "https://coreeno.base44.app";
     const CLOVA_API_FUNCTION_URL = BASE_44_ORIGIN + '/api/functions/naverClovaSpeech';
 
     function calculateSimilarity(str1, str2) {
-        const s1 = str1.replace(/[\s.,?!]/g, '').toLowerCase();
-        const s2 = str2.replace(/[\s.,?!]/g, '').toLowerCase();
+        const s1 = str1.replace(/[\s.,?!]/g,'').toLowerCase();
+        const s2 = str2.replace(/[\s.,?!]/g,'').toLowerCase();
         if (s1 === s2) return 100;
         if (!s1.length || !s2.length) return 0;
-        const matrix = Array(s2.length + 1).fill(null).map(() => Array(s1.length + 1).fill(0));
-        for (let i = 0; i <= s1.length; i++) matrix[0][i] = i;
-        for (let j = 0; j <= s2.length; j++) matrix[j][0] = j;
-        for (let j = 1; j <= s2.length; j++) {
+        const m = Array(s2.length+1).fill(null).map(() => Array(s1.length+1).fill(0));
+        for (let i = 0; i <= s1.length; i++) m[0][i] = i;
+        for (let j = 0; j <= s2.length; j++) m[j][0] = j;
+        for (let j = 1; j <= s2.length; j++)
             for (let i = 1; i <= s1.length; i++) {
                 const ind = s1[i-1] === s2[j-1] ? 0 : 1;
-                matrix[j][i] = Math.min(matrix[j][i-1]+1, matrix[j-1][i]+1, matrix[j-1][i-1]+ind);
+                m[j][i] = Math.min(m[j][i-1]+1, m[j-1][i]+1, m[j-1][i-1]+ind);
             }
-        }
-        return Math.max(0, Math.round((1 - matrix[s2.length][s1.length] / Math.max(s1.length, s2.length)) * 100));
+        return Math.max(0, Math.round((1 - m[s2.length][s1.length] / Math.max(s1.length, s2.length)) * 100));
     }
 
     async function toggleRecordSpeech(btn, statusId, referenceData, mode) {
@@ -945,20 +1000,20 @@
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const mediaRecorder = new MediaRecorder(stream);
-            let audioChunks = [];
+            const audioChunks = [];
             mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
             mediaRecorder.onstop = async () => {
                 btn.classList.remove('recording-pulse');
                 btn.innerHTML = `<i class="ph ph-spinner animate-spin text-4xl"></i>`;
                 statusEl.innerText = "Analyse...";
-                const transcriptEl = document.getElementById(statusId.replace('status', 'transcript'));
+                // Clear transcript immediately on 2nd attempt
+                const transcriptEl = document.getElementById(statusId.replace('status','transcript'));
                 if (transcriptEl) transcriptEl.innerHTML = "";
                 const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                 const reader = new FileReader();
                 reader.readAsDataURL(audioBlob);
                 reader.onloadend = async () => {
-                    const base64data = reader.result.split(',')[1];
-                    await processSpeechApi(base64data, referenceData, mode, btn, statusEl, transcriptEl);
+                    await processSpeechApi(reader.result.split(',')[1], referenceData, mode, btn, statusEl, transcriptEl);
                 };
                 stream.getTracks().forEach(t => t.stop());
             };
@@ -967,10 +1022,13 @@
             btn.classList.add('recording-pulse');
             btn.innerHTML = `<i class="ph-fill ph-stop text-4xl"></i>`;
             statusEl.innerText = "";
+            // Also clear transcript when starting a new recording
+            const transcriptEl = document.getElementById(statusId.replace('status','transcript'));
+            if (transcriptEl) transcriptEl.innerHTML = "";
             recordingTimeout = setTimeout(() => {
                 if (mediaRecorder.state === 'recording') mediaRecorder.stop();
             }, 6000);
-        } catch (err) {
+        } catch(err) {
             console.error("Mic error:", err);
             statusEl.innerText = "Erreur micro.";
             statusEl.className = "text-red-500 font-bold text-sm text-center w-full transition-colors";
@@ -995,25 +1053,29 @@
             score = Array.isArray(referenceData)
                 ? Math.max(...referenceData.map(r => calculateSimilarity(recognizedText, r)))
                 : calculateSimilarity(recognizedText, referenceData);
-        } catch (e) {
+        } catch(e) {
             console.warn("API fallback:", e);
             score = Math.floor(Math.random() * 20) + 70;
-            recognizedText = score >= 80 ? (Array.isArray(referenceData) ? referenceData[0] : referenceData) : "???";
+            recognizedText = score >= 80
+                ? (Array.isArray(referenceData) ? referenceData[0] : referenceData)
+                : "???";
         }
 
         if (transcriptEl && recognizedText) {
-            transcriptEl.innerHTML = `<span class="text-slate-500">Vous avez dit : </span><span class="font-bold text-indigo-600">"${recognizedText}"</span> <span class="text-xs text-slate-400">(${score}%)</span>`;
+            transcriptEl.innerHTML =
+                `<span class="text-slate-500">Vous avez dit : </span>` +
+                `<span class="font-bold text-indigo-600">"${recognizedText}"</span> ` +
+                `<span class="text-xs text-slate-400">(${score}%)</span>`;
         }
 
-        const threshold = 80;
-        const isPass    = score >= threshold;
+        const isPass = score >= 80;
         let msg = "", isComplete = false;
 
         if (mode === 'repeat') {
             if (currentAttempts === 1) {
                 msg = isPass ? "Très bien, essayons encore." : "On y est presque !";
                 isComplete = false;
-                // Auto-replay card audio
+                // Replay card audio
                 const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                 if (cardBtns.length > 0) {
                     const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
@@ -1047,11 +1109,7 @@
 
         if (isComplete) {
             statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-blue-600'}`;
-            const isSmall = btn.classList.contains('p-5');
-            if (isSmall) disableMicBtnSmall(btn, isPass);
-            else disableMicBtn(btn, isPass);
-
-            // Check if all mics on page are done
+            disableMicBtn(btn, isPass);
             const allMics = document.querySelectorAll(`#page-${currentPage} .mic-req`);
             const allDone = Array.from(allMics).every(b => b.disabled);
             if (allDone) {
