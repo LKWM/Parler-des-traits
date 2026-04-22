@@ -2,382 +2,598 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Leçon 5 - Exercice (1) Mémoriser le vocabulaire</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
     <style>
-        * { font-family: 'Noto Sans KR', sans-serif; box-sizing: border-box; }
-        #app-container { display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; }
+        html, body {
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
+            overflow: hidden;
+            background-color: #f1f5f9;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: none;
+        }
+        #app-container {
+            width: 100%; height: 100%;
+            background-color: #ffffff;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
         #progress-container, #bottom-nav { flex-shrink: 0; }
-        .page { display: none; flex-direction: column; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; }
+        #pages-wrapper {
+            flex: 1; position: relative; width: 100%; display: flex; overflow: hidden;
+        }
+        .page {
+            display: none; flex-direction: column; width: 100%; height: 100%;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
         .page.active { display: flex; }
-        .content-area { display: flex; flex-direction: column; align-items: center; padding: 1.5rem 1.25rem; width: 100%; max-width: 480px; margin: 0 auto; flex: 1; gap: 1rem; }
-        .card-btn { cursor: pointer; border: none; background: none; padding: 0; }
-        .consigne { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 1.5rem; text-align: center; }
-        @media (min-width: 640px) { .consigne { font-size: 1.5rem; } }
-        @keyframes pulse-ring { 0%{box-shadow:0 0 0 0 rgba(239,68,68,0.5)} 70%{box-shadow:0 0 0 18px rgba(239,68,68,0)} 100%{box-shadow:0 0 0 0 rgba(239,68,68,0)} }
-        .recording-pulse { animation: pulse-ring 1.2s ease-out infinite; }
-        .mic-btn-lg { width:5rem; height:5rem; display:flex; align-items:center; justify-content:center; }
-        .cover-page { justify-content:center; align-items:center; background:linear-gradient(135deg,#e0e7ff 0%,#f0fdf4 100%); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .content-area {
+            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 1rem 1.25rem; text-align: center; min-height: 0; overflow: hidden;
+        }
+        @media (min-width: 768px)  { .content-area { padding: 2rem 3rem; } }
+        @media (min-width: 1024px) { .content-area { padding: 2.5rem 6rem; } }
+
+        /* scrollable content (matching pages with many items) */
+        .content-area.scrollable {
+            overflow-y: auto; justify-content: flex-start; padding-top: 1.25rem;
+        }
+
+        .text-content {
+            font-size: 1rem; line-height: 1.6rem; color: #334155; max-width: 42rem; margin: 0 auto;
+        }
+        @media (min-width: 768px)  { .text-content { font-size: 1.15rem; line-height: 1.85rem; } }
+        @media (min-width: 1024px) { .text-content { font-size: 1.25rem; line-height: 2rem; } }
+
+        .card-btn { transition: transform 0.1s, box-shadow 0.1s; cursor: pointer; }
+        .card-btn:active { transform: scale(0.97); }
+
+        .consigne {
+            font-size: 1.25rem; line-height: 1.75rem;
+            font-weight: 700; color: #1e293b;
+            margin-bottom: 1.25rem;
+        }
+        @media (min-width: 640px)  { .consigne { font-size: 1.5rem; } }
+        @media (min-width: 1024px) { .consigne { font-size: 1.75rem; margin-bottom: 1.75rem; } }
+
+        .recording-pulse { animation: pulse-red 1.5s infinite; }
+        @keyframes pulse-red {
+            0%   { box-shadow: 0 0 0 0   rgba(239,68,68,0.7); }
+            70%  { box-shadow: 0 0 0 15px rgba(239,68,68,0);  }
+            100% { box-shadow: 0 0 0 0   rgba(239,68,68,0);   }
+        }
+
+        /* Matching cards */
+        .match-card {
+            cursor: pointer; transition: all 0.15s;
+            border: 2px solid #e2e8f0; border-radius: 0.75rem;
+            padding: 0.6rem 0.5rem; background: white;
+            font-weight: 700; color: #334155;
+            text-align: center; user-select: none;
+            font-size: 0.85rem;
+        }
+        @media (min-width: 640px)  { .match-card { font-size: 0.95rem; padding: 0.75rem 0.6rem; } }
+        @media (min-width: 1024px) { .match-card { font-size: 1rem; padding: 0.85rem 0.75rem; } }
+        .match-card:hover            { border-color: #6366f1; background: #eef2ff; color: #4338ca; }
+        .match-card.selected-match   { border-color: #6366f1; background: #e0e7ff; color: #4338ca; }
+        .match-card.correct          { border-color: #22c55e; background: #dcfce7; color: #15803d; pointer-events: none; }
+        .match-card.wrong-flash      { border-color: #ef4444; background: #fee2e2; color: #b91c1c; }
+
+        /* MCQ options */
+        .quiz-option {
+            transition: all 0.2s; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .quiz-option.selected { background-color:#e0e7ff; border-color:#6366f1; color:#4338ca; }
+        .quiz-option.correct  { background-color:#dcfce7; border-color:#22c55e; color:#15803d; }
+        .quiz-option.wrong    { background-color:#fee2e2; border-color:#ef4444; color:#b91c1c; }
+        @media (min-width: 1024px) {
+            .quiz-option { font-size: 1.1rem; padding: 1rem 1.25rem !important; }
+        }
+
+        /* Fill-in input */
+        .fillin-input {
+            border: 2px solid #e2e8f0; border-radius: 0.75rem;
+            padding: 0.75rem 1rem; font-size: 1rem; font-weight: 700;
+            color: #1e293b; width: 100%; max-width: 22rem;
+            outline: none; text-align: center;
+            transition: border-color 0.2s;
+        }
+        .fillin-input:focus { border-color: #6366f1; }
+
+        /* Mic button */
+        .mic-btn-lg { padding: 1.5rem; }
+        @media (min-width: 1024px) {
+            .mic-btn-lg { padding: 2rem !important; }
+            .mic-btn-lg i { font-size: 3.5rem !important; }
+        }
     </style>
 </head>
-<body class="bg-white" style="margin:0;padding:0;width:100%;height:100vh;overflow:hidden;">
+<body>
 <div id="app-container">
-    <div id="progress-container" class="w-full bg-slate-100 hidden" style="height:4px;">
-        <div id="progress-bar" class="bg-indigo-500 h-full transition-all duration-500" style="width:0%"></div>
-    </div>
-    <div id="pages-wrapper" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
 
-        <!-- PAGE 0 — Cover -->
-        <div id="page-0" class="page cover-page active">
-            <div class="content-area items-center justify-center text-center gap-6">
-                <p class="text-sm font-semibold text-indigo-400 uppercase tracking-widest">Chapitre 1 · L'utilisation des adjectifs</p>
-                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 leading-tight">Leçon 5</h1>
-                <p class="text-lg sm:text-xl font-semibold text-slate-500">Exercice (1)</p>
-                <button onclick="startLesson()" class="mt-4 bg-indigo-600 text-white font-bold text-lg px-10 py-4 rounded-2xl shadow-lg hover:bg-indigo-700 active:scale-95 transition-all">Commencer</button>
+    <!-- Progress Bar -->
+    <div id="progress-container" class="w-full h-2 bg-slate-100 hidden">
+        <div id="progress-bar" class="h-full bg-indigo-500 transition-all duration-300 w-0"></div>
+    </div>
+
+    <div id="pages-wrapper">
+
+        <!-- ══════════════════════════════
+             PAGE 0 — Cover
+        ══════════════════════════════ -->
+        <div id="page-0" class="page active justify-center items-center bg-indigo-50">
+            <div class="content-area">
+                <p class="text-indigo-600 font-semibold mb-2 text-lg sm:text-xl">Chapitre 1 - L'utilisation des adjectifs</p>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-3 px-4">Leçon 5 - Exercice (1)</h1>
+                <p class="text-slate-500 font-semibold mb-10">Mémoriser le vocabulaire</p>
+                <button onclick="startLesson()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full text-xl shadow-lg transition-transform transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-3">
+                    <i class="ph-fill ph-play-circle text-2xl"></i>
+                    Commencer
+                </button>
             </div>
         </div>
-        <!-- PAGE 1 — Matching -->
+
+        <!-- ══════════════════════════════
+             PAGE 1 — Matching : Ch.1 Leçon 1 (calme/gentil/sympa/intelligent)
+        ══════════════════════════════ -->
         <div id="page-1" class="page">
-            <div class="content-area w-full">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 text-center w-full">Associez chaque mot à sa définition.</h2>
-                <div class="grid grid-cols-2 gap-3 w-full" id="match-grid-1">
+            <div class="content-area gap-3">
+                <h2 class="consigne" style="margin-bottom:0.75rem;">Associez chaque mot à sa définition.</h2>
+                <div class="grid grid-cols-2 gap-2 w-full max-w-sm" id="match-grid-1">
                     <div class="flex flex-col gap-2">
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(1,this,'left')">Être calme</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(1,this,'left')">Être gentil</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(1,this,'left')">Être sympathique</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(1,this,'left')">Être intelligent</div>
+                        <div class="match-card" onclick="selectMatch(1,this,'left')">Être calme</div>
+                        <div class="match-card" onclick="selectMatch(1,this,'left')">Être gentil</div>
+                        <div class="match-card" onclick="selectMatch(1,this,'left')">Être sympathique</div>
+                        <div class="match-card" onclick="selectMatch(1,this,'left')">Être intelligent</div>
                     </div>
                     <div class="flex flex-col gap-2">
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(1,this,'right')">친절하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(1,this,'right')">착하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(1,this,'right')">똑똑하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(1,this,'right')">조용하다</div>
+                        <div class="match-card" onclick="selectMatch(1,this,'right')">친절하다</div>
+                        <div class="match-card" onclick="selectMatch(1,this,'right')">착하다</div>
+                        <div class="match-card" onclick="selectMatch(1,this,'right')">똑똑하다</div>
+                        <div class="match-card" onclick="selectMatch(1,this,'right')">조용하다</div>
                     </div>
                 </div>
-                <p id="match-status-1" class="font-bold text-sm text-center w-full mt-1 min-h-[1.25rem]"></p>
+                <p id="match-status-1" class="font-bold text-sm text-center w-full min-h-[1.25rem]"></p>
             </div>
         </div>
-        <!-- PAGE 2 — Matching -->
+
+        <!-- ══════════════════════════════
+             PAGE 2 — Matching : Ch.1 Leçon 2 (propre/dur/chaud/frais)
+        ══════════════════════════════ -->
         <div id="page-2" class="page">
-            <div class="content-area w-full">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 text-center w-full">Associez chaque mot à sa définition.</h2>
-                <div class="grid grid-cols-2 gap-3 w-full" id="match-grid-2">
+            <div class="content-area gap-3">
+                <h2 class="consigne" style="margin-bottom:0.75rem;">Associez chaque mot à sa définition.</h2>
+                <div class="grid grid-cols-2 gap-2 w-full max-w-sm" id="match-grid-2">
                     <div class="flex flex-col gap-2">
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(2,this,'left')">Être propre</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(2,this,'left')">Être dur</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(2,this,'left')">Être chaud</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(2,this,'left')">Être frais</div>
+                        <div class="match-card" onclick="selectMatch(2,this,'left')">Être propre</div>
+                        <div class="match-card" onclick="selectMatch(2,this,'left')">Être dur</div>
+                        <div class="match-card" onclick="selectMatch(2,this,'left')">Être chaud</div>
+                        <div class="match-card" onclick="selectMatch(2,this,'left')">Être frais</div>
                     </div>
                     <div class="flex flex-col gap-2">
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(2,this,'right')">시원하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(2,this,'right')">딱딱하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(2,this,'right')">따뜻하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(2,this,'right')">깨끗하다</div>
+                        <div class="match-card" onclick="selectMatch(2,this,'right')">시원하다</div>
+                        <div class="match-card" onclick="selectMatch(2,this,'right')">딱딱하다</div>
+                        <div class="match-card" onclick="selectMatch(2,this,'right')">따뜻하다</div>
+                        <div class="match-card" onclick="selectMatch(2,this,'right')">깨끗하다</div>
                     </div>
                 </div>
-                <p id="match-status-2" class="font-bold text-sm text-center w-full mt-1 min-h-[1.25rem]"></p>
+                <p id="match-status-2" class="font-bold text-sm text-center w-full min-h-[1.25rem]"></p>
             </div>
         </div>
-        <!-- PAGE 3 — Matching -->
+
+        <!-- ══════════════════════════════
+             PAGE 3 — Matching : Ch.1 Leçon 3 (heureux/fatigué/ennuyé/libre)
+        ══════════════════════════════ -->
         <div id="page-3" class="page">
-            <div class="content-area w-full">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 text-center w-full">Associez chaque mot à sa définition.</h2>
-                <div class="grid grid-cols-2 gap-3 w-full" id="match-grid-3">
+            <div class="content-area gap-3">
+                <h2 class="consigne" style="margin-bottom:0.75rem;">Associez chaque mot à sa définition.</h2>
+                <div class="grid grid-cols-2 gap-2 w-full max-w-sm" id="match-grid-3">
                     <div class="flex flex-col gap-2">
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(3,this,'left')">Être heureux</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(3,this,'left')">Être fatigué</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(3,this,'left')">Être ennuyé</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(3,this,'left')">Être libre</div>
+                        <div class="match-card" onclick="selectMatch(3,this,'left')">Être heureux</div>
+                        <div class="match-card" onclick="selectMatch(3,this,'left')">Être fatigué</div>
+                        <div class="match-card" onclick="selectMatch(3,this,'left')">Être ennuyé</div>
+                        <div class="match-card" onclick="selectMatch(3,this,'left')">Être libre</div>
                     </div>
                     <div class="flex flex-col gap-2">
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(3,this,'right')">피곤하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(3,this,'right')">심심하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(3,this,'right')">한가하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(3,this,'right')">행복하다</div>
+                        <div class="match-card" onclick="selectMatch(3,this,'right')">한가하다</div>
+                        <div class="match-card" onclick="selectMatch(3,this,'right')">행복하다</div>
+                        <div class="match-card" onclick="selectMatch(3,this,'right')">심심하다</div>
+                        <div class="match-card" onclick="selectMatch(3,this,'right')">피곤하다</div>
                     </div>
                 </div>
-                <p id="match-status-3" class="font-bold text-sm text-center w-full mt-1 min-h-[1.25rem]"></p>
+                <p id="match-status-3" class="font-bold text-sm text-center w-full min-h-[1.25rem]"></p>
             </div>
         </div>
-        <!-- PAGE 4 — Matching -->
+
+        <!-- ══════════════════════════════
+             PAGE 4 — Matching : Mix 6 (calme/gentil/propre/dur/heureux/fatigué)
+        ══════════════════════════════ -->
         <div id="page-4" class="page">
-            <div class="content-area w-full">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 text-center w-full">Associez chaque mot à sa définition.</h2>
-                <div class="grid grid-cols-2 gap-3 w-full" id="match-grid-4">
+            <div class="content-area scrollable gap-2">
+                <h2 class="consigne w-full" style="margin-bottom:0.5rem;">Associez chaque mot à sa définition.</h2>
+                <div class="grid grid-cols-2 gap-2 w-full max-w-sm" id="match-grid-4">
                     <div class="flex flex-col gap-2">
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'left')">Être calme</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'left')">Être gentil</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'left')">Être propre</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'left')">Être dur</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'left')">Être heureux</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'left')">Être fatigué</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'left')">Être calme</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'left')">Être gentil</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'left')">Être propre</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'left')">Être dur</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'left')">Être heureux</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'left')">Être fatigué</div>
                     </div>
                     <div class="flex flex-col gap-2">
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'right')">깨끗하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'right')">피곤하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'right')">착하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'right')">조용하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'right')">행복하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(4,this,'right')">딱딱하다</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'right')">깨끗하다</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'right')">피곤하다</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'right')">착하다</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'right')">조용하다</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'right')">행복하다</div>
+                        <div class="match-card" onclick="selectMatch(4,this,'right')">딱딱하다</div>
                     </div>
                 </div>
-                <p id="match-status-4" class="font-bold text-sm text-center w-full mt-1 min-h-[1.25rem]"></p>
+                <p id="match-status-4" class="font-bold text-sm text-center w-full min-h-[1.25rem] mt-1"></p>
             </div>
         </div>
-        <!-- PAGE 5 — Matching -->
+
+        <!-- ══════════════════════════════
+             PAGE 5 — Matching : Mix 6 (chaud/frais/ennuyé/libre/sympa/intelligent)
+        ══════════════════════════════ -->
         <div id="page-5" class="page">
-            <div class="content-area w-full">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 text-center w-full">Associez chaque mot à sa définition.</h2>
-                <div class="grid grid-cols-2 gap-3 w-full" id="match-grid-5">
+            <div class="content-area scrollable gap-2">
+                <h2 class="consigne w-full" style="margin-bottom:0.5rem;">Associez chaque mot à sa définition.</h2>
+                <div class="grid grid-cols-2 gap-2 w-full max-w-sm" id="match-grid-5">
                     <div class="flex flex-col gap-2">
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'left')">Être chaud</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'left')">Être frais</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'left')">Être ennuyé</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'left')">Être libre</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'left')">Être sympathique</div>
-                    <div class="match-left border-2 border-slate-200 rounded-xl p-3 font-semibold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'left')">Être intelligent</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'left')">Être chaud</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'left')">Être frais</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'left')">Être ennuyé</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'left')">Être libre</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'left')">Être sympathique</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'left')">Être intelligent</div>
                     </div>
                     <div class="flex flex-col gap-2">
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'right')">지루하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'right')">따뜻하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'right')">친절하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'right')">똑똑하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'right')">시원하다</div>
-                    <div class="match-right border-2 border-slate-200 rounded-xl p-3 font-bold text-sm text-slate-700 bg-white cursor-pointer hover:bg-slate-50 text-center transition-all" onclick="selectMatch(5,this,'right')">한가하다</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'right')">심심하다</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'right')">따뜻하다</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'right')">친절하다</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'right')">똑똑하다</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'right')">시원하다</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'right')">한가하다</div>
                     </div>
                 </div>
-                <p id="match-status-5" class="font-bold text-sm text-center w-full mt-1 min-h-[1.25rem]"></p>
+                <p id="match-status-5" class="font-bold text-sm text-center w-full min-h-[1.25rem] mt-1"></p>
             </div>
         </div>
-        <!-- PAGE 6 — MCQ -->
+
+        <!-- ══════════════════════════════
+             PAGE 6 — MCQ : 이 사람은 친절해요.
+        ══════════════════════════════ -->
         <div id="page-6" class="page">
-            <div class="content-area w-full max-w-lg mx-auto">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center w-full">Choisissez la bonne traduction.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776797576/5-S1_oqdgaq.mp3')" class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
-                    <p class="text-base sm:text-lg font-bold text-slate-800">이 사람은 친절해요.</p>
-                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
+            <div class="content-area gap-4">
+                <h2 class="consigne">Choisissez la bonne traduction.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776797576/5-S1_oqdgaq.mp3')"
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">이 사람은 친절해요.</p>
+                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
-                <div class="flex flex-col gap-3 w-full" id="mcq-6">
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(6,this,true,null)">Cette personne est sympathique.</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(6,this,false,null)">La personne est heureuse.</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(6,this,false,null)">Cette personne est intelligente.</button>
+                <div class="flex flex-col gap-3 w-full max-w-sm" id="mcq-6">
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,6)" data-correct="true">Cette personne est sympathique.</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,6)" data-correct="false">La personne est heureuse.</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,6)" data-correct="false">Cette personne est intelligente.</button>
                 </div>
-                <p id="mcq-status-6" class="font-bold text-sm text-center w-full mt-2 min-h-[1.25rem]"></p>
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="mcq-status-6" class="font-bold text-center text-sm w-full transition-colors"></p>
+                </div>
+                <button id="mcq-btn-6" onclick="checkMCQ(6)"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                    Valider
+                </button>
             </div>
         </div>
-        <!-- PAGE 7 — MCQ -->
+
+        <!-- ══════════════════════════════
+             PAGE 7 — MCQ : 아버지는 착해요.
+        ══════════════════════════════ -->
         <div id="page-7" class="page">
-            <div class="content-area w-full max-w-lg mx-auto">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center w-full">Choisissez la bonne traduction.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776797580/5-S2_qmiuwx.mp3')" class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
-                    <p class="text-base sm:text-lg font-bold text-slate-800">방이 시원합니다.</p>
-                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
+            <div class="content-area gap-4">
+                <h2 class="consigne">Choisissez la bonne traduction.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776797580/5-S2_qmiuwx.mp3')"
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">아버지는 착해요.</p>
+                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
-                <div class="flex flex-col gap-3 w-full" id="mcq-7">
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(7,this,false,null)">La maison est chaude.</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(7,this,true,null)">La chambre est fraîche.</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(7,this,false,null)">Le pain est froid.</button>
+                <div class="flex flex-col gap-3 w-full max-w-sm" id="mcq-7">
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,7)" data-correct="false">Mon père est calme.</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,7)" data-correct="true">Mon père est gentil.</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,7)" data-correct="false">Mon père est sympathique.</button>
                 </div>
-                <p id="mcq-status-7" class="font-bold text-sm text-center w-full mt-2 min-h-[1.25rem]"></p>
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="mcq-status-7" class="font-bold text-center text-sm w-full transition-colors"></p>
+                </div>
+                <button id="mcq-btn-7" onclick="checkMCQ(7)"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                    Valider
+                </button>
             </div>
         </div>
-        <!-- PAGE 8 — MCQ -->
+
+        <!-- ══════════════════════════════
+             PAGE 8 — MCQ : 누나는 행복합니다.
+        ══════════════════════════════ -->
         <div id="page-8" class="page">
-            <div class="content-area w-full max-w-lg mx-auto">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center w-full">Choisissez la bonne traduction.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776798021/5-S3_hfjxww.mp3')" class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
-                    <p class="text-base sm:text-lg font-bold text-slate-800">고양이는 심심해요.</p>
-                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
+            <div class="content-area gap-4">
+                <h2 class="consigne">Choisissez la bonne traduction.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776798021/5-S3_hfjxww.mp3')"
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">누나는 행복합니다.</p>
+                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
-                <div class="flex flex-col gap-3 w-full" id="mcq-8">
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(8,this,false,null)">Le chien est libre.</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(8,this,true,null)">Le chat est ennuyé.</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(8,this,false,null)">Ma sœur est fatiguée.</button>
+                <div class="flex flex-col gap-3 w-full max-w-sm" id="mcq-8">
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,8)" data-correct="true">Ma grande sœur est heureuse.</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,8)" data-correct="false">Ma grande sœur est libre.</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,8)" data-correct="false">Ma grande sœur est fatiguée.</button>
                 </div>
-                <p id="mcq-status-8" class="font-bold text-sm text-center w-full mt-2 min-h-[1.25rem]"></p>
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="mcq-status-8" class="font-bold text-center text-sm w-full transition-colors"></p>
+                </div>
+                <button id="mcq-btn-8" onclick="checkMCQ(8)"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                    Valider
+                </button>
             </div>
         </div>
-        <!-- PAGE 9 — MCQ -->
+
+        <!-- ══════════════════════════════
+             PAGE 9 — MCQ : Être dur (no audio)
+        ══════════════════════════════ -->
         <div id="page-9" class="page">
-            <div class="content-area w-full max-w-lg mx-auto">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center w-full">Choisissez la bonne traduction.</h2>
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 w-full text-center">
-                    <p class="text-base sm:text-lg font-bold text-slate-800">Être dur</p>
-                    
+            <div class="content-area gap-4">
+                <h2 class="consigne">Choisissez la bonne traduction.</h2>
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">Être dur</p>
                 </div>
-                <div class="flex flex-col gap-3 w-full" id="mcq-9">
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(9,this,false,null)">똑똑하다</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(9,this,true,null)">딱딱하다</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(9,this,false,null)">피곤하다</button>
+                <div class="flex flex-col gap-3 w-full max-w-sm" id="mcq-9">
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,9)" data-correct="false">똑똑하다</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,9)" data-correct="true">딱딱하다</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,9)" data-correct="false">피곤하다</button>
                 </div>
-                <p id="mcq-status-9" class="font-bold text-sm text-center w-full mt-2 min-h-[1.25rem]"></p>
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="mcq-status-9" class="font-bold text-center text-sm w-full transition-colors"></p>
+                </div>
+                <button id="mcq-btn-9" onclick="checkMCQ(9)"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                    Valider
+                </button>
             </div>
         </div>
-        <!-- PAGE 10 — MCQ -->
+
+        <!-- ══════════════════════════════
+             PAGE 10 — MCQ : Être propre (no audio)
+        ══════════════════════════════ -->
         <div id="page-10" class="page">
-            <div class="content-area w-full max-w-lg mx-auto">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center w-full">Choisissez la bonne traduction.</h2>
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 w-full text-center">
-                    <p class="text-base sm:text-lg font-bold text-slate-800">Être propre</p>
-                    
+            <div class="content-area gap-4">
+                <h2 class="consigne">Choisissez la bonne traduction.</h2>
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">Être propre</p>
                 </div>
-                <div class="flex flex-col gap-3 w-full" id="mcq-10">
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(10,this,false,null)">친절하다</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(10,this,true,null)">깨끗하다</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(10,this,false,null)">따뜻하다</button>
+                <div class="flex flex-col gap-3 w-full max-w-sm" id="mcq-10">
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,10)" data-correct="false">친절하다</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,10)" data-correct="true">깨끗하다</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,10)" data-correct="false">따뜻하다</button>
                 </div>
-                <p id="mcq-status-10" class="font-bold text-sm text-center w-full mt-2 min-h-[1.25rem]"></p>
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="mcq-status-10" class="font-bold text-center text-sm w-full transition-colors"></p>
+                </div>
+                <button id="mcq-btn-10" onclick="checkMCQ(10)"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                    Valider
+                </button>
             </div>
         </div>
-        <!-- PAGE 11 — MCQ -->
+
+        <!-- ══════════════════════════════
+             PAGE 11 — MCQ : Être calme (no audio)
+        ══════════════════════════════ -->
         <div id="page-11" class="page">
-            <div class="content-area w-full max-w-lg mx-auto">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center w-full">Choisissez la bonne traduction.</h2>
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 w-full text-center">
-                    <p class="text-base sm:text-lg font-bold text-slate-800">Être calme</p>
-                    
+            <div class="content-area gap-4">
+                <h2 class="consigne">Choisissez la bonne traduction.</h2>
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">Être calme</p>
                 </div>
-                <div class="flex flex-col gap-3 w-full" id="mcq-11">
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(11,this,false,null)">시원하다</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(11,this,true,null)">조용하다</button>
-                    <button class="mcq-opt border-2 border-slate-200 rounded-xl p-4 font-bold text-base text-slate-700 bg-white hover:bg-slate-50 text-left" onclick="checkMCQ(11,this,false,null)">행복하다</button>
+                <div class="flex flex-col gap-3 w-full max-w-sm" id="mcq-11">
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,11)" data-correct="false">시원하다</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,11)" data-correct="true">조용하다</button>
+                    <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
+                        onclick="selectMCQOpt(this,11)" data-correct="false">행복하다</button>
                 </div>
-                <p id="mcq-status-11" class="font-bold text-sm text-center w-full mt-2 min-h-[1.25rem]"></p>
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="mcq-status-11" class="font-bold text-center text-sm w-full transition-colors"></p>
+                </div>
+                <button id="mcq-btn-11" onclick="checkMCQ(11)"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                    Valider
+                </button>
             </div>
         </div>
-        <!-- PAGE 12 — Fill-in -->
+
+        <!-- ══════════════════════════════
+             PAGE 12 — Fill-in : 학생은 ____. (L'étudiant est intelligent.)
+        ══════════════════════════════ -->
         <div id="page-12" class="page">
-            <div class="content-area w-full max-w-lg mx-auto">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center w-full">Complétez la phrase.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776797573/5-S4_u79cue.mp3')" class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
+            <div class="content-area gap-4">
+                <h2 class="consigne">Complétez la phrase.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776797573/5-S4_u79cue.mp3')"
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
                     <p class="text-base sm:text-lg font-bold text-slate-800 text-left">L'étudiant est intelligent.</p>
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 w-full text-center">
-                    <p class="text-base sm:text-lg font-bold text-slate-800">학생은 ____.</p>
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">학생은 ____.</p>
                 </div>
-                <div class="flex gap-2 w-full max-w-xs mx-auto">
-                    <input id="fillin-input-12" type="text" placeholder="Votre réponse…" class="flex-1 border-2 border-slate-200 rounded-xl p-3 text-base font-bold text-slate-800 focus:outline-none focus:border-indigo-400" onkeydown="if(event.key==='Enter') checkFillin(12,'똑똑해요')">
-                    <button onclick="checkFillin(12,'똑똑해요')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-3 rounded-xl">OK</button>
+                <input id="fillin-input-12" class="fillin-input" type="text" placeholder="Votre réponse…"
+                    onkeydown="if(event.key==='Enter') checkFillin(12,'똑똑해요')">
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="fillin-status-12" class="font-bold text-center text-sm w-full transition-colors"></p>
                 </div>
-                <p id="fillin-status-12" class="font-bold text-sm text-center w-full min-h-[1.25rem]"></p>
+                <button id="fillin-btn-12" onclick="checkFillin(12,'똑똑해요')"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                    Valider
+                </button>
             </div>
         </div>
-        <!-- PAGE 13 — Speak -->
+
+        <!-- ══════════════════════════════
+             PAGE 13 — Speak : 학교가 _____. (L'école est chaude.)
+        ══════════════════════════════ -->
         <div id="page-13" class="page">
-            <div class="content-area">
+            <div class="content-area gap-4">
                 <h2 class="consigne">Parlez en coréen.</h2>
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 w-full text-center mb-2">
-                    <p class="text-base sm:text-lg font-bold text-slate-500 italic">L'école est chaude.</p>
-                    <p class="text-xl sm:text-2xl font-black text-slate-800 mt-1">학교가 _____.</p>
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-4 px-6 w-full max-w-sm shrink-0 text-center">
+                    <p class="text-slate-500 italic text-sm sm:text-base mb-1">L'école est chaude.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">학교가 _____.</p>
                 </div>
-                <button id="mic-btn-13" onclick="toggleRecordSpeech(this,'status-13','ANSWER_13','speak')" class="mic-req mic-btn-lg bg-red-500 text-white rounded-full shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-13" onclick="toggleRecordSpeech(this,'status-13','따뜻합니다','speak')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-13" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-13" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                    <p id="status-13"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-13" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
-        <!-- PAGE 14 — Fill-in -->
+
+        <!-- ══════════════════════════════
+             PAGE 14 — Fill-in : 집이 ____. (La maison est propre.)
+        ══════════════════════════════ -->
         <div id="page-14" class="page">
-            <div class="content-area w-full max-w-lg mx-auto">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-2 text-center w-full">Complétez la phrase.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776798017/5-S5_eot16d.mp3')" class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
+            <div class="content-area gap-4">
+                <h2 class="consigne">Complétez la phrase.</h2>
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776798017/5-S5_eot16d.mp3')"
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
                     <p class="text-base sm:text-lg font-bold text-slate-800 text-left">La maison est propre.</p>
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 w-full text-center">
-                    <p class="text-base sm:text-lg font-bold text-slate-800">집이 ____.</p>
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">집이 ____.</p>
                 </div>
-                <div class="flex gap-2 w-full max-w-xs mx-auto">
-                    <input id="fillin-input-14" type="text" placeholder="Votre réponse…" class="flex-1 border-2 border-slate-200 rounded-xl p-3 text-base font-bold text-slate-800 focus:outline-none focus:border-indigo-400" onkeydown="if(event.key==='Enter') checkFillin(14,'깨끗합니다')">
-                    <button onclick="checkFillin(14,'깨끗합니다')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-3 rounded-xl">OK</button>
+                <input id="fillin-input-14" class="fillin-input" type="text" placeholder="Votre réponse…"
+                    onkeydown="if(event.key==='Enter') checkFillin(14,'깨끗합니다')">
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="fillin-status-14" class="font-bold text-center text-sm w-full transition-colors"></p>
                 </div>
-                <p id="fillin-status-14" class="font-bold text-sm text-center w-full min-h-[1.25rem]"></p>
+                <button id="fillin-btn-14" onclick="checkFillin(14,'깨끗합니다')"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                    Valider
+                </button>
             </div>
         </div>
-        <!-- PAGE 15 — Speak -->
+
+        <!-- ══════════════════════════════
+             PAGE 15 — Speak : 언니는 _____. (Ma grande sœur est libre.)
+        ══════════════════════════════ -->
         <div id="page-15" class="page">
-            <div class="content-area">
+            <div class="content-area gap-4">
                 <h2 class="consigne">Parlez en coréen.</h2>
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 w-full text-center mb-2">
-                    <p class="text-base sm:text-lg font-bold text-slate-500 italic">Ma sœur est libre.</p>
-                    <p class="text-xl sm:text-2xl font-black text-slate-800 mt-1">언니는 _____.</p>
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-4 px-6 w-full max-w-sm shrink-0 text-center">
+                    <p class="text-slate-500 italic text-sm sm:text-base mb-1">Ma grande sœur est libre.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">언니는 _____.</p>
                 </div>
-                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15','ANSWER_15','speak')" class="mic-req mic-btn-lg bg-red-500 text-white rounded-full shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
+                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15','한가해요','speak')"
+                    class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <div class="invisible flex flex-col items-center w-full pointer-events-none">
-                        <p class="font-bold text-sm text-center w-full">Analyse...</p>
-                        <p class="text-sm text-center px-4 leading-tight mt-1">Vous avez dit : "..." (100%)<br>&nbsp;</p>
-                    </div>
-                    <div class="absolute inset-0 flex flex-col items-center justify-start w-full">
-                        <p id="status-15" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                        <p id="transcript-15" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    </div>
+                    <p id="status-15"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-15" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
-        <!-- PAGE 16 — Outro -->
+
+        <!-- ══════════════════════════════
+             PAGE 16 — Outro
+        ══════════════════════════════ -->
         <div id="page-16" class="page justify-center items-center bg-green-50">
-            <div class="content-area">
-                <div class="bg-white p-5 rounded-full shadow-md mb-6">
-                    <i class="ph-fill ph-check-circle text-5xl text-green-500"></i>
-                </div>
-                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-6">Bon travail !</h1>
-                <p class="text-content text-green-900 font-medium text-sm sm:text-base leading-relaxed text-justify">Félicitations ! Vous avez mémorisé tous les mots du chapitre 1. N'oubliez pas de réviser régulièrement pour bien les ancrer dans votre mémoire !</p>
+            <div class="content-area gap-6">
+                <i class="ph-fill ph-check-circle text-7xl text-green-500"></i>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800">Bon travail !</h1>
+                <p class="text-content text-green-900 font-medium text-sm sm:text-base leading-relaxed text-justify">
+                    Félicitations ! Vous avez mémorisé tous les mots du chapitre 1. N'oubliez pas de réviser régulièrement pour bien les ancrer dans votre mémoire !
+                </p>
             </div>
         </div>
 
     </div><!-- end pages-wrapper -->
 
-    <div id="bottom-nav" class="w-full h-16 sm:h-20 bg-white border-t border-slate-200 flex items-center justify-between px-6 sm:px-10 hidden">
-        <button id="btn-prev" onclick="changePage(-1)" class="text-slate-500 font-bold text-base sm:text-lg flex items-center gap-2 hover:text-slate-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"><i class="ph-bold ph-caret-left"></i> Précédent</button>
-        <button id="btn-next" onclick="changePage(1)" class="text-indigo-600 font-bold text-base sm:text-lg flex items-center gap-2 hover:text-indigo-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">Suivant <i class="ph-bold ph-caret-right"></i></button>
+    <!-- Bottom Nav -->
+    <div id="bottom-nav" class="w-full bg-white border-t border-slate-200 hidden" style="flex-shrink:0;">
+        <div class="flex items-center justify-between px-6 sm:px-10 h-16 sm:h-20">
+            <button id="btn-prev" onclick="changePage(-1)"
+                class="text-slate-500 font-bold text-base sm:text-lg flex items-center gap-2 hover:text-slate-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                <i class="ph-bold ph-caret-left"></i> Précédent
+            </button>
+            <button id="btn-next" onclick="changePage(1)"
+                class="text-indigo-600 font-bold text-base sm:text-lg flex items-center gap-2 hover:text-indigo-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                Suivant <i class="ph-bold ph-caret-right"></i>
+            </button>
+        </div>
     </div>
-</div>
+
+</div><!-- end app-container -->
 
 <script>
-    const TOTAL_PAGES = 17;
-    let currentPage = 0, currentAudio = null, audioTimeoutId = null, activeRecorder = null, recordingTimeout = null;
-    const pageStates = {};
-    for (let i = 0; i < TOTAL_PAGES; i++) pageStates[i] = { completed: false, attempts: 0 };
-    const completedPages = new Set();
-    let correctSound = null, completionSynth = null, errorSound = null, transitionSynth = null;
+    const TOTAL_PAGES = 17; // pages 0–16
 
     const interactivePages = new Set([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]);
 
-    const pageTextAudios = {
-        16: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776799172/5-1_omi4cs.wav',
-    };
+    const completedPages = new Set();
+    const pageStates = {};
+    for (let i = 0; i < TOTAL_PAGES; i++) {
+        pageStates[i] = { attempts: 0, completed: false };
+    }
 
-    // MCQ audio pages auto-play
-    const mcqAudios = {
+    let currentPage = 0;
+    let currentAudio = null;
+    let audioTimeoutId = null;
+    let activeRecorder = null;
+    let recordingTimeout = null;
+
+    let correctSound = null, errorSound = null, completionSynth = null, transitionSynth = null;
+
+    // Pages with audio to auto-play on entry
+    const pageAudios = {
         6:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776797576/5-S1_oqdgaq.mp3',
         7:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776797580/5-S2_qmiuwx.mp3',
         8:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776798021/5-S3_hfjxww.mp3',
         12: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776797573/5-S4_u79cue.mp3',
         14: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776798017/5-S5_eot16d.mp3',
+        16: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776799172/5-1_omi4cs.wav',
     };
 
-    // Speak page answers
-    const speakAnswers = { 13: '따뜻합니다', 15: '한가해요' };
-
-    // Matching data: left → correct right
+    // Matching answers: left text → correct right text
     const matchingAnswers = {
         1: { "Être calme":"조용하다", "Être gentil":"착하다", "Être sympathique":"친절하다", "Être intelligent":"똑똑하다" },
         2: { "Être propre":"깨끗하다", "Être dur":"딱딱하다", "Être chaud":"따뜻하다", "Être frais":"시원하다" },
@@ -387,243 +603,411 @@
     };
     const matchState = {};
 
-    function startLesson() {
-        Tone.start().then(() => {
-            correctSound    = new Tone.Synth({ oscillator:{type:"sine"} }).toDestination();
-            errorSound      = new Tone.Synth({ oscillator:{type:"triangle"} }).toDestination();
-            completionSynth = new Tone.PolySynth(Tone.Synth).toDestination();
-            transitionSynth = new Tone.Synth({ oscillator:{type:"sine"}, envelope:{attack:0.01,decay:0.05,sustain:0,release:0.1} }).toDestination();
-        });
+    /* ═══════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════ */
+    async function initAudioContext() {
+        await Tone.start();
+        correctSound    = new Tone.Synth({ oscillator: { type: 'sine'     } }).toDestination();
+        errorSound      = new Tone.Synth({ oscillator: { type: 'triangle' } }).toDestination();
+        completionSynth = new Tone.PolySynth(Tone.Synth).toDestination();
+        transitionSynth = new Tone.Synth({
+            oscillator: { type: 'sine' },
+            envelope:   { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
+        }).toDestination();
+        transitionSynth.volume.value = -15;
+    }
+
+    async function startLesson() {
+        await initAudioContext();
         currentPage = 1;
         document.getElementById('page-0').classList.remove('active');
         document.getElementById('page-1').classList.add('active');
         document.getElementById('bottom-nav').classList.remove('hidden');
         document.getElementById('progress-container').classList.remove('hidden');
-        // init matching states
-        [1,2,3,4,5].forEach(p => { matchState[p] = { selectedLeft: null, selectedRight: null, matched: new Set() }; });
-        updateProgress(); updateNav();
+        // init match states
+        [1,2,3,4,5].forEach(p => {
+            matchState[p] = { selectedLeft: null, selectedRight: null, matched: new Set() };
+        });
+        updateProgress();
+        updateNav();
     }
 
+    /* ═══════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════ */
     function updateProgress() {
-        document.getElementById('progress-bar').style.width = ((currentPage/(TOTAL_PAGES-1))*100) + '%';
+        const pct = (currentPage / (TOTAL_PAGES - 1)) * 100;
+        document.getElementById('progress-bar').style.width = pct + '%';
     }
-    function unlockNextButton(page) {
-        completedPages.add(page); pageStates[page].completed = true;
-        const btn = document.getElementById('btn-next'); if (btn) btn.disabled = false;
+
+    function unlockNextButton(pageId) {
+        completedPages.add(pageId);
+        pageStates[pageId].completed = true;
+        const btn = document.getElementById('btn-next');
+        if (btn) btn.disabled = false;
     }
 
     function changePage(dir) {
-        if (dir !== 0 && transitionSynth) transitionSynth.triggerAttackRelease('C6','0.05s');
-        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+        if (dir !== 0 && transitionSynth) transitionSynth.triggerAttackRelease('C6', '0.05s');
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
         if (audioTimeoutId) { clearTimeout(audioTimeoutId); audioTimeoutId = null; }
-        if (activeRecorder && activeRecorder.state === 'recording') { activeRecorder.stop(); clearTimeout(recordingTimeout); }
+        if (activeRecorder && activeRecorder.state === 'recording') {
+            activeRecorder.stop(); clearTimeout(recordingTimeout);
+        }
+
         document.getElementById(`page-${currentPage}`).classList.remove('active');
-        currentPage = Math.max(1, Math.min(currentPage + dir, TOTAL_PAGES-1));
+        currentPage = Math.max(1, Math.min(currentPage + dir, TOTAL_PAGES - 1));
         document.getElementById(`page-${currentPage}`).classList.add('active');
-        updateProgress(); updateNav();
-        if (currentPage < TOTAL_PAGES-1) {
-            const ma = mcqAudios[currentPage];
-            if (ma) audioTimeoutId = setTimeout(() => playCardAudio(ma), 300);
+
+        updateProgress();
+
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+
+        if (currentPage === TOTAL_PAGES - 1) {
+            document.getElementById('bottom-nav').classList.add('hidden');
+            if (completionSynth) {
+                completionSynth.triggerAttackRelease(["C5","E5","G5","C6"], "4n");
+                const outroAudio = pageAudios[TOTAL_PAGES - 1];
+                if (outroAudio) audioTimeoutId = setTimeout(() => playCardAudio(outroAudio), 700);
+            }
+            triggerLessonComplete();
+        } else {
+            document.getElementById('bottom-nav').classList.remove('hidden');
+            btnPrev.style.display = 'flex';
+            btnNext.style.display = 'flex';
+            btnPrev.disabled = (currentPage <= 1);
+            btnNext.disabled = interactivePages.has(currentPage) && !completedPages.has(currentPage);
+        }
+
+        // Auto-play audio on page entry
+        const audio = pageAudios[currentPage];
+        if (audio && currentPage < TOTAL_PAGES - 1) {
+            audioTimeoutId = setTimeout(() => playCardAudio(audio), 300);
         }
     }
 
     function updateNav() {
         const btnPrev = document.getElementById('btn-prev');
         const btnNext = document.getElementById('btn-next');
-        if (currentPage === TOTAL_PAGES-1) {
-            document.getElementById('bottom-nav').classList.add('hidden');
-            if (completionSynth) {
-                completionSynth.triggerAttackRelease(["C5","E5","G5","C6"],"4n");
-                const oa = pageTextAudios[TOTAL_PAGES-1];
-                if (oa) audioTimeoutId = setTimeout(() => playCardAudio(oa), 700);
-            }
-            triggerLessonComplete();
-        } else {
-            document.getElementById('bottom-nav').classList.remove('hidden');
-            btnPrev.style.display='flex'; btnNext.style.display='flex';
-            btnPrev.disabled = (currentPage <= 1);
-            btnNext.disabled = interactivePages.has(currentPage) && !completedPages.has(currentPage);
-        }
+        btnPrev.disabled = (currentPage <= 1);
+        btnNext.disabled = interactivePages.has(currentPage) && !completedPages.has(currentPage);
     }
 
-    function triggerLessonComplete() { window.parent.postMessage({ type: 'lesson_complete' }, '*'); }
-
+    /* ═══════════════════════════════════════
+       AUDIO
+    ═══════════════════════════════════════ */
     function playCardAudio(url) {
         if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
         currentAudio = new Audio(url);
         currentAudio.addEventListener('play',  () => toggleActiveMic(true));
         currentAudio.addEventListener('ended', () => toggleActiveMic(false));
         currentAudio.addEventListener('pause', () => toggleActiveMic(false));
-        const p = currentAudio.play(); if (p) p.catch(()=>{});
-    }
-    function toggleActiveMic(disable) {
-        document.querySelectorAll('.mic-req').forEach(b => { if (!b.disabled) b.style.pointerEvents = disable?'none':'auto'; });
+        const p = currentAudio.play();
+        if (p !== undefined) p.catch(e => { console.warn('Audio:', e); toggleActiveMic(false); });
     }
 
-    /* ═══ MATCHING ═══ */
+    function triggerLessonComplete() {
+        window.parent.postMessage({ type: 'lesson_complete' }, '*');
+    }
+
+    function toggleActiveMic(disable) {
+        document.querySelectorAll(`#page-${currentPage} .mic-req`).forEach(btn => {
+            if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse')) return;
+            if (disable) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50','bg-slate-400','cursor-not-allowed');
+                btn.classList.remove('bg-red-500');
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50','bg-slate-400','cursor-not-allowed');
+                btn.classList.add('bg-red-500');
+            }
+        });
+    }
+
+    function disableMicBtn(btn, success) {
+        btn.disabled = true;
+        btn.className = `mic-req mic-btn-lg text-white rounded-full p-6 shadow-none transition-colors relative z-10 ${success ? 'bg-green-500' : 'bg-slate-400'}`;
+        btn.innerHTML = `<i class="ph-bold ph-check text-4xl"></i>`;
+    }
+
+    function resetMicBtnState(btn) {
+        btn.disabled = false;
+        btn.className = 'mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0';
+        btn.innerHTML = `<i class="ph-fill ph-microphone text-4xl"></i>`;
+    }
+
+    /* ═══════════════════════════════════════
+       MATCHING
+    ═══════════════════════════════════════ */
     function selectMatch(pageNum, el, side) {
         if (pageStates[pageNum].completed) return;
-        const state = matchState[pageNum];
+        const state   = matchState[pageNum];
         const answers = matchingAnswers[pageNum];
-        const grid = document.getElementById(`match-grid-${pageNum}`);
+        const grid    = document.getElementById(`match-grid-${pageNum}`);
+        const sideKey = side === 'left' ? 'selectedLeft' : 'selectedRight';
+        const cls     = side === 'left' ? 'match-card' : 'match-card';
 
-        // Deselect same side
-        grid.querySelectorAll(`.match-${side}`).forEach(b => { if (!b.classList.contains('correct')) b.classList.remove('selected-match','border-indigo-500','bg-indigo-50'); });
+        // Deselect same side (not already correct)
+        grid.querySelectorAll(`.match-card`).forEach(b => {
+            if (!b.classList.contains('correct')) {
+                const isLeft  = b.parentElement === grid.children[0];
+                const isRight = b.parentElement === grid.children[1];
+                if ((side === 'left' && isLeft) || (side === 'right' && isRight)) {
+                    b.classList.remove('selected-match');
+                }
+            }
+        });
 
         if (el.classList.contains('correct')) return;
-        el.classList.add('selected-match','border-indigo-500','bg-indigo-50');
-        state[`selected${side.charAt(0).toUpperCase()+side.slice(1)}`] = el;
+        el.classList.add('selected-match');
+        state[sideKey] = el;
 
         if (state.selectedLeft && state.selectedRight) {
             const leftText  = state.selectedLeft.textContent.trim();
             const rightText = state.selectedRight.textContent.trim();
             const isCorrect = answers[leftText] === rightText;
+
             if (isCorrect) {
-                state.selectedLeft.classList.add('correct','border-green-500','bg-green-50');
-                state.selectedLeft.classList.remove('selected-match','border-indigo-500','bg-indigo-50');
-                state.selectedRight.classList.add('correct','border-green-500','bg-green-50');
-                state.selectedRight.classList.remove('selected-match','border-indigo-500','bg-indigo-50');
+                state.selectedLeft.classList.add('correct');
+                state.selectedLeft.classList.remove('selected-match');
+                state.selectedRight.classList.add('correct');
+                state.selectedRight.classList.remove('selected-match');
                 state.matched.add(leftText);
-                if (correctSound) correctSound.triggerAttackRelease('C5','0.15s');
+                if (correctSound) correctSound.triggerAttackRelease('C5', '0.15s');
                 if (state.matched.size === Object.keys(answers).length) {
-                    document.getElementById(`match-status-${pageNum}`).textContent = 'Parfait !';
-                    document.getElementById(`match-status-${pageNum}`).className = 'font-bold text-sm text-center w-full mt-1 text-green-600';
+                    const statusEl = document.getElementById(`match-status-${pageNum}`);
+                    statusEl.textContent = 'Parfait !';
+                    statusEl.className   = 'font-bold text-sm text-center w-full min-h-[1.25rem] text-green-600';
+                    if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
                     unlockNextButton(pageNum);
-                    if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"],"8n");
                 }
             } else {
-                if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+                if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
                 [state.selectedLeft, state.selectedRight].forEach(b => {
-                    b.classList.add('border-red-400','bg-red-50');
-                    b.classList.remove('selected-match','border-indigo-500','bg-indigo-50');
+                    b.classList.add('wrong-flash');
+                    b.classList.remove('selected-match');
                 });
                 setTimeout(() => {
-                    [state.selectedLeft, state.selectedRight].forEach(b => b.classList.remove('border-red-400','bg-red-50'));
-                }, 800);
+                    [state.selectedLeft, state.selectedRight].forEach(b => b.classList.remove('wrong-flash'));
+                }, 700);
             }
-            state.selectedLeft = null; state.selectedRight = null;
+            state.selectedLeft = null;
+            state.selectedRight = null;
         }
     }
 
-    /* ═══ MCQ ═══ */
-    function checkMCQ(pageNum, btn, isCorrect, tradText) {
-        if (pageStates[pageNum].completed) return;
-        const container = document.getElementById(`mcq-${pageNum}`);
-        const statusEl  = document.getElementById(`mcq-status-${pageNum}`);
-        container.querySelectorAll('.mcq-opt').forEach(b => b.classList.remove('bg-red-50','border-red-400','bg-green-50','border-green-500'));
+    /* ═══════════════════════════════════════
+       MCQ (Valider 버튼 방식)
+    ═══════════════════════════════════════ */
+    function selectMCQOpt(btn, pageId) {
+        if (pageStates[pageId].completed) return;
+        document.querySelectorAll(`#mcq-${pageId} .quiz-option`).forEach(o => o.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    function checkMCQ(pageId) {
+        if (pageStates[pageId].completed) return;
+        pageStates[pageId].attempts++;
+
+        const options  = document.querySelectorAll(`#mcq-${pageId} .quiz-option`);
+        const statusEl = document.getElementById(`mcq-status-${pageId}`);
+        const selected = Array.from(options).find(o => o.classList.contains('selected'));
+
+        if (!selected) {
+            statusEl.textContent  = "Veuillez choisir une option.";
+            statusEl.className    = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
+            return;
+        }
+
+        const isCorrect = selected.dataset.correct === "true";
+
         if (isCorrect) {
-            btn.classList.add('bg-green-50','border-green-500');
-            statusEl.textContent = 'Très bien !'; statusEl.className = 'font-bold text-sm text-center w-full mt-2 text-green-600';
-            unlockNextButton(pageNum); if (correctSound) correctSound.triggerAttackRelease('C5','0.2s');
+            pageStates[pageId].completed = true;
+            if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+            statusEl.textContent = "Très bien !";
+            statusEl.className   = "font-bold text-center text-green-500 text-sm w-full transition-colors";
+            selected.classList.remove('selected'); selected.classList.add('correct');
+            document.getElementById(`mcq-btn-${pageId}`).disabled = true;
+            document.getElementById(`mcq-btn-${pageId}`).classList.add('opacity-40','cursor-not-allowed');
+            options.forEach(o => o.style.pointerEvents = 'none');
+            unlockNextButton(pageId);
         } else {
-            btn.classList.add('bg-red-50','border-red-400');
-            statusEl.textContent = 'Essayez encore !'; statusEl.className = 'font-bold text-sm text-center w-full mt-2 text-red-500';
-            if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
-            setTimeout(() => { btn.classList.remove('bg-red-50','border-red-400'); statusEl.textContent=''; }, 1000);
-        }
-    }
-
-    /* ═══ FILL-IN ═══ */
-    function checkFillin(pageNum, answer) {
-        if (pageStates[pageNum].completed) return;
-        const input = document.getElementById(`fillin-input-${pageNum}`);
-        const statusEl = document.getElementById(`fillin-status-${pageNum}`);
-        const val = input.value.trim();
-        if (!val) return;
-        pageStates[pageNum].attempts = (pageStates[pageNum].attempts||0) + 1;
-        const score = computeSimilarity(val, answer);
-        const isPass = score >= 80;
-        if (isPass) {
-            statusEl.textContent = 'Parfait !'; statusEl.className = 'font-bold text-sm text-center w-full text-green-600';
-            input.disabled = true; input.className = input.className + ' opacity-60';
-            unlockNextButton(pageNum); if (correctSound) correctSound.triggerAttackRelease('C5','0.2s');
-        } else {
-            if (pageStates[pageNum].attempts >= 2) {
-                statusEl.textContent = `Réponse : ${answer}`; statusEl.className = 'font-bold text-sm text-center w-full text-blue-600';
-                input.disabled = true; unlockNextButton(pageNum);
+            if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
+            selected.classList.remove('selected'); selected.classList.add('wrong');
+            setTimeout(() => selected.classList.remove('wrong'), 800);
+            if (pageStates[pageId].attempts >= 2) {
+                pageStates[pageId].completed = true;
+                statusEl.textContent = "Voici la bonne réponse.";
+                statusEl.className   = "font-bold text-center text-blue-500 text-sm w-full transition-colors";
+                options.forEach(o => {
+                    if (o.dataset.correct === "true") o.classList.add('correct');
+                    o.style.pointerEvents = 'none';
+                });
+                document.getElementById(`mcq-btn-${pageId}`).disabled = true;
+                document.getElementById(`mcq-btn-${pageId}`).classList.add('opacity-40','cursor-not-allowed');
+                unlockNextButton(pageId);
             } else {
-                statusEl.textContent = 'Essayez encore !'; statusEl.className = 'font-bold text-sm text-center w-full text-red-500';
-                input.value = '';
-                if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+                statusEl.textContent = "Incorrect. Réessayez !";
+                statusEl.className   = "font-bold text-center text-red-500 text-sm w-full transition-colors";
             }
         }
     }
 
-    /* ═══ SPEECH ═══ */
-    function toggleRecordSpeech(btn, statusId, targetKey, mode) {
-        const pageNum = parseInt(btn.id.replace('mic-btn-',''));
-        const target  = speakAnswers[pageNum] || targetKey;
-        if (btn.classList.contains('recording-pulse')) { if (activeRecorder && activeRecorder.state==='recording') activeRecorder.stop(); return; }
-        if (btn.disabled) return;
-        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
-        Tone.start();
-        btn.classList.add('recording-pulse');
-        const statusEl     = document.getElementById(statusId);
-        const transcriptEl = document.getElementById(`transcript-${pageNum}`);
-        statusEl.textContent = 'Écoute…'; statusEl.className = 'text-indigo-500 font-bold text-sm text-center w-full transition-colors';
-        if (transcriptEl) transcriptEl.textContent = '';
-        navigator.mediaDevices.getUserMedia({ audio:true }).then(stream => {
-            const recorder = new MediaRecorder(stream); activeRecorder = recorder;
-            const chunks = [];
-            recorder.ondataavailable = e => chunks.push(e.data);
-            recorder.onstop = () => { stream.getTracks().forEach(t=>t.stop()); activeRecorder=null; clearTimeout(recordingTimeout); analyzeRepeatSpeech(new Blob(chunks,{type:'audio/webm'}),btn,statusEl,transcriptEl,target,mode,pageNum); };
-            recorder.start();
-            recordingTimeout = setTimeout(() => { if (recorder.state==='recording') recorder.stop(); }, 5000);
-        }).catch(() => { btn.classList.remove('recording-pulse'); statusEl.textContent='Accès micro refusé.'; statusEl.className='text-red-500 font-bold text-sm text-center w-full'; });
-    }
+    /* ═══════════════════════════════════════
+       FILL-IN
+    ═══════════════════════════════════════ */
+    function checkFillin(pageId, correctAnswer) {
+        if (pageStates[pageId].completed) return;
+        pageStates[pageId].attempts++;
 
-    async function analyzeRepeatSpeech(blob, btn, statusEl, transcriptEl, target, mode, pageNum) {
-        const formData = new FormData();
-        formData.append('file', blob, 'audio.webm'); formData.append('model','whisper-1'); formData.append('language','ko');
-        let transcript = '';
-        try {
-            const res = await fetch('https://api.openai.com/v1/audio/transcriptions', { method:'POST', headers:{'Authorization':'Bearer OPENAI_API_KEY_PLACEHOLDER'}, body:formData });
-            transcript = ((await res.json()).text||'').trim();
-        } catch(e) {}
-        const score = computeSimilarity(transcript, target);
-        const isPass = score >= 80;
-        btn.classList.remove('recording-pulse');
-        pageStates[pageNum].attempts = (pageStates[pageNum].attempts||0) + 1;
-        const attemptCount = pageStates[pageNum].attempts;
-        const isComplete = (attemptCount >= 3);
-        const baseClass = 'font-bold text-sm text-center w-full transition-colors';
-        if (transcriptEl) transcriptEl.textContent = transcript ? `Vous avez dit : "${transcript}" (${score}%)` : `(${score}%)`;
-        let msg = '';
-        if (isPass) {
-            statusEl.className = `${baseClass} text-green-600`; msg = 'Très bien !';
-            disableMicBtn(btn, true); unlockNextButton(pageNum);
-            if (correctSound) correctSound.triggerAttackRelease('C5','0.2s');
-        } else if (isComplete) {
-            statusEl.className = `${baseClass} text-blue-600`; msg = `Réponse : ${target}`;
-            disableMicBtn(btn, false); unlockNextButton(pageNum);
-            if (errorSound) errorSound.triggerAttackRelease('C4','0.15s');
-        } else {
-            statusEl.className = `${baseClass} text-orange-500`; msg = 'On y est presque ! Essayons encore une fois.';
-            resetMicBtnState(btn);
-            if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+        const input    = document.getElementById(`fillin-input-${pageId}`);
+        const statusEl = document.getElementById(`fillin-status-${pageId}`);
+        const val      = (input.value || '').trim();
+
+        if (!val) {
+            statusEl.textContent = "Veuillez entrer votre réponse.";
+            statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
+            return;
         }
-        statusEl.textContent = msg;
+
+        // Normalize: remove spaces and trailing period
+        const normalize = s => s.replace(/\s/g,'').replace(/\.$/, '').toLowerCase();
+        const isCorrect = normalize(val) === normalize(correctAnswer);
+
+        if (isCorrect) {
+            pageStates[pageId].completed = true;
+            if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+            statusEl.textContent = "Très bien !";
+            statusEl.className   = "font-bold text-center text-green-500 text-sm w-full transition-colors";
+            input.classList.add('border-green-400','bg-green-50');
+            input.disabled = true;
+            document.getElementById(`fillin-btn-${pageId}`).disabled = true;
+            document.getElementById(`fillin-btn-${pageId}`).classList.add('opacity-40');
+            unlockNextButton(pageId);
+        } else {
+            if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
+            input.classList.add('border-red-400','bg-red-50');
+            setTimeout(() => input.classList.remove('border-red-400','bg-red-50'), 700);
+            if (pageStates[pageId].attempts >= 2) {
+                pageStates[pageId].completed = true;
+                statusEl.textContent = `Réponse : ${correctAnswer}`;
+                statusEl.className   = "font-bold text-center text-blue-500 text-sm w-full transition-colors";
+                input.disabled = true;
+                document.getElementById(`fillin-btn-${pageId}`).disabled = true;
+                document.getElementById(`fillin-btn-${pageId}`).classList.add('opacity-40');
+                unlockNextButton(pageId);
+            } else {
+                statusEl.textContent = "Incorrect. Réessayez !";
+                statusEl.className   = "font-bold text-center text-red-500 text-sm w-full transition-colors";
+            }
+        }
     }
 
-    function computeSimilarity(a,b) {
-        a=a.replace(/[.,!?]/g,'').toLowerCase().trim(); b=b.replace(/[.,!?]/g,'').toLowerCase().trim();
-        if(a===b) return 100; if(!a||!b) return 0;
-        const lo=a.length>b.length?a:b, sh=a.length>b.length?b:a;
-        return Math.round((1-editDistance(lo,sh)/lo.length)*100);
+    /* ═══════════════════════════════════════
+       SPEECH RECOGNITION
+    ═══════════════════════════════════════ */
+    function toggleRecordSpeech(btn, statusId, expectedText, mode) {
+        if (pageStates[currentPage].completed) return;
+        if (btn.classList.contains('recording-pulse')) {
+            // Stop recording
+            if (activeRecorder && activeRecorder.state === 'recording') activeRecorder.stop();
+            clearTimeout(recordingTimeout);
+            btn.classList.remove('recording-pulse');
+            resetMicBtnState(btn);
+            return;
+        }
+        if (!navigator.mediaDevices) {
+            document.getElementById(statusId).textContent = "Microphone non disponible.";
+            return;
+        }
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            pageStates[currentPage].attempts++;
+            const rec   = new MediaRecorder(stream);
+            activeRecorder = rec;
+            const chunks = [];
+            rec.ondataavailable = e => chunks.push(e.data);
+            rec.onstart = () => {
+                btn.classList.add('recording-pulse');
+                btn.classList.remove('bg-red-500');
+                document.getElementById(statusId).textContent = "Enregistrement…";
+                document.getElementById(statusId).className   = "text-red-500 font-bold text-sm text-center w-full transition-colors";
+            };
+            rec.onstop = () => {
+                stream.getTracks().forEach(t => t.stop());
+                btn.classList.remove('recording-pulse');
+                const blob = new Blob(chunks, { type: 'audio/webm' });
+                analyzeAudio(blob, btn, statusId, expectedText, mode);
+            };
+            rec.start();
+            recordingTimeout = setTimeout(() => { if (rec.state === 'recording') rec.stop(); }, 5000);
+        }).catch(() => {
+            document.getElementById(statusId).textContent = "Accès micro refusé.";
+        });
     }
-    function editDistance(a,b) {
-        const dp=Array.from({length:a.length+1},(_,i)=>Array.from({length:b.length+1},(_,j)=>j===0?i:0));
-        for(let j=1;j<=b.length;j++) dp[0][j]=j;
-        for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
-        return dp[a.length][b.length];
+
+    async function analyzeAudio(blob, btn, statusId, expectedText, mode) {
+        const statusEl = document.getElementById(statusId);
+        statusEl.textContent = "Analyse…";
+        statusEl.className   = "text-slate-500 font-bold text-sm text-center w-full transition-colors";
+
+        try {
+            const fd = new FormData();
+            fd.append('file', blob, 'speech.webm');
+            fd.append('model', 'whisper-1');
+            fd.append('language', 'ko');
+            const resp = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${window.OPENAI_KEY || ''}` },
+                body: fd,
+            });
+            const data = await resp.json();
+            const transcript = (data.text || '').trim();
+            evaluateSpeech(transcript, btn, statusId, expectedText, mode);
+        } catch (e) {
+            statusEl.textContent = "Erreur de reconnaissance.";
+            resetMicBtnState(btn);
+        }
     }
-    function disableMicBtn(btn, isPass) {
-        btn.disabled=true; btn.classList.remove('recording-pulse','bg-red-500','hover:scale-105','active:scale-95');
-        btn.classList.add('shadow-none','opacity-50','cursor-not-allowed', isPass?'bg-green-500':'bg-slate-400');
+
+    function normalize(s) {
+        return s.replace(/[.\s。、！？!?]/g,'').toLowerCase();
     }
-    function resetMicBtnState(btn) {
-        btn.classList.remove('recording-pulse','bg-green-500','bg-slate-400','cursor-not-allowed','shadow-none','opacity-50');
-        btn.classList.add('bg-red-500','hover:scale-105','active:scale-95');
+
+    function evaluateSpeech(transcript, btn, statusId, expectedText, mode) {
+        const statusEl     = document.getElementById(statusId);
+        const transcriptEl = document.getElementById(statusId.replace('status-','transcript-'));
+        const attempts     = pageStates[currentPage].attempts;
+
+        const expected  = normalize(expectedText);
+        const got       = normalize(transcript);
+        const isCorrect = got.includes(expected) || expected.includes(got);
+
+        if (transcriptEl) transcriptEl.textContent = transcript ? `« ${transcript} »` : '';
+
+        if (isCorrect) {
+            pageStates[currentPage].completed = true;
+            if (correctSound) correctSound.triggerAttackRelease('E5', '0.2s');
+            statusEl.textContent = "Très bien !";
+            statusEl.className   = "text-green-500 font-bold text-sm text-center w-full transition-colors";
+            disableMicBtn(btn, true);
+            unlockNextButton(currentPage);
+        } else {
+            if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
+            if (attempts >= 2) {
+                pageStates[currentPage].completed = true;
+                statusEl.textContent = `Réponse : ${expectedText}`;
+                statusEl.className   = "text-blue-500 font-bold text-sm text-center w-full transition-colors";
+                disableMicBtn(btn, false);
+                unlockNextButton(currentPage);
+            } else {
+                statusEl.textContent = "Incorrect. Réessayez !";
+                statusEl.className   = "text-red-500 font-bold text-sm text-center w-full transition-colors";
+                resetMicBtnState(btn);
+            }
+        }
     }
 </script>
 </body>
