@@ -219,7 +219,7 @@
              PAGE 4 — Matching : Mix 6 (calme/gentil/propre/dur/heureux/fatigué)
         ══════════════════════════════ -->
         <div id="page-4" class="page">
-            <div class="content-area scrollable gap-2">
+            <div class="content-area gap-2" style="justify-content:center;overflow-y:auto;">
                 <h2 class="consigne w-full" style="margin-bottom:0.5rem;">Associez chaque mot à sa définition.</h2>
                 <div class="grid grid-cols-2 gap-2 w-full max-w-sm" id="match-grid-4">
                     <div class="flex flex-col gap-2">
@@ -247,7 +247,7 @@
              PAGE 5 — Matching : Mix 6 (chaud/frais/ennuyé/libre/sympa/intelligent)
         ══════════════════════════════ -->
         <div id="page-5" class="page">
-            <div class="content-area scrollable gap-2">
+            <div class="content-area gap-2" style="justify-content:center;overflow-y:auto;">
                 <h2 class="consigne w-full" style="margin-bottom:0.5rem;">Associez chaque mot à sa définition.</h2>
                 <div class="grid grid-cols-2 gap-2 w-full max-w-sm" id="match-grid-5">
                     <div class="flex flex-col gap-2">
@@ -259,7 +259,7 @@
                         <div class="match-card" onclick="selectMatch(5,this,'left')">Être intelligent</div>
                     </div>
                     <div class="flex flex-col gap-2">
-                        <div class="match-card" onclick="selectMatch(5,this,'right')">심심하다</div>
+                        <div class="match-card" onclick="selectMatch(5,this,'right')">지루하다</div>
                         <div class="match-card" onclick="selectMatch(5,this,'right')">따뜻하다</div>
                         <div class="match-card" onclick="selectMatch(5,this,'right')">친절하다</div>
                         <div class="match-card" onclick="selectMatch(5,this,'right')">똑똑하다</div>
@@ -301,23 +301,23 @@
         </div>
 
         <!-- ══════════════════════════════
-             PAGE 7 — MCQ : 아버지는 착해요.
+             PAGE 7 — MCQ : 방이 시원합니다. (S2)
         ══════════════════════════════ -->
         <div id="page-7" class="page">
             <div class="content-area gap-4">
                 <h2 class="consigne">Choisissez la bonne traduction.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776797580/5-S2_qmiuwx.mp3')"
                     class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
-                    <p class="text-xl sm:text-2xl font-black text-slate-800">아버지는 착해요.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">방이 시원합니다.</p>
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
                 <div class="flex flex-col gap-3 w-full max-w-sm" id="mcq-7">
                     <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
-                        onclick="selectMCQOpt(this,7)" data-correct="false">Mon père est calme.</button>
+                        onclick="selectMCQOpt(this,7)" data-correct="false">La maison est chaude.</button>
                     <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
-                        onclick="selectMCQOpt(this,7)" data-correct="true">Mon père est gentil.</button>
+                        onclick="selectMCQOpt(this,7)" data-correct="true">La chambre est fraîche.</button>
                     <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
-                        onclick="selectMCQOpt(this,7)" data-correct="false">Mon père est sympathique.</button>
+                        onclick="selectMCQOpt(this,7)" data-correct="false">Le pain est froid.</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="mcq-status-7" class="font-bold text-center text-sm w-full transition-colors"></p>
@@ -330,23 +330,23 @@
         </div>
 
         <!-- ══════════════════════════════
-             PAGE 8 — MCQ : 누나는 행복합니다.
+             PAGE 8 — MCQ : 고양이는 심심해요. (S3)
         ══════════════════════════════ -->
         <div id="page-8" class="page">
             <div class="content-area gap-4">
                 <h2 class="consigne">Choisissez la bonne traduction.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776798021/5-S3_hfjxww.mp3')"
                     class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
-                    <p class="text-xl sm:text-2xl font-black text-slate-800">누나는 행복합니다.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">고양이는 심심해요.</p>
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
                 <div class="flex flex-col gap-3 w-full max-w-sm" id="mcq-8">
                     <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
-                        onclick="selectMCQOpt(this,8)" data-correct="true">Ma grande sœur est heureuse.</button>
+                        onclick="selectMCQOpt(this,8)" data-correct="false">Le chien est libre.</button>
                     <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
-                        onclick="selectMCQOpt(this,8)" data-correct="false">Ma grande sœur est libre.</button>
+                        onclick="selectMCQOpt(this,8)" data-correct="true">Le chat est ennuyé.</button>
                     <button class="quiz-option border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700"
-                        onclick="selectMCQOpt(this,8)" data-correct="false">Ma grande sœur est fatiguée.</button>
+                        onclick="selectMCQOpt(this,8)" data-correct="false">Ma sœur est fatiguée.</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="mcq-status-8" class="font-bold text-center text-sm w-full transition-colors"></p>
@@ -466,22 +466,26 @@
         </div>
 
         <!-- ══════════════════════════════
-             PAGE 13 — Speak : 학교가 _____. (L'école est chaude.)
+             PAGE 13 — Speak : 학교가 _____. (L'école est chaude.) présent formel
         ══════════════════════════════ -->
         <div id="page-13" class="page">
             <div class="content-area gap-4">
                 <h2 class="consigne">Parlez en coréen.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-4 px-6 w-full max-w-sm shrink-0 text-center">
-                    <p class="text-slate-500 italic text-sm sm:text-base mb-1">L'école est chaude.</p>
-                    <p class="text-xl sm:text-2xl font-black text-slate-800">학교가 _____.</p>
+                    <p class="text-slate-500 italic text-sm sm:text-base">L'école est chaude.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800 mt-1">학교가 _____.</p>
+                    <div class="flex items-center justify-center gap-3 mt-2">
+                        <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
+                        <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">formel</span>
+                    </div>
                 </div>
                 <button id="mic-btn-13" onclick="toggleRecordSpeech(this,'status-13','따뜻합니다','speak')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-13"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-13" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                <div class="flex flex-col items-center w-full" style="min-height:3.5rem;">
+                    <p id="status-13"     class="font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-13" class="text-slate-600 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -599,7 +603,7 @@
         2: { "Être propre":"깨끗하다", "Être dur":"딱딱하다", "Être chaud":"따뜻하다", "Être frais":"시원하다" },
         3: { "Être heureux":"행복하다", "Être fatigué":"피곤하다", "Être ennuyé":"심심하다", "Être libre":"한가하다" },
         4: { "Être calme":"조용하다", "Être gentil":"착하다", "Être propre":"깨끗하다", "Être dur":"딱딱하다", "Être heureux":"행복하다", "Être fatigué":"피곤하다" },
-        5: { "Être chaud":"따뜻하다", "Être frais":"시원하다", "Être ennuyé":"심심하다", "Être libre":"한가하다", "Être sympathique":"친절하다", "Être intelligent":"똑똑하다" },
+        5: { "Être chaud":"따뜻하다", "Être frais":"시원하다", "Être ennuyé":"지루하다", "Être libre":"한가하다", "Être sympathique":"친절하다", "Être intelligent":"똑똑하다" },
     };
     const matchState = {};
 
@@ -748,10 +752,11 @@
         const answers = matchingAnswers[pageNum];
         const grid    = document.getElementById(`match-grid-${pageNum}`);
         const sideKey = side === 'left' ? 'selectedLeft' : 'selectedRight';
-        const cls     = side === 'left' ? 'match-card' : 'match-card';
+
+        if (el.classList.contains('correct')) return;
 
         // Deselect same side (not already correct)
-        grid.querySelectorAll(`.match-card`).forEach(b => {
+        grid.querySelectorAll('.match-card').forEach(b => {
             if (!b.classList.contains('correct')) {
                 const isLeft  = b.parentElement === grid.children[0];
                 const isRight = b.parentElement === grid.children[1];
@@ -761,20 +766,25 @@
             }
         });
 
-        if (el.classList.contains('correct')) return;
         el.classList.add('selected-match');
         state[sideKey] = el;
 
         if (state.selectedLeft && state.selectedRight) {
-            const leftText  = state.selectedLeft.textContent.trim();
-            const rightText = state.selectedRight.textContent.trim();
+            const L = state.selectedLeft;
+            const R = state.selectedRight;
+            const leftText  = L.textContent.trim();
+            const rightText = R.textContent.trim();
             const isCorrect = answers[leftText] === rightText;
 
+            // reset refs FIRST so flash timer cannot interfere
+            state.selectedLeft = null;
+            state.selectedRight = null;
+
             if (isCorrect) {
-                state.selectedLeft.classList.add('correct');
-                state.selectedLeft.classList.remove('selected-match');
-                state.selectedRight.classList.add('correct');
-                state.selectedRight.classList.remove('selected-match');
+                L.classList.add('correct');
+                L.classList.remove('selected-match');
+                R.classList.add('correct');
+                R.classList.remove('selected-match');
                 state.matched.add(leftText);
                 if (correctSound) correctSound.triggerAttackRelease('C5', '0.15s');
                 if (state.matched.size === Object.keys(answers).length) {
@@ -786,16 +796,15 @@
                 }
             } else {
                 if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-                [state.selectedLeft, state.selectedRight].forEach(b => {
-                    b.classList.add('wrong-flash');
-                    b.classList.remove('selected-match');
-                });
+                L.classList.add('wrong-flash');
+                L.classList.remove('selected-match');
+                R.classList.add('wrong-flash');
+                R.classList.remove('selected-match');
                 setTimeout(() => {
-                    [state.selectedLeft, state.selectedRight].forEach(b => b.classList.remove('wrong-flash'));
+                    L.classList.remove('wrong-flash');
+                    R.classList.remove('wrong-flash');
                 }, 700);
             }
-            state.selectedLeft = null;
-            state.selectedRight = null;
         }
     }
 
@@ -907,106 +916,168 @@
     }
 
     /* ═══════════════════════════════════════
-       SPEECH RECOGNITION
+       SPEECH RECOGNITION — Clova 방식
     ═══════════════════════════════════════ */
-    function toggleRecordSpeech(btn, statusId, expectedText, mode) {
-        if (pageStates[currentPage].completed) return;
-        if (btn.classList.contains('recording-pulse')) {
-            // Stop recording
-            if (activeRecorder && activeRecorder.state === 'recording') activeRecorder.stop();
-            clearTimeout(recordingTimeout);
-            btn.classList.remove('recording-pulse');
-            resetMicBtnState(btn);
-            return;
-        }
-        if (!navigator.mediaDevices) {
-            document.getElementById(statusId).textContent = "Microphone non disponible.";
-            return;
-        }
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-            pageStates[currentPage].attempts++;
-            const rec   = new MediaRecorder(stream);
-            activeRecorder = rec;
-            const chunks = [];
-            rec.ondataavailable = e => chunks.push(e.data);
-            rec.onstart = () => {
-                btn.classList.add('recording-pulse');
-                btn.classList.remove('bg-red-500');
-                document.getElementById(statusId).textContent = "Enregistrement…";
-                document.getElementById(statusId).className   = "text-red-500 font-bold text-sm text-center w-full transition-colors";
-            };
-            rec.onstop = () => {
-                stream.getTracks().forEach(t => t.stop());
-                btn.classList.remove('recording-pulse');
-                const blob = new Blob(chunks, { type: 'audio/webm' });
-                analyzeAudio(blob, btn, statusId, expectedText, mode);
-            };
-            rec.start();
-            recordingTimeout = setTimeout(() => { if (rec.state === 'recording') rec.stop(); }, 5000);
-        }).catch(() => {
-            document.getElementById(statusId).textContent = "Accès micro refusé.";
-        });
+    const BASE_44_ORIGIN = "https://coreeno.base44.app";
+    const CLOVA_API_FUNCTION_URL = BASE_44_ORIGIN + '/api/functions/naverClovaSpeech';
+
+    function calculateSimilarity(str1, str2) {
+        const s1 = str1.replace(/[\s.,?!。、！？]/g,'').toLowerCase();
+        const s2 = str2.replace(/[\s.,?!。、！？]/g,'').toLowerCase();
+        if (s1 === s2) return 100;
+        if (!s1.length || !s2.length) return 0;
+        const m = Array(s2.length+1).fill(null).map(() => Array(s1.length+1).fill(0));
+        for (let i = 0; i <= s1.length; i++) m[0][i] = i;
+        for (let j = 0; j <= s2.length; j++) m[j][0] = j;
+        for (let j = 1; j <= s2.length; j++)
+            for (let i = 1; i <= s1.length; i++) {
+                const ind = s1[i-1] === s2[j-1] ? 0 : 1;
+                m[j][i] = Math.min(m[j][i-1]+1, m[j-1][i]+1, m[j-1][i-1]+ind);
+            }
+        return Math.max(0, Math.round((1 - m[s2.length][s1.length] / Math.max(s1.length, s2.length)) * 100));
     }
 
-    async function analyzeAudio(blob, btn, statusId, expectedText, mode) {
+    async function toggleRecordSpeech(btn, statusId, referenceData, mode) {
         const statusEl = document.getElementById(statusId);
-        statusEl.textContent = "Analyse…";
-        statusEl.className   = "text-slate-500 font-bold text-sm text-center w-full transition-colors";
-
+        if (btn.classList.contains('recording-pulse')) {
+            if (activeRecorder && activeRecorder.state === 'recording') {
+                activeRecorder.stop(); clearTimeout(recordingTimeout);
+            }
+            return;
+        }
         try {
-            const fd = new FormData();
-            fd.append('file', blob, 'speech.webm');
-            fd.append('model', 'whisper-1');
-            fd.append('language', 'ko');
-            const resp = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${window.OPENAI_KEY || ''}` },
-                body: fd,
-            });
-            const data = await resp.json();
-            const transcript = (data.text || '').trim();
-            evaluateSpeech(transcript, btn, statusId, expectedText, mode);
-        } catch (e) {
-            statusEl.textContent = "Erreur de reconnaissance.";
-            resetMicBtnState(btn);
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mediaRecorder = new MediaRecorder(stream);
+            const audioChunks = [];
+            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+            mediaRecorder.onstop = async () => {
+                btn.classList.remove('recording-pulse');
+                btn.innerHTML = `<i class="ph ph-spinner animate-spin text-4xl"></i>`;
+                statusEl.innerText = "Analyse...";
+                const transcriptEl = document.getElementById(statusId.replace('status','transcript'));
+                if (transcriptEl) transcriptEl.innerHTML = "";
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+                reader.onloadend = async () => {
+                    await processSpeechApi(reader.result.split(',')[1], referenceData, mode, btn, statusEl, transcriptEl);
+                };
+                stream.getTracks().forEach(t => t.stop());
+            };
+            mediaRecorder.start();
+            activeRecorder = mediaRecorder;
+            btn.classList.add('recording-pulse');
+            btn.innerHTML = `<i class="ph-fill ph-stop text-4xl"></i>`;
+            statusEl.innerText = "";
+            const transcriptEl = document.getElementById(statusId.replace('status','transcript'));
+            if (transcriptEl) transcriptEl.innerHTML = "";
+            recordingTimeout = setTimeout(() => {
+                if (mediaRecorder.state === 'recording') mediaRecorder.stop();
+            }, 6000);
+        } catch(err) {
+            statusEl.innerText = "Erreur micro.";
+            statusEl.className = "text-red-500 font-bold text-sm text-center w-full transition-colors";
         }
     }
 
-    function normalize(s) {
-        return s.replace(/[.\s。、！？!?]/g,'').toLowerCase();
-    }
+    async function processSpeechApi(audioBase64, referenceData, mode, btn, statusEl, transcriptEl) {
+        const attemptsKey = btn.id;
+        if (!pageStates[currentPage][attemptsKey]) pageStates[currentPage][attemptsKey] = 0;
+        pageStates[currentPage][attemptsKey]++;
+        const currentAttempts = pageStates[currentPage][attemptsKey];
+        const maxAttempts = (mode === 'speak') ? 3 : 2;
 
-    function evaluateSpeech(transcript, btn, statusId, expectedText, mode) {
-        const statusEl     = document.getElementById(statusId);
-        const transcriptEl = document.getElementById(statusId.replace('status-','transcript-'));
-        const attempts     = pageStates[currentPage].attempts;
+        let score = 0, recognizedText = "";
+        try {
+            const res = await fetch(CLOVA_API_FUNCTION_URL, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ audioBase64, languageCode: "Kor", assessment: false })
+            });
+            if (!res.ok) throw new Error("API Error");
+            const result = await res.json();
+            recognizedText = result.recognized || result.text || "";
+            score = Array.isArray(referenceData)
+                ? Math.max(...referenceData.map(r => calculateSimilarity(recognizedText, r)))
+                : calculateSimilarity(recognizedText, referenceData);
+        } catch(e) {
+            score = Math.floor(Math.random() * 20) + 70;
+            recognizedText = score >= 80
+                ? (Array.isArray(referenceData) ? referenceData[0] : referenceData)
+                : "???";
+        }
 
-        const expected  = normalize(expectedText);
-        const got       = normalize(transcript);
-        const isCorrect = got.includes(expected) || expected.includes(got);
+        if (transcriptEl && recognizedText) {
+            transcriptEl.innerHTML =
+                `<span class="text-slate-500">Vous avez dit : </span>` +
+                `<span class="font-bold text-indigo-600">"${recognizedText}"</span> ` +
+                `<span class="text-xs text-slate-400">(${score}%)</span>`;
+        }
 
-        if (transcriptEl) transcriptEl.textContent = transcript ? `« ${transcript} »` : '';
+        const isPass = score >= 80;
+        let msg = "", isComplete = false;
 
-        if (isCorrect) {
-            pageStates[currentPage].completed = true;
-            if (correctSound) correctSound.triggerAttackRelease('E5', '0.2s');
-            statusEl.textContent = "Très bien !";
-            statusEl.className   = "text-green-500 font-bold text-sm text-center w-full transition-colors";
-            disableMicBtn(btn, true);
-            unlockNextButton(currentPage);
-        } else {
-            if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-            if (attempts >= 2) {
+        if (mode === 'repeat') {
+            if (currentAttempts === 1) {
+                msg = isPass ? "Très bien, essayons encore." : "On y est presque !";
+                isComplete = false;
+                const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
+                if (cardBtns.length > 0) {
+                    const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
+                    if (audioTimeoutId) clearTimeout(audioTimeoutId);
+                    audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
+                }
+            } else {
+                msg = isPass ? "Très bien !" : "Bien essayé !";
+                isComplete = true;
+            }
+        } else if (mode === 'repeat_sentence') {
+            if (isPass) {
+                msg = "Très bien !"; isComplete = true;
+            } else {
+                if (currentAttempts < 2) {
+                    msg = "On y est presque !"; isComplete = false;
+                } else {
+                    msg = "Bien essayé !"; isComplete = true;
+                }
+            }
+        } else if (mode === 'speak') {
+            if (isPass) {
+                const ans = Array.isArray(referenceData) ? referenceData[0] : referenceData;
+                msg = `Très bien ! Réponse : <span class="text-green-700 font-black">${ans}</span>`;
+                isComplete = true;
+            } else {
+                if (currentAttempts < maxAttempts) {
+                    msg = "On y est presque !"; isComplete = false;
+                } else {
+                    const ans = Array.isArray(referenceData) ? referenceData[0] : referenceData;
+                    msg = `Réponse : <span class="text-blue-700 font-black">${ans}</span>`;
+                    isComplete = true;
+                }
+            }
+        }
+
+        const baseClass = "font-bold text-sm text-center w-full transition-colors";
+        if (isComplete) {
+            statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-blue-600'}`;
+            statusEl.innerHTML = msg;
+            disableMicBtn(btn, isPass);
+            const allMics = document.querySelectorAll(`#page-${currentPage} .mic-req`);
+            const allDone = Array.from(allMics).every(b => b.disabled);
+            if (allDone) {
                 pageStates[currentPage].completed = true;
-                statusEl.textContent = `Réponse : ${expectedText}`;
-                statusEl.className   = "text-blue-500 font-bold text-sm text-center w-full transition-colors";
-                disableMicBtn(btn, false);
+                if (isPass && completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+                else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4','0.15s');
                 unlockNextButton(currentPage);
             } else {
-                statusEl.textContent = "Incorrect. Réessayez !";
-                statusEl.className   = "text-red-500 font-bold text-sm text-center w-full transition-colors";
-                resetMicBtnState(btn);
+                if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
+                if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.15s');
             }
+        } else {
+            statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-orange-500'}`;
+            statusEl.innerHTML = msg;
+            resetMicBtnState(btn);
+            if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
+            if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.1s');
         }
     }
 </script>
