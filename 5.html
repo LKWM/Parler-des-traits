@@ -439,7 +439,7 @@
         </div>
 
         <!-- ══════════════════════════════
-             PAGE 12 — Fill-in : 학생은 ____. (L'étudiant est intelligent.)
+             PAGE 12 — Fill-in : 학생은 ____. (L'étudiant est intelligent.) présent poli
         ══════════════════════════════ -->
         <div id="page-12" class="page">
             <div class="content-area gap-4">
@@ -450,7 +450,11 @@
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
-                    <p class="text-xl sm:text-2xl font-black text-slate-800">학생은 ____.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">학생은 <span id="fillin-blank-12">____</span>.</p>
+                    <div class="flex items-center justify-center gap-3 mt-2">
+                        <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
+                        <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">poli</span>
+                    </div>
                 </div>
                 <input id="fillin-input-12" class="fillin-input" type="text" placeholder="Votre réponse…"
                     onkeydown="if(event.key==='Enter') checkFillin(12,'똑똑해요')">
@@ -472,7 +476,7 @@
                 <h2 class="consigne">Parlez en coréen.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-4 px-6 w-full max-w-sm shrink-0 text-center">
                     <p class="text-slate-500 italic text-sm sm:text-base">L'école est chaude.</p>
-                    <p class="text-xl sm:text-2xl font-black text-slate-800 mt-1">학교가 _____.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800 mt-1">학교가 <span id="speak-blank-13">_____</span>.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">formel</span>
@@ -490,7 +494,7 @@
         </div>
 
         <!-- ══════════════════════════════
-             PAGE 14 — Fill-in : 집이 ____. (La maison est propre.)
+             PAGE 14 — Fill-in : 집이 ____. (La maison est propre.) présent formel
         ══════════════════════════════ -->
         <div id="page-14" class="page">
             <div class="content-area gap-4">
@@ -501,7 +505,11 @@
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
-                    <p class="text-xl sm:text-2xl font-black text-slate-800">집이 ____.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">집이 <span id="fillin-blank-14">____</span>.</p>
+                    <div class="flex items-center justify-center gap-3 mt-2">
+                        <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
+                        <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">formel</span>
+                    </div>
                 </div>
                 <input id="fillin-input-14" class="fillin-input" type="text" placeholder="Votre réponse…"
                     onkeydown="if(event.key==='Enter') checkFillin(14,'깨끗합니다')">
@@ -516,22 +524,26 @@
         </div>
 
         <!-- ══════════════════════════════
-             PAGE 15 — Speak : 언니는 _____. (Ma grande sœur est libre.)
+             PAGE 15 — Speak : 언니는 _____. (Ma grande sœur est libre.) présent poli
         ══════════════════════════════ -->
         <div id="page-15" class="page">
             <div class="content-area gap-4">
                 <h2 class="consigne">Parlez en coréen.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-4 px-6 w-full max-w-sm shrink-0 text-center">
-                    <p class="text-slate-500 italic text-sm sm:text-base mb-1">Ma grande sœur est libre.</p>
-                    <p class="text-xl sm:text-2xl font-black text-slate-800">언니는 _____.</p>
+                    <p class="text-slate-500 italic text-sm sm:text-base">Ma grande sœur est libre.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800 mt-1">언니는 <span id="speak-blank-15">_____</span>.</p>
+                    <div class="flex items-center justify-center gap-3 mt-2">
+                        <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
+                        <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">poli</span>
+                    </div>
                 </div>
                 <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15','한가해요','speak')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-15"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-15" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                <div class="flex flex-col items-center w-full" style="min-height:3.5rem;">
+                    <p id="status-15"     class="font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-15" class="text-slate-600 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -844,23 +856,14 @@
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-            selected.classList.remove('selected'); selected.classList.add('wrong');
-            setTimeout(() => selected.classList.remove('wrong'), 800);
-            if (pageStates[pageId].attempts >= 2) {
-                pageStates[pageId].completed = true;
-                statusEl.textContent = "Voici la bonne réponse.";
-                statusEl.className   = "font-bold text-center text-blue-500 text-sm w-full transition-colors";
-                options.forEach(o => {
-                    if (o.dataset.correct === "true") o.classList.add('correct');
-                    o.style.pointerEvents = 'none';
-                });
-                document.getElementById(`mcq-btn-${pageId}`).disabled = true;
-                document.getElementById(`mcq-btn-${pageId}`).classList.add('opacity-40','cursor-not-allowed');
-                unlockNextButton(pageId);
-            } else {
-                statusEl.textContent = "Incorrect. Réessayez !";
-                statusEl.className   = "font-bold text-center text-red-500 text-sm w-full transition-colors";
-            }
+            // 오답 flash 후 선택 초기화 (재시도 가능)
+            selected.classList.add('wrong');
+            setTimeout(() => {
+                selected.classList.remove('wrong', 'selected');
+            }, 700);
+            statusEl.textContent = "Incorrect. Réessayez !";
+            statusEl.className   = "font-bold text-center text-red-500 text-sm w-full transition-colors";
+            // 정답 공개 없이 계속 재시도
         }
     }
 
@@ -881,7 +884,6 @@
             return;
         }
 
-        // Normalize: remove spaces and trailing period
         const normalize = s => s.replace(/\s/g,'').replace(/\.$/, '').toLowerCase();
         const isCorrect = normalize(val) === normalize(correctAnswer);
 
@@ -894,18 +896,28 @@
             input.disabled = true;
             document.getElementById(`fillin-btn-${pageId}`).disabled = true;
             document.getElementById(`fillin-btn-${pageId}`).classList.add('opacity-40');
+            // 빈칸 공개
+            const blankEl = document.getElementById(`fillin-blank-${pageId}`);
+            if (blankEl) { blankEl.textContent = correctAnswer; blankEl.style.color = '#16a34a'; }
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
             input.classList.add('border-red-400','bg-red-50');
-            setTimeout(() => input.classList.remove('border-red-400','bg-red-50'), 700);
+            setTimeout(() => {
+                input.classList.remove('border-red-400','bg-red-50');
+                input.value = ''; // 오답 후 입력값 초기화
+                input.focus();
+            }, 700);
             if (pageStates[pageId].attempts >= 2) {
                 pageStates[pageId].completed = true;
-                statusEl.textContent = `Réponse : ${correctAnswer}`;
+                statusEl.textContent = correctAnswer;
                 statusEl.className   = "font-bold text-center text-blue-500 text-sm w-full transition-colors";
                 input.disabled = true;
                 document.getElementById(`fillin-btn-${pageId}`).disabled = true;
                 document.getElementById(`fillin-btn-${pageId}`).classList.add('opacity-40');
+                // 빈칸 공개
+                const blankEl = document.getElementById(`fillin-blank-${pageId}`);
+                if (blankEl) { blankEl.textContent = correctAnswer; blankEl.style.color = '#2563eb'; }
                 unlockNextButton(pageId);
             } else {
                 statusEl.textContent = "Incorrect. Réessayez !";
@@ -1041,16 +1053,24 @@
             }
         } else if (mode === 'speak') {
             if (isPass) {
-                const ans = Array.isArray(referenceData) ? referenceData[0] : referenceData;
-                msg = `Très bien ! Réponse : <span class="text-green-700 font-black">${ans}</span>`;
+                msg = "Très bien !";
                 isComplete = true;
             } else {
                 if (currentAttempts < maxAttempts) {
                     msg = "On y est presque !"; isComplete = false;
                 } else {
-                    const ans = Array.isArray(referenceData) ? referenceData[0] : referenceData;
-                    msg = `Réponse : <span class="text-blue-700 font-black">${ans}</span>`;
+                    msg = ""; // 빈칸 공개로 대체, 별도 텍스트 없음
                     isComplete = true;
+                }
+            }
+            // 완료(통과/탈락 모두) 시 빈칸 공개
+            if (isComplete) {
+                const ans = Array.isArray(referenceData) ? referenceData[0] : referenceData;
+                const blankEl = document.getElementById(`speak-blank-${currentPage}`);
+                if (blankEl) {
+                    blankEl.textContent = ans;
+                    blankEl.style.color = isPass ? '#16a34a' : '#2563eb';
+                    blankEl.style.fontWeight = '900';
                 }
             }
         }
