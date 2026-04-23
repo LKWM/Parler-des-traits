@@ -482,7 +482,7 @@
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">formel</span>
                     </div>
                 </div>
-                <button id="mic-btn-13" onclick="toggleRecordSpeech(this,'status-13','따뜻합니다','speak')"
+                <button id="mic-btn-13" onclick="toggleRecordSpeech(this,'status-13','학교가 따뜻합니다','speak','따뜻합니다')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -537,7 +537,7 @@
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">poli</span>
                     </div>
                 </div>
-                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15','한가해요','speak')"
+                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15','언니는 한가해요','speak','한가해요')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -948,7 +948,7 @@
         return Math.max(0, Math.round((1 - m[s2.length][s1.length] / Math.max(s1.length, s2.length)) * 100));
     }
 
-    async function toggleRecordSpeech(btn, statusId, referenceData, mode) {
+    async function toggleRecordSpeech(btn, statusId, referenceData, mode, blankAnswer) {
         const statusEl = document.getElementById(statusId);
         if (btn.classList.contains('recording-pulse')) {
             if (activeRecorder && activeRecorder.state === 'recording') {
@@ -971,7 +971,7 @@
                 const reader = new FileReader();
                 reader.readAsDataURL(audioBlob);
                 reader.onloadend = async () => {
-                    await processSpeechApi(reader.result.split(',')[1], referenceData, mode, btn, statusEl, transcriptEl);
+                    await processSpeechApi(reader.result.split(',')[1], referenceData, mode, btn, statusEl, transcriptEl, blankAnswer);
                 };
                 stream.getTracks().forEach(t => t.stop());
             };
@@ -991,7 +991,7 @@
         }
     }
 
-    async function processSpeechApi(audioBase64, referenceData, mode, btn, statusEl, transcriptEl) {
+    async function processSpeechApi(audioBase64, referenceData, mode, btn, statusEl, transcriptEl, blankAnswer) {
         const attemptsKey = btn.id;
         if (!pageStates[currentPage][attemptsKey]) pageStates[currentPage][attemptsKey] = 0;
         pageStates[currentPage][attemptsKey]++;
@@ -1063,12 +1063,12 @@
                     isComplete = true;
                 }
             }
-            // 완료(통과/탈락 모두) 시 빈칸 공개
+            // 완료(통과/탈락 모두) 시 빈칸 공개 — blankAnswer(빈칸 부분만) 사용
             if (isComplete) {
-                const ans = Array.isArray(referenceData) ? referenceData[0] : referenceData;
+                const revealText = blankAnswer || (Array.isArray(referenceData) ? referenceData[0] : referenceData);
                 const blankEl = document.getElementById(`speak-blank-${currentPage}`);
                 if (blankEl) {
-                    blankEl.textContent = ans;
+                    blankEl.textContent = revealText;
                     blankEl.style.color = isPass ? '#16a34a' : '#2563eb';
                     blankEl.style.fontWeight = '900';
                 }
