@@ -1060,11 +1060,21 @@
                 msg = "Très bien ! Passez à la suite.";
                 isComplete = true;
             } else {
-                if (currentAttempts >= 2) {
-                    // 2회 이상 오답 → 정답 공개 + 세션 종료
+                if (currentAttempts >= maxAttempts) {
+                    // 3회 탈락 → 종료
                     msg = "Bien essayé ! Passez à la suite.";
                     isComplete = true;
                 } else {
+                    if (currentAttempts === 2) {
+                        // 2회 오답 → 빈칸에 정답 공개 (보고 읽기 가능), 재시도 허용
+                        const revealText = blankAnswer || (Array.isArray(referenceData) ? referenceData[0] : referenceData);
+                        const blankEl2 = document.getElementById(`speak-blank-${currentPage}`);
+                        if (blankEl2) {
+                            blankEl2.textContent = revealText;
+                            blankEl2.style.color = '#2563eb';
+                            blankEl2.style.fontWeight = '900';
+                        }
+                    }
                     msg = "On y est presque ! Essayons encore une fois.";
                     isComplete = false;
                 }
