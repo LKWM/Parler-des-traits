@@ -451,7 +451,7 @@
                 </button>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">학생은 <span id="fillin-blank-12">____</span>.</p>
-                    <p id="fillin-subtitle-12" class="text-sm text-slate-500 italic mt-1 hidden">L'étudiant est intelligent.</p>
+                    <p id="fillin-subtitle-12" class="text-sm text-slate-500 italic mt-1">L'étudiant est intelligent.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">poli</span>
@@ -477,7 +477,7 @@
                 <h2 class="consigne">Parlez en coréen.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-4 px-6 w-full max-w-sm shrink-0 text-center">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">학교가 <span id="speak-blank-13">_____</span>.</p>
-                    <p id="speak-subtitle-13" class="text-sm text-slate-500 italic mt-1 hidden">L'école est chaude.</p>
+                    <p id="speak-subtitle-13" class="text-sm text-slate-500 italic mt-1">L'école est chaude.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">formel</span>
@@ -507,7 +507,7 @@
                 </button>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">집이 <span id="fillin-blank-14">____</span>.</p>
-                    <p id="fillin-subtitle-14" class="text-sm text-slate-500 italic mt-1 hidden">La maison est propre.</p>
+                    <p id="fillin-subtitle-14" class="text-sm text-slate-500 italic mt-1">La maison est propre.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">formel</span>
@@ -533,7 +533,7 @@
                 <h2 class="consigne">Parlez en coréen.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-4 px-6 w-full max-w-sm shrink-0 text-center">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">언니는 <span id="speak-blank-15">_____</span>.</p>
-                    <p id="speak-subtitle-15" class="text-sm text-slate-500 italic mt-1 hidden">Ma sœur est libre.</p>
+                    <p id="speak-subtitle-15" class="text-sm text-slate-500 italic mt-1">Ma sœur est libre.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">poli</span>
@@ -863,8 +863,8 @@
             setTimeout(() => {
                 selected.classList.remove('wrong', 'selected');
             }, 700);
-            statusEl.textContent = "On y est presque ! Essayons encore une fois.";
-            statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
+            statusEl.textContent = "";
+            statusEl.className   = "font-bold text-center text-sm w-full transition-colors";
             // 정답 공개 없이 계속 재시도
         }
     }
@@ -922,16 +922,8 @@
                     input.value = '';
                     input.focus();
                 }, 700);
-                if (attempts === 2) {
-                    // 2회 오답 → subtitle 공개 + 재시도
-                    if (subtitleEl) subtitleEl.classList.remove('hidden');
-                    statusEl.textContent = "On y est presque ! Essayons encore une fois.";
-                    statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
-                } else {
-                    // 1회 오답 → 재시도
-                    statusEl.textContent = "On y est presque ! Essayons encore une fois.";
-                    statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
-                }
+                statusEl.textContent = "On y est presque ! Essayons encore une fois.";
+                statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
             }
         }
     }
@@ -1070,11 +1062,6 @@
                     msg = "Bien essayé ! Passez à la suite.";
                     isComplete = true;
                 } else {
-                    // 2회 오답시 subtitle 공개
-                    if (currentAttempts === 2) {
-                        const subtitleEl = document.getElementById(`speak-subtitle-${currentPage}`);
-                        if (subtitleEl) subtitleEl.classList.remove('hidden');
-                    }
                     msg = "On y est presque ! Essayons encore une fois.";
                     isComplete = false;
                 }
