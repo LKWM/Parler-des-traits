@@ -451,7 +451,7 @@
                 </button>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">학생은 <span id="fillin-blank-12">____</span>.</p>
-                    <p id="fillin-subtitle-12" class="text-sm text-slate-500 italic mt-1">L'étudiant est intelligent.</p>
+                    <p id="fillin-subtitle-12" class="text-sm text-slate-500 italic mt-1 hidden">L'étudiant est intelligent.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">poli</span>
@@ -507,7 +507,7 @@
                 </button>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">집이 <span id="fillin-blank-14">____</span>.</p>
-                    <p id="fillin-subtitle-14" class="text-sm text-slate-500 italic mt-1">La maison est propre.</p>
+                    <p id="fillin-subtitle-14" class="text-sm text-slate-500 italic mt-1 hidden">La maison est propre.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">formel</span>
@@ -904,7 +904,7 @@
             input.classList.add('border-red-400','bg-red-50');
 
             if (attempts >= 3) {
-                // 3회 탈락
+                // 3회 탈락 → 정답 빈칸 공개
                 setTimeout(() => {
                     input.classList.remove('border-red-400','bg-red-50');
                     input.value = '';
@@ -917,6 +917,8 @@
                 if (blankEl) { blankEl.textContent = correctAnswer; blankEl.style.color = '#2563eb'; blankEl.style.fontWeight = '900'; }
                 unlockNextButton(pageId);
             } else {
+                // 2회 오답시 subtitle 공개
+                if (attempts === 2 && subtitleEl) subtitleEl.classList.remove('hidden');
                 setTimeout(() => {
                     input.classList.remove('border-red-400','bg-red-50');
                     input.value = '';
@@ -1058,7 +1060,8 @@
                 msg = "Très bien ! Passez à la suite.";
                 isComplete = true;
             } else {
-                if (currentAttempts >= maxAttempts) {
+                if (currentAttempts >= 2) {
+                    // 2회 이상 오답 → 정답 공개 + 세션 종료
                     msg = "Bien essayé ! Passez à la suite.";
                     isComplete = true;
                 } else {
