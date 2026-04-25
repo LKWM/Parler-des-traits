@@ -446,11 +446,12 @@
                 <h2 class="consigne">Complétez la phrase.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776797573/5-S4_u79cue.mp3')"
                     class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
-                    <p class="text-base sm:text-lg font-bold text-slate-800 text-left">L'étudiant est intelligent.</p>
+                    <p class="text-sm sm:text-base font-semibold text-indigo-700 text-left">Écouter</p>
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">학생은 <span id="fillin-blank-12">____</span>.</p>
+                    <p id="fillin-subtitle-12" class="text-sm text-slate-500 italic mt-1 hidden">L'étudiant est intelligent.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">poli</span>
@@ -475,8 +476,8 @@
             <div class="content-area gap-4">
                 <h2 class="consigne">Parlez en coréen.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-4 px-6 w-full max-w-sm shrink-0 text-center">
-                    <p class="text-slate-500 italic text-sm sm:text-base">L'école est chaude.</p>
-                    <p class="text-xl sm:text-2xl font-black text-slate-800 mt-1">학교가 <span id="speak-blank-13">_____</span>.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">학교가 <span id="speak-blank-13">_____</span>.</p>
+                    <p id="speak-subtitle-13" class="text-sm text-slate-500 italic mt-1 hidden">L'école est chaude.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">formel</span>
@@ -501,11 +502,12 @@
                 <h2 class="consigne">Complétez la phrase.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776798017/5-S5_eot16d.mp3')"
                     class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-between">
-                    <p class="text-base sm:text-lg font-bold text-slate-800 text-left">La maison est propre.</p>
+                    <p class="text-sm sm:text-base font-semibold text-indigo-700 text-left">Écouter</p>
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400 shrink-0"></i>
                 </button>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">집이 <span id="fillin-blank-14">____</span>.</p>
+                    <p id="fillin-subtitle-14" class="text-sm text-slate-500 italic mt-1 hidden">La maison est propre.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">formel</span>
@@ -530,8 +532,8 @@
             <div class="content-area gap-4">
                 <h2 class="consigne">Parlez en coréen.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-4 px-6 w-full max-w-sm shrink-0 text-center">
-                    <p class="text-slate-500 italic text-sm sm:text-base">Ma grande sœur est libre.</p>
-                    <p class="text-xl sm:text-2xl font-black text-slate-800 mt-1">언니는 <span id="speak-blank-15">_____</span>.</p>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">언니는 <span id="speak-blank-15">_____</span>.</p>
+                    <p id="speak-subtitle-15" class="text-sm text-slate-500 italic mt-1 hidden">Ma sœur est libre.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">poli</span>
@@ -861,8 +863,8 @@
             setTimeout(() => {
                 selected.classList.remove('wrong', 'selected');
             }, 700);
-            statusEl.textContent = "Incorrect. Réessayez !";
-            statusEl.className   = "font-bold text-center text-red-500 text-sm w-full transition-colors";
+            statusEl.textContent = "On y est presque ! Essayons encore une fois.";
+            statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
             // 정답 공개 없이 계속 재시도
         }
     }
@@ -873,55 +875,63 @@
     function checkFillin(pageId, correctAnswer) {
         if (pageStates[pageId].completed) return;
         pageStates[pageId].attempts++;
+        const attempts = pageStates[pageId].attempts;
 
         const input    = document.getElementById(`fillin-input-${pageId}`);
         const statusEl = document.getElementById(`fillin-status-${pageId}`);
+        const blankEl  = document.getElementById(`fillin-blank-${pageId}`);
+        const subtitleEl = document.getElementById(`fillin-subtitle-${pageId}`);
         const val      = (input.value || '').trim();
 
-        if (!val) {
-            statusEl.textContent = "Veuillez entrer votre réponse.";
-            statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
-            return;
-        }
+        if (!val) return;
 
         const normalize = s => s.replace(/\s/g,'').replace(/\.$/, '').toLowerCase();
         const isCorrect = normalize(val) === normalize(correctAnswer);
 
         if (isCorrect) {
+            // 정답
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.textContent = "Très bien !";
+            statusEl.textContent = "Très bien ! Passez à la suite.";
             statusEl.className   = "font-bold text-center text-green-500 text-sm w-full transition-colors";
             input.classList.add('border-green-400','bg-green-50');
             input.disabled = true;
             document.getElementById(`fillin-btn-${pageId}`).disabled = true;
-            document.getElementById(`fillin-btn-${pageId}`).classList.add('opacity-40');
-            // 빈칸 공개
-            const blankEl = document.getElementById(`fillin-blank-${pageId}`);
-            if (blankEl) { blankEl.textContent = correctAnswer; blankEl.style.color = '#16a34a'; }
+            if (blankEl) { blankEl.textContent = correctAnswer; blankEl.style.color = '#16a34a'; blankEl.style.fontWeight = '900'; }
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
             input.classList.add('border-red-400','bg-red-50');
-            setTimeout(() => {
-                input.classList.remove('border-red-400','bg-red-50');
-                input.value = ''; // 오답 후 입력값 초기화
-                input.focus();
-            }, 700);
-            if (pageStates[pageId].attempts >= 2) {
+
+            if (attempts >= 3) {
+                // 3회 탈락
+                setTimeout(() => {
+                    input.classList.remove('border-red-400','bg-red-50');
+                    input.value = '';
+                }, 500);
                 pageStates[pageId].completed = true;
-                statusEl.textContent = correctAnswer;
+                statusEl.textContent = "Bien essayé ! Passez à la suite.";
                 statusEl.className   = "font-bold text-center text-blue-500 text-sm w-full transition-colors";
                 input.disabled = true;
                 document.getElementById(`fillin-btn-${pageId}`).disabled = true;
-                document.getElementById(`fillin-btn-${pageId}`).classList.add('opacity-40');
-                // 빈칸 공개
-                const blankEl = document.getElementById(`fillin-blank-${pageId}`);
-                if (blankEl) { blankEl.textContent = correctAnswer; blankEl.style.color = '#2563eb'; }
+                if (blankEl) { blankEl.textContent = correctAnswer; blankEl.style.color = '#2563eb'; blankEl.style.fontWeight = '900'; }
                 unlockNextButton(pageId);
             } else {
-                statusEl.textContent = "Incorrect. Réessayez !";
-                statusEl.className   = "font-bold text-center text-red-500 text-sm w-full transition-colors";
+                setTimeout(() => {
+                    input.classList.remove('border-red-400','bg-red-50');
+                    input.value = '';
+                    input.focus();
+                }, 700);
+                if (attempts === 2) {
+                    // 2회 오답 → subtitle 공개 + 재시도
+                    if (subtitleEl) subtitleEl.classList.remove('hidden');
+                    statusEl.textContent = "On y est presque ! Essayons encore une fois.";
+                    statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
+                } else {
+                    // 1회 오답 → 재시도
+                    statusEl.textContent = "On y est presque ! Essayons encore une fois.";
+                    statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
+                }
             }
         }
     }
@@ -1029,7 +1039,7 @@
 
         if (mode === 'repeat') {
             if (currentAttempts === 1) {
-                msg = isPass ? "Très bien, essayons encore." : "On y est presque !";
+                msg = isPass ? "Très bien ! Essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
                 const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                 if (cardBtns.length > 0) {
@@ -1038,32 +1048,38 @@
                     audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
                 }
             } else {
-                msg = isPass ? "Très bien !" : "Bien essayé !";
+                msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
                 isComplete = true;
             }
         } else if (mode === 'repeat_sentence') {
             if (isPass) {
-                msg = "Très bien !"; isComplete = true;
+                msg = "Très bien ! Passez à la suite."; isComplete = true;
             } else {
                 if (currentAttempts < 2) {
-                    msg = "On y est presque !"; isComplete = false;
+                    msg = "On y est presque ! Essayons encore une fois."; isComplete = false;
                 } else {
-                    msg = "Bien essayé !"; isComplete = true;
+                    msg = "Bien essayé ! Passez à la suite."; isComplete = true;
                 }
             }
         } else if (mode === 'speak') {
             if (isPass) {
-                msg = "Très bien !";
+                msg = "Très bien ! Passez à la suite.";
                 isComplete = true;
             } else {
-                if (currentAttempts < maxAttempts) {
-                    msg = "On y est presque !"; isComplete = false;
-                } else {
-                    msg = ""; // 빈칸 공개로 대체, 별도 텍스트 없음
+                if (currentAttempts >= maxAttempts) {
+                    msg = "Bien essayé ! Passez à la suite.";
                     isComplete = true;
+                } else {
+                    // 2회 오답시 subtitle 공개
+                    if (currentAttempts === 2) {
+                        const subtitleEl = document.getElementById(`speak-subtitle-${currentPage}`);
+                        if (subtitleEl) subtitleEl.classList.remove('hidden');
+                    }
+                    msg = "On y est presque ! Essayons encore une fois.";
+                    isComplete = false;
                 }
             }
-            // 완료(통과/탈락 모두) 시 빈칸 공개 — blankAnswer(빈칸 부분만) 사용
+            // 완료(통과/탈락 모두) 시 빈칸 공개
             if (isComplete) {
                 const revealText = blankAnswer || (Array.isArray(referenceData) ? referenceData[0] : referenceData);
                 const blankEl = document.getElementById(`speak-blank-${currentPage}`);
