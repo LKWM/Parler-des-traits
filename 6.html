@@ -3,42 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Leçon 6 - Les phrases avec un objet direct</title>
+    <title>Leçon 3 - Décrire un espace et un objet</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
     <style>
-        html, body { margin:0; padding:0; width:100vw; height:100vh; overflow:hidden; background-color:#f1f5f9; font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; touch-action:none; }
-        #app-container { width:100%; height:100%; background-color:#ffffff; display:flex; flex-direction:column; overflow:hidden; }
-        #progress-container, #bottom-nav { flex-shrink:0; }
-        #pages-wrapper { flex:1; position:relative; width:100%; display:flex; overflow:hidden; }
-        .page { display:none; flex-direction:column; width:100%; height:100%; animation:fadeIn 0.3s ease-out forwards; }
-        .page.active { display:flex; }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
-        .content-area { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:1rem 1.25rem; text-align:center; min-height:0; overflow:hidden; }
-        @media(min-width:768px){ .content-area{padding:2rem 3rem;} }
-        @media(min-width:1024px){ .content-area{padding:2.5rem 6rem;} }
-        .text-content { font-size:1rem; line-height:1.6rem; color:#334155; max-width:42rem; margin:0 auto; }
-        @media(min-width:768px){ .text-content{font-size:1.15rem;line-height:1.85rem;} }
-        @media(min-width:1024px){ .text-content{font-size:1.25rem;line-height:2rem;} }
-        .card-btn { transition:transform 0.1s,box-shadow 0.1s; cursor:pointer; }
-        .card-btn:active { transform:scale(0.97); }
-        @media(min-width:1024px){ .card-btn{max-width:26rem!important;} .card-btn h3{font-size:2rem!important;} .card-btn p{font-size:1.1rem!important;} .card-btn i{font-size:3rem!important;} .mic-btn-lg{padding:2rem!important;} .mic-btn-lg i{font-size:3.5rem!important;} }
-        .consigne { font-size:1.25rem; line-height:1.75rem; font-weight:700; color:#1e293b; margin-bottom:1.25rem; }
-        @media(min-width:640px){ .consigne{font-size:1.5rem;} }
-        @media(min-width:1024px){ .consigne{font-size:1.75rem;margin-bottom:1.75rem;} }
-        .recording-pulse { animation:pulse-red 1.5s infinite; }
-        @keyframes pulse-red { 0%{box-shadow:0 0 0 0 rgba(239,68,68,0.7)} 70%{box-shadow:0 0 0 15px rgba(239,68,68,0)} 100%{box-shadow:0 0 0 0 rgba(239,68,68,0)} }
+        html, body {
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
+            overflow: hidden;
+            background-color: #f1f5f9;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: none;
+        }
+        #app-container {
+            width: 100%; height: 100%;
+            background-color: #ffffff;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        #progress-container, #bottom-nav { flex-shrink: 0; }
+        #pages-wrapper {
+            flex: 1; position: relative; width: 100%; display: flex; overflow: hidden;
+        }
+        .page {
+            display: none; flex-direction: column; width: 100%; height: 100%;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .page.active { display: flex; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .content-area {
+            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 1rem 1.25rem; text-align: center; min-height: 0; overflow: hidden;
+        }
+        /* Responsive scaling for large screens */
+        @media (min-width: 768px) {
+            .content-area { padding: 2rem 3rem; }
+        }
+        @media (min-width: 1024px) {
+            .content-area { padding: 2.5rem 6rem; }
+        }
+        .text-content {
+            font-size: 1rem; line-height: 1.6rem; color: #334155; max-width: 42rem; margin: 0 auto;
+        }
+        @media (min-width: 768px) {
+            .text-content { font-size: 1.15rem; line-height: 1.85rem; }
+        }
+        @media (min-width: 1024px) {
+            .text-content { font-size: 1.25rem; line-height: 2rem; }
+        }
+        /* Card scaling */
+        .card-btn { transition: transform 0.1s, box-shadow 0.1s; cursor: pointer; }
+        .card-btn:active { transform: scale(0.97); }
+        @media (min-width: 1024px) {
+            .card-btn { max-width: 26rem !important; }
+            .card-btn h3 { font-size: 2rem !important; }
+            .card-btn p  { font-size: 1.1rem !important; }
+            .card-btn i  { font-size: 3rem !important; }
+            .mic-btn-lg  { padding: 2rem !important; }
+            .mic-btn-lg i { font-size: 3.5rem !important; }
+        }
+        /* Consigne heading — same size as "Répétez après moi." */
+        .consigne {
+            font-size: 1.25rem; line-height: 1.75rem;
+            font-weight: 700; color: #1e293b;
+            margin-bottom: 1.25rem;
+        }
+        @media (min-width: 640px)  { .consigne { font-size: 1.5rem; } }
+        @media (min-width: 1024px) { .consigne { font-size: 1.75rem; margin-bottom: 1.75rem; } }
+
+        .recording-pulse { animation: pulse-red 1.5s infinite; }
+        @keyframes pulse-red {
+            0%   { box-shadow: 0 0 0 0   rgba(239,68,68,0.7); }
+            70%  { box-shadow: 0 0 0 15px rgba(239,68,68,0);  }
+            100% { box-shadow: 0 0 0 0   rgba(239,68,68,0);   }
+        }
+        .quiz-option { transition: all 0.2s; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .quiz-option.selected { background-color:#e0e7ff; border-color:#6366f1; color:#4338ca; }
+        .quiz-option.correct  { background-color:#dcfce7; border-color:#22c55e; color:#15803d; }
+        .quiz-option.wrong    { background-color:#fee2e2; border-color:#ef4444; color:#b91c1c; }
+        @media (min-width: 1024px) {
+            .quiz-option { font-size: 1.1rem; padding: 1rem 1.25rem !important; }
+            .quiz-grid   { max-width: 28rem !important; gap: 0.875rem !important; }
+        }
+        /* Word-order tokens */
+        .word-token {
+            cursor: pointer; transition: all 0.15s;
+            background: white; border: 2px solid #e2e8f0;
+            border-radius: 0.5rem; padding: 0.4rem 0.75rem;
+            font-size: 0.9rem; font-weight: 600; color: #334155;
+            user-select: none;
+        }
+        .word-token:hover { border-color:#6366f1; background:#eef2ff; color:#4338ca; }
+        .word-token.placed  { background:#e0e7ff; border-color:#6366f1; color:#4338ca; }
+        .word-token.correct-token { background:#dcfce7; border-color:#22c55e; color:#15803d; pointer-events:none; }
+        .word-token.wrong-token   { background:#fee2e2; border-color:#ef4444; color:#b91c1c; }
+        @media (min-width: 1024px) {
+            .word-token { font-size: 1.05rem; padding: 0.55rem 1rem; }
+        }
     </style>
 </head>
 <body>
 <div id="app-container">
+
+    <!-- Progress Bar (hidden until lesson starts) -->
     <div id="progress-container" class="w-full h-2 bg-slate-100 hidden">
         <div id="progress-bar" class="h-full bg-indigo-500 transition-all duration-300 w-0"></div>
     </div>
+
     <div id="pages-wrapper">
 
-        <!-- PAGE 0 — Cover -->
+        <!-- ══════════════════════════════
+             PAGE 0 — Cover
+        ══════════════════════════════ -->
         <div id="page-0" class="page active justify-center items-center bg-indigo-50">
             <div class="content-area">
                 <p class="text-indigo-600 font-semibold mb-2 text-lg sm:text-xl">Chapitre 2 - Parler des préférences</p>
@@ -50,25 +131,31 @@
             </div>
         </div>
 
-        <!-- PAGE 1 — Text intro 1 -->
+        <!-- ══════════════════════════════
+             PAGE 1 — Text 1
+        ══════════════════════════════ -->
         <div id="page-1" class="page">
             <div class="content-area">
                 <p class="text-content text-justify">
-                    Bonjour ! Bienvenue dans le chapitre 2. Avant de commencer, passons rapidement en revue ce que nous avons appris jusqu'à présent.
+                    Bonjour ! Bienvenue dans le chapitre 2. Avant de commencer, passons rapidement en revue ce que nous avons appris jusqu'à présent. Dans le programme précédent, « Parler des activités », nous avons appris que « 하다 » peut signifier « faire » ou se combiner avec des noms pour former des verbes. Au cours du premier chapitre de ce programme, nous avons également examiné plusieurs adjectifs se terminant par « 하다 » qui n'ont pas le sens de « faire ».
                 </p>
             </div>
         </div>
 
-        <!-- PAGE 2 — Text intro 2 -->
+        <!-- ══════════════════════════════
+             PAGE 2 — Text 2
+        ══════════════════════════════ -->
         <div id="page-2" class="page">
             <div class="content-area">
                 <p class="text-content text-justify">
-                    Dans ce chapitre, nous allons maintenant découvrir des expressions pour exprimer les préférences personnelles, comme « aimer » et « détester », et apprendre à construire des phrases avec un objet direct en coréen.
+                    Dans ce chapitre, nous allons maintenant découvrir des expressions pour exprimer les préférences personnelles, comme aimer et détester. Tout d'abord, répétons ensemble les deux mots les plus importants.
                 </p>
             </div>
         </div>
 
-        <!-- PAGE 3 — Repeat : 좋아하다 -->
+        <!-- ══════════════════════════════
+             PAGE 3 — Repeat : 좋아하다
+        ══════════════════════════════ -->
         <div id="page-3" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -89,7 +176,9 @@
             </div>
         </div>
 
-        <!-- PAGE 4 — Repeat : 싫어하다 -->
+        <!-- ══════════════════════════════
+             PAGE 4 — Repeat : 싫어하다
+        ══════════════════════════════ -->
         <div id="page-4" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -99,7 +188,7 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Détester</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <p class="text-xs text-slate-400 italic -mt-4 mb-4">* La double consonne finale &lt;ㄹㅎ&gt; est réalisée comme /ㄹ/ en prononciation moderne.</p>
+                <p class="text-xs text-slate-400 italic text-center px-6">* La double consonne finale &lt;ㄹㅎ&gt; est réalisée comme /ㄹ/ en prononciation moderne.</p>
                 <button id="mic-btn-4" onclick="toggleRecordSpeech(this,'status-4','싫어하다','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
@@ -111,7 +200,9 @@
             </div>
         </div>
 
-        <!-- PAGE 5 — Text intro 3 -->
+        <!-- ══════════════════════════════
+             PAGE 5 — Text 3
+        ══════════════════════════════ -->
         <div id="page-5" class="page">
             <div class="content-area">
                 <p class="text-content text-justify">
@@ -120,14 +211,16 @@
             </div>
         </div>
 
-        <!-- PAGE 6 — Repeat : 좋아합니다. -->
+        <!-- ══════════════════════════════
+             PAGE 6 — Repeat : 좋아합니다.
+        ══════════════════════════════ -->
         <div id="page-6" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776841125/%E1%84%8C%E1%85%A9%E1%87%82f_bm7vhl.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">좋아합니다.</h3>
-                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… aime / aimes / aimons / aimez / aiment …</p>
+                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… aime/aimes/aimons/aimez/aiment …</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
                 <button id="mic-btn-6" onclick="toggleRecordSpeech(this,'status-6','좋아합니다','repeat')"
@@ -141,14 +234,16 @@
             </div>
         </div>
 
-        <!-- PAGE 7 — Repeat : 좋아해요. -->
+        <!-- ══════════════════════════════
+             PAGE 7 — Repeat : 좋아해요.
+        ══════════════════════════════ -->
         <div id="page-7" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1776841135/%E1%84%8C%E1%85%A9%E1%87%82p_kbrxyg.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">좋아해요.</h3>
-                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… aime / aimes / aimons / aimez / aiment …</p>
+                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">… aime/aimes/aimons/aimez/aiment …</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
                 <button id="mic-btn-7" onclick="toggleRecordSpeech(this,'status-7','좋아해요','repeat')"
@@ -162,7 +257,9 @@
             </div>
         </div>
 
-        <!-- PAGE 8 — Repeat : 싫어합니다. -->
+        <!-- ══════════════════════════════
+             PAGE 8 — Repeat : 싫어합니다.
+        ══════════════════════════════ -->
         <div id="page-8" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -183,7 +280,9 @@
             </div>
         </div>
 
-        <!-- PAGE 9 — Repeat : 싫어해요. -->
+        <!-- ══════════════════════════════
+             PAGE 9 — Repeat : 싫어해요.
+        ══════════════════════════════ -->
         <div id="page-9" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -204,19 +303,23 @@
             </div>
         </div>
 
-        <!-- PAGE 10 — Card text : Objet direct -->
+        <!-- ══════════════════════════════
+             PAGE 10 — Card text + Text 4
+        ══════════════════════════════ -->
         <div id="page-10" class="page">
             <div class="content-area gap-4">
                 <button class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center shrink-0" style="cursor:default;">
                     <h3 class="text-xl sm:text-2xl font-black text-slate-800">Objet direct + 을/를 + 좋아하다/싫어하다</h3>
                 </button>
                 <p class="text-content text-justify">
-                    Les verbes comme « 좋아하다 » et « 싫어하다 » nécessitent toujours un objet direct lorsqu'ils sont utilisés dans une phrase.
+                    Les verbes comme « 좋아하다 » et « 싫어하다 » nécessitent toujours un objet direct lorsqu'ils sont utilisés dans une phrase. C'est comme en français : on ne peut pas simplement dire « J'aime » pour que la phrase soit complète, il faut préciser ce que l'on aime pour transmettre l'information. En coréen, les particules « 을/를 » indiquent que le mot est l'objet direct de la phrase. On utilise « 을 » après une consonne et « 를 » après une voyelle.
                 </p>
             </div>
         </div>
 
-        <!-- PAGE 11 — Repeat sentence : 저는 커피를 좋아합니다. (S1) -->
+        <!-- ══════════════════════════════
+             PAGE 11 — Repeat : 저는 커피를 좋아합니다. (S1)
+        ══════════════════════════════ -->
         <div id="page-11" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -237,7 +340,9 @@
             </div>
         </div>
 
-        <!-- PAGE 12 — Repeat sentence : 저는 옷을 좋아해요. (S2) -->
+        <!-- ══════════════════════════════
+             PAGE 12 — Repeat : 저는 옷을 좋아해요. (S2)
+        ══════════════════════════════ -->
         <div id="page-12" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -258,7 +363,9 @@
             </div>
         </div>
 
-        <!-- PAGE 13 — Repeat sentence : 제 누나는 사과를 싫어합니다. (S3) -->
+        <!-- ══════════════════════════════
+             PAGE 13 — Repeat : 제 누나는 사과를 싫어합니다. (S3)
+        ══════════════════════════════ -->
         <div id="page-13" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -279,7 +386,9 @@
             </div>
         </div>
 
-        <!-- PAGE 14 — Repeat sentence : 엄마는 이 집을 싫어해요. (S4) -->
+        <!-- ══════════════════════════════
+             PAGE 14 — Repeat : 엄마는 이 집을 싫어해요. (S4)
+        ══════════════════════════════ -->
         <div id="page-14" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -300,7 +409,9 @@
             </div>
         </div>
 
-        <!-- PAGE 15 — Outro -->
+        <!-- ══════════════════════════════
+             PAGE 15 — Outro
+        ══════════════════════════════ -->
         <div id="page-15" class="page justify-center items-center bg-green-50">
             <div class="content-area">
                 <div class="bg-white p-5 rounded-full shadow-md mb-6">
@@ -314,30 +425,46 @@
 
     </div><!-- end pages-wrapper -->
 
-    <!-- Bottom Navigation -->
+    <!-- Bottom Navigation (hidden on cover, shown after startLesson()) -->
     <div id="bottom-nav" class="w-full h-16 sm:h-20 bg-white border-t border-slate-200 flex items-center justify-between px-6 sm:px-10 hidden">
         <button id="btn-prev" onclick="changePage(-1)"
-            class="flex items-center gap-2 text-slate-500 font-semibold hover:text-indigo-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
-            <i class="ph-bold ph-caret-left text-xl"></i>
-            <span class="hidden sm:inline">Précédent</span>
+            class="text-slate-500 font-bold text-base sm:text-lg flex items-center gap-2 hover:text-slate-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+            <i class="ph-bold ph-caret-left"></i> Précédent
         </button>
         <button id="btn-next" onclick="changePage(1)"
-            class="flex items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-semibold py-2 px-5 rounded-full transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
-            <span>Suivant</span>
-            <i class="ph-bold ph-caret-right text-xl"></i>
+            class="text-indigo-600 font-bold text-base sm:text-lg flex items-center gap-2 hover:text-indigo-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+            Suivant <i class="ph-bold ph-caret-right"></i>
         </button>
     </div>
-</div>
+
+</div><!-- end app-container -->
 
 <script>
-    const TOTAL_PAGES = 16;
-    const interactivePages = new Set([3,4,6,7,8,9,11,12,13,14]);
-    const completedPages   = new Set();
-    let currentPage = 0;
-    let currentAudio = null, activeRecorder = null, recordingTimeout = null, audioTimeoutId = null;
-    const pageStates = {};
-    for (let i = 0; i < TOTAL_PAGES; i++) pageStates[i] = { completed: false, attempts: 0 };
+    /* ═══════════════════════════════════════
+       STATE & CONFIG
+    ═══════════════════════════════════════ */
+    const TOTAL_PAGES = 16; // pages 0–15
 
+    // Pages that lock "Suivant" until completed
+    const interactivePages = new Set([3,4,6,7,8,9,11,12,13,14]);
+
+    const completedPages = new Set();
+    const pageStates = {};
+    for (let i = 0; i < TOTAL_PAGES; i++) {
+        pageStates[i] = { attempts: 0, completed: false };
+    }
+
+    let currentPage = 0;
+    let currentAudio = null;
+    let audioTimeoutId = null;
+    let activeRecorder = null;
+    let recordingTimeout = null;
+
+    // Tone.js sounds
+    let correctSound = null, errorSound = null, completionSynth = null, transitionSynth = null;
+
+    // Auto-play audio on page entry
+    // Text-explanation pages (auto-play the narration)
     const pageTextAudios = {
         1:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776841148/6-1_o7tizf.wav',
         2:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776841041/6-2_tuvkg0.mp3',
@@ -345,6 +472,8 @@
         10: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776841141/6-4_zx581p.mp3',
         15: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776841145/6-5_iedxck.wav',
     };
+
+    // Single repeat-card pages: auto-play the card audio
     const repeatCardAudios = {
         3:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776841131/%E1%84%8C%E1%85%A9%E1%87%82v_e99wcc.mp3',
         4:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776841138/%E1%84%89%E1%85%B5%E1%86%B6v_i3nyjp.mp3',
@@ -358,58 +487,77 @@
         14: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776841118/6-S4_zlc8du.mp3',
     };
 
-    let completionSynth = null, correctSound = null, errorSound = null;
-    (async () => {
-        try {
-            await Tone.start();
-            completionSynth = new Tone.PolySynth(Tone.Synth, { oscillator:{type:'triangle'}, envelope:{attack:0.02,decay:0.1,sustain:0.3,release:0.8} }).toDestination();
-            correctSound    = new Tone.Synth({ oscillator:{type:'sine'}, envelope:{attack:0.01,decay:0.1,sustain:0,release:0.3} }).toDestination();
-            errorSound      = new Tone.Synth({ oscillator:{type:'sawtooth'}, envelope:{attack:0.01,decay:0.2,sustain:0,release:0.3} }).toDestination();
-        } catch(e) { console.warn('Tone.js init failed', e); }
-    })();
 
-    function startLesson() {
-        document.getElementById('page-0').classList.remove('active');
-        currentPage = 1;
-        document.getElementById('page-1').classList.add('active');
-        document.getElementById('progress-container').classList.remove('hidden');
-        document.getElementById('bottom-nav').classList.remove('hidden');
-        document.getElementById('btn-prev').disabled = true;
-        document.getElementById('btn-next').disabled = false;
-        updateProgress();
-        const audio = pageTextAudios[1];
-        if (audio) audioTimeoutId = setTimeout(() => playCardAudio(audio), 300);
+    /* ═══════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════ */
+    async function initAudioContext() {
+        await Tone.start();
+        correctSound    = new Tone.Synth({ oscillator: { type: 'sine'     } }).toDestination();
+        errorSound      = new Tone.Synth({ oscillator: { type: 'triangle' } }).toDestination();
+        completionSynth = new Tone.PolySynth(Tone.Synth).toDestination();
+        transitionSynth = new Tone.Synth({
+            oscillator: { type: 'sine' },
+            envelope:   { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
+        }).toDestination();
+        transitionSynth.volume.value = -15;
     }
 
+    async function startLesson() {
+        await initAudioContext();
+        document.getElementById('progress-container').classList.remove('hidden');
+        document.getElementById('bottom-nav').classList.remove('hidden');
+        changePage(1);
+    }
+
+    /* ═══════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════ */
     function updateProgress() {
-        const pct = (currentPage / (TOTAL_PAGES - 1)) * 100;
+        const pct = ((currentPage) / (TOTAL_PAGES - 1)) * 100;
         document.getElementById('progress-bar').style.width = pct + '%';
     }
 
     function unlockNextButton(pageId) {
         completedPages.add(pageId);
-        pageStates[pageId].completed = true;
-        if (currentPage === pageId) document.getElementById('btn-next').disabled = false;
+        if (currentPage === pageId) {
+            document.getElementById('btn-next').disabled = false;
+        }
     }
 
     function changePage(dir) {
-        if (audioTimeoutId) { clearTimeout(audioTimeoutId); audioTimeoutId = null; }
-        if (currentAudio)   { currentAudio.pause(); currentAudio.currentTime = 0; }
+        // Play transition sound
+        if (dir !== 0 && transitionSynth) transitionSynth.triggerAttackRelease('C6', '0.05s');
 
-        document.getElementById('page-' + currentPage).classList.remove('active');
+        // Stop audio immediately on page leave
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+        if (audioTimeoutId) { clearTimeout(audioTimeoutId); audioTimeoutId = null; }
+        if (activeRecorder && activeRecorder.state === 'recording') {
+            activeRecorder.stop(); clearTimeout(recordingTimeout);
+        }
+
+        // Deactivate old page
+        document.getElementById(`page-${currentPage}`).classList.remove('active');
         currentPage = Math.max(1, Math.min(currentPage + dir, TOTAL_PAGES - 1));
-        document.getElementById('page-' + currentPage).classList.add('active');
+        document.getElementById(`page-${currentPage}`).classList.add('active');
+
+
         updateProgress();
 
         const btnPrev = document.getElementById('btn-prev');
         const btnNext = document.getElementById('btn-next');
 
         if (currentPage === TOTAL_PAGES - 1) {
+            // Outro page — hide entire bottom nav bar
             document.getElementById('bottom-nav').classList.add('hidden');
             if (completionSynth && dir > 0) {
+                // 완료 효과음(짠) 재생 후 설명 오디오 재생
                 completionSynth.triggerAttackRelease(["C5","E5","G5","C6"], "4n");
                 const outroAudio = pageTextAudios[TOTAL_PAGES - 1];
-                if (outroAudio) audioTimeoutId = setTimeout(() => playCardAudio(outroAudio), 700);
+                if (outroAudio) {
+                    // Tone.js 4n ≈ 500ms at 120BPM — 700ms 후 재생
+                    audioTimeoutId = setTimeout(() => playCardAudio(outroAudio), 700);
+                }
             }
             triggerLessonComplete();
         } else {
@@ -424,6 +572,7 @@
             }
         }
 
+        // Auto-play audio (Outro 제외)
         if (currentPage < TOTAL_PAGES - 1) {
             const textAudio   = pageTextAudios[currentPage];
             const repeatAudio = repeatCardAudios[currentPage];
@@ -432,9 +581,14 @@
             } else if (repeatAudio) {
                 audioTimeoutId = setTimeout(() => playCardAudio(repeatAudio), 300);
             }
+
+
         }
     }
 
+    /* ═══════════════════════════════════════
+       AUDIO
+    ═══════════════════════════════════════ */
     function playCardAudio(url) {
         if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
         currentAudio = new Audio(url);
@@ -449,8 +603,11 @@
         window.parent.postMessage({ type: 'lesson_complete' }, '*');
     }
 
+    /* ═══════════════════════════════════════
+       MIC UI HELPERS
+    ═══════════════════════════════════════ */
     function toggleActiveMic(disable) {
-        document.querySelectorAll('#page-' + currentPage + ' .mic-req').forEach(btn => {
+        document.querySelectorAll(`#page-${currentPage} .mic-req`).forEach(btn => {
             if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse')) return;
             if (disable) {
                 btn.disabled = true;
@@ -466,16 +623,23 @@
 
     function disableMicBtn(btn, success) {
         btn.disabled = true;
-        btn.className = 'mic-req mic-btn-lg text-white rounded-full p-6 shadow-none transition-colors relative z-10 ' + (success ? 'bg-green-500' : 'bg-slate-400');
-        btn.innerHTML = '<i class="ph-bold ph-check text-4xl"></i>';
+        btn.className = `mic-req mic-btn-lg text-white rounded-full p-6 shadow-none transition-colors relative z-10 ${success ? 'bg-green-500' : 'bg-slate-400'}`;
+        btn.innerHTML = `<i class="ph-bold ph-check text-4xl"></i>`;
     }
 
     function resetMicBtnState(btn) {
         btn.disabled = false;
         btn.className = 'mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0';
-        btn.innerHTML = '<i class="ph-fill ph-microphone text-4xl"></i>';
+        btn.innerHTML = `<i class="ph-fill ph-microphone text-4xl"></i>`;
     }
 
+
+
+
+
+    /* ═══════════════════════════════════════
+       SPEECH RECOGNITION
+    ═══════════════════════════════════════ */
     const BASE_44_ORIGIN = "https://coreeno.base44.app";
     const CLOVA_API_FUNCTION_URL = BASE_44_ORIGIN + '/api/functions/naverClovaSpeech';
 
@@ -510,8 +674,9 @@
             mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
             mediaRecorder.onstop = async () => {
                 btn.classList.remove('recording-pulse');
-                btn.innerHTML = '<i class="ph ph-spinner animate-spin text-4xl"></i>';
+                btn.innerHTML = `<i class="ph ph-spinner animate-spin text-4xl"></i>`;
                 statusEl.innerText = "Analyse...";
+                // Clear transcript immediately on 2nd attempt
                 const transcriptEl = document.getElementById(statusId.replace('status','transcript'));
                 if (transcriptEl) transcriptEl.innerHTML = "";
                 const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
@@ -525,8 +690,9 @@
             mediaRecorder.start();
             activeRecorder = mediaRecorder;
             btn.classList.add('recording-pulse');
-            btn.innerHTML = '<i class="ph-fill ph-stop text-4xl"></i>';
+            btn.innerHTML = `<i class="ph-fill ph-stop text-4xl"></i>`;
             statusEl.innerText = "";
+            // Also clear transcript when starting a new recording
             const transcriptEl = document.getElementById(statusId.replace('status','transcript'));
             if (transcriptEl) transcriptEl.innerHTML = "";
             recordingTimeout = setTimeout(() => {
@@ -567,9 +733,9 @@
 
         if (transcriptEl && recognizedText) {
             transcriptEl.innerHTML =
-                '<span class="text-slate-500">Vous avez dit : </span>' +
-                '<span class="font-bold text-indigo-600">"' + recognizedText + '"</span> ' +
-                '<span class="text-xs text-slate-400">(' + score + '%)</span>';
+                `<span class="text-slate-500">Vous avez dit : </span>` +
+                `<span class="font-bold text-indigo-600">"${recognizedText}"</span> ` +
+                `<span class="text-xs text-slate-400">(${score}%)</span>`;
         }
 
         const isPass = score >= 80;
@@ -579,6 +745,7 @@
             if (currentAttempts === 1) {
                 msg = isPass ? "Très bien, essayons encore." : "On y est presque !";
                 isComplete = false;
+                // Replay card audio
                 const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                 if (cardBtns.length > 0) {
                     const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
@@ -589,28 +756,47 @@
                 msg = isPass ? "Très bien !" : "Bien essayé !";
                 isComplete = true;
             }
+        } else if (mode === 'repeat_sentence') {
+            if (isPass) {
+                msg = "Très bien !"; isComplete = true;
+            } else {
+                if (currentAttempts === 1) {
+                    msg = "On y est presque !"; isComplete = false;
+                    const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
+                    if (cardBtns.length > 0) {
+                        const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
+                        if (audioTimeoutId) clearTimeout(audioTimeoutId);
+                        audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
+                    }
+                } else {
+                    msg = "Bien essayé !"; isComplete = true;
+                }
+            }
         }
 
         const baseClass = "font-bold text-sm text-center w-full transition-colors";
         statusEl.innerHTML = msg;
 
         if (isComplete) {
-            statusEl.className = baseClass + ' ' + (isPass ? 'text-green-600' : 'text-blue-600');
+            statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-blue-600'}`;
             disableMicBtn(btn, isPass);
-            const allMics = document.querySelectorAll('#page-' + currentPage + ' .mic-req');
+            const allMics = document.querySelectorAll(`#page-${currentPage} .mic-req`);
             const allDone = Array.from(allMics).every(b => b.disabled);
             if (allDone) {
                 pageStates[currentPage].completed = true;
+                // 2차 완료(페이지 전체): 통과 → 짠(completionSynth), 실패 → 둥(errorSound)
                 if (isPass && completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
                 else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4','0.15s');
                 unlockNextButton(currentPage);
             } else {
+                // 2차 완료(일부 남음): 통과 → 삑(correctSound), 실패 → 둥(errorSound)
                 if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
                 if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.15s');
             }
         } else {
-            statusEl.className = baseClass + ' ' + (isPass ? 'text-green-600' : 'text-orange-500');
+            statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-orange-500'}`;
             resetMicBtnState(btn);
+            // 1차: 통과 → 삑(correctSound), 실패 → 둥(errorSound)
             if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
             if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.1s');
         }
