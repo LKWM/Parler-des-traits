@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Leçon 3 - Décrire un espace et un objet</title>
+    <title>Leçon 6 - Les phrases avec un objet direct</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -40,7 +40,6 @@
             flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 1rem 1.25rem; text-align: center; min-height: 0; overflow: hidden;
         }
-        /* Responsive scaling for large screens */
         @media (min-width: 768px) {
             .content-area { padding: 2rem 3rem; }
         }
@@ -56,7 +55,6 @@
         @media (min-width: 1024px) {
             .text-content { font-size: 1.25rem; line-height: 2rem; }
         }
-        /* Card scaling */
         .card-btn { transition: transform 0.1s, box-shadow 0.1s; cursor: pointer; }
         .card-btn:active { transform: scale(0.97); }
         @media (min-width: 1024px) {
@@ -67,7 +65,6 @@
             .mic-btn-lg  { padding: 2rem !important; }
             .mic-btn-lg i { font-size: 3.5rem !important; }
         }
-        /* Consigne heading — same size as "Répétez après moi." */
         .consigne {
             font-size: 1.25rem; line-height: 1.75rem;
             font-weight: 700; color: #1e293b;
@@ -82,35 +79,11 @@
             70%  { box-shadow: 0 0 0 15px rgba(239,68,68,0);  }
             100% { box-shadow: 0 0 0 0   rgba(239,68,68,0);   }
         }
-        .quiz-option { transition: all 0.2s; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .quiz-option.selected { background-color:#e0e7ff; border-color:#6366f1; color:#4338ca; }
-        .quiz-option.correct  { background-color:#dcfce7; border-color:#22c55e; color:#15803d; }
-        .quiz-option.wrong    { background-color:#fee2e2; border-color:#ef4444; color:#b91c1c; }
-        @media (min-width: 1024px) {
-            .quiz-option { font-size: 1.1rem; padding: 1rem 1.25rem !important; }
-            .quiz-grid   { max-width: 28rem !important; gap: 0.875rem !important; }
-        }
-        /* Word-order tokens */
-        .word-token {
-            cursor: pointer; transition: all 0.15s;
-            background: white; border: 2px solid #e2e8f0;
-            border-radius: 0.5rem; padding: 0.4rem 0.75rem;
-            font-size: 0.9rem; font-weight: 600; color: #334155;
-            user-select: none;
-        }
-        .word-token:hover { border-color:#6366f1; background:#eef2ff; color:#4338ca; }
-        .word-token.placed  { background:#e0e7ff; border-color:#6366f1; color:#4338ca; }
-        .word-token.correct-token { background:#dcfce7; border-color:#22c55e; color:#15803d; pointer-events:none; }
-        .word-token.wrong-token   { background:#fee2e2; border-color:#ef4444; color:#b91c1c; }
-        @media (min-width: 1024px) {
-            .word-token { font-size: 1.05rem; padding: 0.55rem 1rem; }
-        }
     </style>
 </head>
 <body>
 <div id="app-container">
 
-    <!-- Progress Bar (hidden until lesson starts) -->
     <div id="progress-container" class="w-full h-2 bg-slate-100 hidden">
         <div id="progress-bar" class="h-full bg-indigo-500 transition-all duration-300 w-0"></div>
     </div>
@@ -188,7 +161,7 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Détester</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <p class="text-xs text-slate-400 italic text-center px-6">* La double consonne finale &lt;ㄹㅎ&gt; est réalisée comme /ㄹ/ en prononciation moderne.</p>
+                <p class="text-xs text-slate-400 italic text-center px-4 -mt-4 mb-4">* La double consonne finale &lt;ㄹㅎ&gt; est réalisée comme /ㄹ/ en prononciation moderne.</p>
                 <button id="mic-btn-4" onclick="toggleRecordSpeech(this,'status-4','싫어하다','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
@@ -304,13 +277,13 @@
         </div>
 
         <!-- ══════════════════════════════
-             PAGE 10 — Card text + Text 4
+             PAGE 10 — Card with text + Text 4
         ══════════════════════════════ -->
         <div id="page-10" class="page">
             <div class="content-area gap-4">
-                <button class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center shrink-0" style="cursor:default;">
+                <div class="bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center shrink-0">
                     <h3 class="text-xl sm:text-2xl font-black text-slate-800">Objet direct + 을/를 + 좋아하다/싫어하다</h3>
-                </button>
+                </div>
                 <p class="text-content text-justify">
                     Les verbes comme « 좋아하다 » et « 싫어하다 » nécessitent toujours un objet direct lorsqu'ils sont utilisés dans une phrase. C'est comme en français : on ne peut pas simplement dire « J'aime » pour que la phrase soit complète, il faut préciser ce que l'on aime pour transmettre l'information. En coréen, les particules « 을/를 » indiquent que le mot est l'objet direct de la phrase. On utilise « 을 » après une consonne et « 를 » après une voyelle.
                 </p>
@@ -445,7 +418,6 @@
     ═══════════════════════════════════════ */
     const TOTAL_PAGES = 16; // pages 0–15
 
-    // Pages that lock "Suivant" until completed
     const interactivePages = new Set([3,4,6,7,8,9,11,12,13,14]);
 
     const completedPages = new Set();
@@ -459,12 +431,10 @@
     let audioTimeoutId = null;
     let activeRecorder = null;
     let recordingTimeout = null;
+    let quizAttempts = 0;
 
-    // Tone.js sounds
     let correctSound = null, errorSound = null, completionSynth = null, transitionSynth = null;
 
-    // Auto-play audio on page entry
-    // Text-explanation pages (auto-play the narration)
     const pageTextAudios = {
         1:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776841148/6-1_o7tizf.wav',
         2:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776841041/6-2_tuvkg0.mp3',
@@ -473,7 +443,6 @@
         15: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776841145/6-5_iedxck.wav',
     };
 
-    // Single repeat-card pages: auto-play the card audio
     const repeatCardAudios = {
         3:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776841131/%E1%84%8C%E1%85%A9%E1%87%82v_e99wcc.mp3',
         4:  'https://res.cloudinary.com/de76i94ia/video/upload/v1776841138/%E1%84%89%E1%85%B5%E1%86%B6v_i3nyjp.mp3',
@@ -486,7 +455,6 @@
         13: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776841051/6-S3_dvs9kw.mp3',
         14: 'https://res.cloudinary.com/de76i94ia/video/upload/v1776841118/6-S4_zlc8du.mp3',
     };
-
 
     /* ═══════════════════════════════════════
        INIT
@@ -526,21 +494,19 @@
     }
 
     function changePage(dir) {
-        // Play transition sound
         if (dir !== 0 && transitionSynth) transitionSynth.triggerAttackRelease('C6', '0.05s');
 
-        // Stop audio immediately on page leave
         if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
         if (audioTimeoutId) { clearTimeout(audioTimeoutId); audioTimeoutId = null; }
         if (activeRecorder && activeRecorder.state === 'recording') {
             activeRecorder.stop(); clearTimeout(recordingTimeout);
         }
 
-        // Deactivate old page
         document.getElementById(`page-${currentPage}`).classList.remove('active');
         currentPage = Math.max(1, Math.min(currentPage + dir, TOTAL_PAGES - 1));
         document.getElementById(`page-${currentPage}`).classList.add('active');
 
+        quizAttempts = pageStates[currentPage].attempts;
 
         updateProgress();
 
@@ -548,14 +514,11 @@
         const btnNext = document.getElementById('btn-next');
 
         if (currentPage === TOTAL_PAGES - 1) {
-            // Outro page — hide entire bottom nav bar
             document.getElementById('bottom-nav').classList.add('hidden');
             if (completionSynth && dir > 0) {
-                // 완료 효과음(짠) 재생 후 설명 오디오 재생
                 completionSynth.triggerAttackRelease(["C5","E5","G5","C6"], "4n");
                 const outroAudio = pageTextAudios[TOTAL_PAGES - 1];
                 if (outroAudio) {
-                    // Tone.js 4n ≈ 500ms at 120BPM — 700ms 후 재생
                     audioTimeoutId = setTimeout(() => playCardAudio(outroAudio), 700);
                 }
             }
@@ -572,7 +535,6 @@
             }
         }
 
-        // Auto-play audio (Outro 제외)
         if (currentPage < TOTAL_PAGES - 1) {
             const textAudio   = pageTextAudios[currentPage];
             const repeatAudio = repeatCardAudios[currentPage];
@@ -581,8 +543,6 @@
             } else if (repeatAudio) {
                 audioTimeoutId = setTimeout(() => playCardAudio(repeatAudio), 300);
             }
-
-
         }
     }
 
@@ -633,10 +593,6 @@
         btn.innerHTML = `<i class="ph-fill ph-microphone text-4xl"></i>`;
     }
 
-
-
-
-
     /* ═══════════════════════════════════════
        SPEECH RECOGNITION
     ═══════════════════════════════════════ */
@@ -648,15 +604,15 @@
         const s2 = str2.replace(/[\s.,?!]/g,'').toLowerCase();
         if (s1 === s2) return 100;
         if (!s1.length || !s2.length) return 0;
-        const m = Array(s2.length+1).fill(null).map(() => Array(s1.length+1).fill(0));
-        for (let i = 0; i <= s1.length; i++) m[0][i] = i;
-        for (let j = 0; j <= s2.length; j++) m[j][0] = j;
-        for (let j = 1; j <= s2.length; j++)
-            for (let i = 1; i <= s1.length; i++) {
-                const ind = s1[i-1] === s2[j-1] ? 0 : 1;
-                m[j][i] = Math.min(m[j][i-1]+1, m[j-1][i]+1, m[j-1][i-1]+ind);
+        const m = Array(s2.length+1).fill(null).map(()=>Array(s1.length+1).fill(0));
+        for (let i=0;i<=s1.length;i++) m[0][i]=i;
+        for (let j=0;j<=s2.length;j++) m[j][0]=j;
+        for (let j=1;j<=s2.length;j++)
+            for (let i=1;i<=s1.length;i++) {
+                const ind = s1[i-1]===s2[j-1]?0:1;
+                m[j][i]=Math.min(m[j][i-1]+1,m[j-1][i]+1,m[j-1][i-1]+ind);
             }
-        return Math.max(0, Math.round((1 - m[s2.length][s1.length] / Math.max(s1.length, s2.length)) * 100));
+        return Math.max(0,Math.round((1-m[s2.length][s1.length]/Math.max(s1.length,s2.length))*100));
     }
 
     async function toggleRecordSpeech(btn, statusId, referenceData, mode) {
@@ -674,9 +630,8 @@
             mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
             mediaRecorder.onstop = async () => {
                 btn.classList.remove('recording-pulse');
-                btn.innerHTML = `<i class="ph ph-spinner animate-spin text-4xl"></i>`;
+                btn.innerHTML = '<i class="ph ph-spinner animate-spin text-4xl"></i>';
                 statusEl.innerText = "Analyse...";
-                // Clear transcript immediately on 2nd attempt
                 const transcriptEl = document.getElementById(statusId.replace('status','transcript'));
                 if (transcriptEl) transcriptEl.innerHTML = "";
                 const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
@@ -690,9 +645,8 @@
             mediaRecorder.start();
             activeRecorder = mediaRecorder;
             btn.classList.add('recording-pulse');
-            btn.innerHTML = `<i class="ph-fill ph-stop text-4xl"></i>`;
+            btn.innerHTML = '<i class="ph-fill ph-stop text-4xl"></i>';
             statusEl.innerText = "";
-            // Also clear transcript when starting a new recording
             const transcriptEl = document.getElementById(statusId.replace('status','transcript'));
             if (transcriptEl) transcriptEl.innerHTML = "";
             recordingTimeout = setTimeout(() => {
@@ -710,6 +664,9 @@
         if (!pageStates[currentPage][attemptsKey]) pageStates[currentPage][attemptsKey] = 0;
         pageStates[currentPage][attemptsKey]++;
         const currentAttempts = pageStates[currentPage][attemptsKey];
+
+        quizAttempts = currentAttempts;
+        pageStates[currentPage].attempts = currentAttempts;
 
         let score = 0, recognizedText = "";
         try {
@@ -756,22 +713,6 @@
                 msg = isPass ? "Très bien !" : "Bien essayé !";
                 isComplete = true;
             }
-        } else if (mode === 'repeat_sentence') {
-            if (isPass) {
-                msg = "Très bien !"; isComplete = true;
-            } else {
-                if (currentAttempts === 1) {
-                    msg = "On y est presque !"; isComplete = false;
-                    const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
-                    if (cardBtns.length > 0) {
-                        const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
-                        if (audioTimeoutId) clearTimeout(audioTimeoutId);
-                        audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
-                    }
-                } else {
-                    msg = "Bien essayé !"; isComplete = true;
-                }
-            }
         }
 
         const baseClass = "font-bold text-sm text-center w-full transition-colors";
@@ -784,19 +725,16 @@
             const allDone = Array.from(allMics).every(b => b.disabled);
             if (allDone) {
                 pageStates[currentPage].completed = true;
-                // 2차 완료(페이지 전체): 통과 → 짠(completionSynth), 실패 → 둥(errorSound)
                 if (isPass && completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
                 else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4','0.15s');
                 unlockNextButton(currentPage);
             } else {
-                // 2차 완료(일부 남음): 통과 → 삑(correctSound), 실패 → 둥(errorSound)
                 if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
                 if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.15s');
             }
         } else {
             statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-orange-500'}`;
             resetMicBtnState(btn);
-            // 1차: 통과 → 삑(correctSound), 실패 → 둥(errorSound)
             if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
             if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.1s');
         }
