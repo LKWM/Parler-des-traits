@@ -64,6 +64,7 @@
         }
         @media (min-width: 640px)  { .consigne { font-size: 1.5rem; } }
         @media (min-width: 1024px) { .consigne { font-size: 1.75rem; margin-bottom: 1.75rem; } }
+        .sub1-sep { font-size: 0; line-height: 0; color: transparent; user-select: none; }
         .recording-pulse { animation: pulse-red 1.5s infinite; }
         @keyframes pulse-red {
             0%   { box-shadow: 0 0 0 0   rgba(239,68,68,0.7); }
@@ -157,7 +158,7 @@
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223984/7-S1_t6uvfq.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">여행</span>을 <span class="text-red-600">좋아합니까</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">voyage</span>, <span class="text-red-600">aimer</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">voyage</span><span class="sub1-sep">, </span><span class="text-red-600">aimer</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Aimez-vous le voyage ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -176,7 +177,7 @@
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223984/7-S1_t6uvfq.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">여행</span>을 <span class="text-red-600">좋아합니까</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">voyage</span>, <span class="text-red-600">aimer</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">voyage</span><span class="sub1-sep">, </span><span class="text-red-600">aimer</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Aimez-vous le voyage ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -199,26 +200,18 @@
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223987/7-S2_eexciq.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1"><span class="text-blue-600">여행</span>을 <span class="text-red-600">좋아해요</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">voyage</span>, <span class="text-red-600">aimer</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">voyage</span><span class="sub1-sep">, </span><span class="text-red-600">aimer</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Aimes-tu les voyages ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223990/7-S3_h2csaz.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1"><span class="text-blue-600">여행</span> <span class="text-red-600">좋아해요</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">voyage</span>, <span class="text-red-600">aimer</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">voyage</span><span class="sub1-sep">, </span><span class="text-red-600">aimer</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Aimes-tu les voyages ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-            </div>
-        </div>
-
-        <!-- ══════════════════════════════
-             PAGE 5b — Text 3
-        ══════════════════════════════ -->
-        <div id="page-6" class="page">
-            <div class="content-area">
-                <p class="text-content text-justify">
+                <p class="text-content text-justify" style="margin-top:0.25rem; font-size:0.85rem; line-height:1.5rem;">
                     Pour les questions très simples avec peu d'éléments, on peut parfois supprimer la particule à l'oral. Cependant, si vous vous habituez trop à la supprimer, il sera difficile de transmettre un sens précis quand les phrases deviendront plus longues et plus complexes. C'est pourquoi, en tant que débutant, il est préférable de s'entraîner à bien utiliser les particules.
                 </p>
             </div>
@@ -227,12 +220,12 @@
         <!-- ══════════════════════════════
              PAGE 7 — Card audio (S4) + Text 4
         ══════════════════════════════ -->
-        <div id="page-7" class="page">
+        <div id="page-6" class="page">
             <div class="content-area gap-4">
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223994/7-S4_uu9wkt.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">무엇</span>을 <span class="text-red-600">좋아합니까</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Quoi</span>, <span class="text-red-600">aimer</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Quoi</span><span class="sub1-sep">, </span><span class="text-red-600">aimer</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Qu'est-ce que vous aimez ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -245,23 +238,23 @@
         <!-- ══════════════════════════════
              PAGE 8 — Card repeat : 무엇을 좋아합니까?
         ══════════════════════════════ -->
-        <div id="page-8" class="page">
+        <div id="page-7" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223994/7-S4_uu9wkt.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">무엇</span>을 <span class="text-red-600">좋아합니까</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Quoi</span>, <span class="text-red-600">aimer</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Quoi</span><span class="sub1-sep">, </span><span class="text-red-600">aimer</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Qu'est-ce que vous aimez ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-8" onclick="toggleRecordSpeech(this,'status-8','무엇을 좋아합니까','repeat')"
+                <button id="mic-btn-7" onclick="toggleRecordSpeech(this,'status-7','무엇을 좋아합니까','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-8"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-8" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                    <p id="status-7"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-7" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -269,12 +262,12 @@
         <!-- ══════════════════════════════
              PAGE 9 — Card audio (S5) + Text 5
         ══════════════════════════════ -->
-        <div id="page-9" class="page">
+        <div id="page-8" class="page">
             <div class="content-area gap-4">
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223997/7-S5_yxjt8i.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">뭘</span> <span class="text-red-600">좋아해요</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Quoi</span>, <span class="text-red-600">aimer</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Quoi</span><span class="sub1-sep">, </span><span class="text-red-600">aimer</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Qu'est-ce que tu aimes ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -287,23 +280,23 @@
         <!-- ══════════════════════════════
              PAGE 10 — Card repeat : 뭘 좋아해요?
         ══════════════════════════════ -->
-        <div id="page-10" class="page">
+        <div id="page-9" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223997/7-S5_yxjt8i.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">뭘</span> <span class="text-red-600">좋아해요</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Quoi</span>, <span class="text-red-600">aimer</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Quoi</span><span class="sub1-sep">, </span><span class="text-red-600">aimer</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Qu'est-ce que tu aimes ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-10" onclick="toggleRecordSpeech(this,'status-10','뭘 좋아해요','repeat')"
+                <button id="mic-btn-9" onclick="toggleRecordSpeech(this,'status-9','뭘 좋아해요','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-10"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-10" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                    <p id="status-9"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-9" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -311,7 +304,7 @@
         <!-- ══════════════════════════════
              PAGE 11 — Card repeat : 싫어합니까?
         ══════════════════════════════ -->
-        <div id="page-11" class="page">
+        <div id="page-10" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777224000/7-S6_pi3bde.mp3')"
@@ -320,13 +313,13 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Détestez-vous ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-11" onclick="toggleRecordSpeech(this,'status-11','싫어합니까','repeat')"
+                <button id="mic-btn-9" onclick="toggleRecordSpeech(this,'status-9','싫어합니까','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-11"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-11" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                    <p id="status-9"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-9" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -334,23 +327,23 @@
         <!-- ══════════════════════════════
              PAGE 12 — Card repeat : 우유를 싫어해요?
         ══════════════════════════════ -->
-        <div id="page-12" class="page">
+        <div id="page-11" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777224003/7-S7_tth5id.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">우유</span>를 <span class="text-red-600">싫어해요</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">lait</span>, <span class="text-red-600">détester</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">lait</span><span class="sub1-sep">, </span><span class="text-red-600">détester</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Détestes-tu le lait ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-12" onclick="toggleRecordSpeech(this,'status-12','우유를 싫어해요','repeat')"
+                <button id="mic-btn-9" onclick="toggleRecordSpeech(this,'status-9','우유를 싫어해요','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-12"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-12" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                    <p id="status-9"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-9" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -358,23 +351,23 @@
         <!-- ══════════════════════════════
              PAGE 13 — Card repeat : 뭘 싫어해요?
         ══════════════════════════════ -->
-        <div id="page-13" class="page">
+        <div id="page-12" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777224007/7-S8_e6twak.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">뭘</span> <span class="text-red-600">싫어해요</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Quoi</span>, <span class="text-red-600">détester</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Quoi</span><span class="sub1-sep">, </span><span class="text-red-600">détester</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Qu'est-ce que tu détestes ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-13" onclick="toggleRecordSpeech(this,'status-13','뭘 싫어해요','repeat')"
+                <button id="mic-btn-9" onclick="toggleRecordSpeech(this,'status-9','뭘 싫어해요','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-13"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-13" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                    <p id="status-9"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-9" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -382,7 +375,7 @@
         <!-- ══════════════════════════════
              PAGE 14 — Word-order : 사과를 좋아해요? → French
         ══════════════════════════════ -->
-        <div id="page-14" class="page">
+        <div id="page-13" class="page">
             <div class="content-area gap-3">
                 <h2 class="consigne">Traduisez la phrase en français.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777224010/7-S9_dhnrn5.mp3')"
@@ -390,26 +383,26 @@
                     <h3 class="text-xl sm:text-2xl font-black text-slate-800">사과를 좋아해요?</h3>
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
                 </button>
-                <div id="answer-area-14" class="flex flex-wrap justify-center gap-2 min-h-[3rem] mt-1 px-2"></div>
-                <div id="bank-14" class="flex flex-wrap justify-center gap-2 mt-1 px-2">
-                    <button class="word-token" onclick="placeToken(this,14)">aimez</button>
-                    <button class="word-token" onclick="placeToken(this,14)">aimer</button>
-                    <button class="word-token" onclick="placeToken(this,14)">est-ce que</button>
-                    <button class="word-token" onclick="placeToken(this,14)">pommes</button>
-                    <button class="word-token" onclick="placeToken(this,14)">aimes</button>
-                    <button class="word-token" onclick="placeToken(this,14)">je</button>
-                    <button class="word-token" onclick="placeToken(this,14)">les</button>
-                    <button class="word-token" onclick="placeToken(this,14)">détestez</button>
-                    <button class="word-token" onclick="placeToken(this,14)">vous</button>
-                    <button class="word-token" onclick="placeToken(this,14)">tu</button>
-                    <button class="word-token" onclick="placeToken(this,14)">quoi</button>
-                    <button class="word-token" onclick="placeToken(this,14)">voyage</button>
-                    <button class="word-token" onclick="placeToken(this,14)">est</button>
+                <div id="answer-area-13" class="flex flex-wrap justify-center gap-2 min-h-[3rem] mt-1 px-2"></div>
+                <div id="bank-13" class="flex flex-wrap justify-center gap-2 mt-1 px-2">
+                    <button class="word-token" onclick="placeToken(this,13)">aimez</button>
+                    <button class="word-token" onclick="placeToken(this,13)">aimer</button>
+                    <button class="word-token" onclick="placeToken(this,13)">est-ce que</button>
+                    <button class="word-token" onclick="placeToken(this,13)">pommes</button>
+                    <button class="word-token" onclick="placeToken(this,13)">aimes</button>
+                    <button class="word-token" onclick="placeToken(this,13)">je</button>
+                    <button class="word-token" onclick="placeToken(this,13)">les</button>
+                    <button class="word-token" onclick="placeToken(this,13)">détestez</button>
+                    <button class="word-token" onclick="placeToken(this,13)">vous</button>
+                    <button class="word-token" onclick="placeToken(this,13)">tu</button>
+                    <button class="word-token" onclick="placeToken(this,13)">quoi</button>
+                    <button class="word-token" onclick="placeToken(this,13)">voyage</button>
+                    <button class="word-token" onclick="placeToken(this,13)">est</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
-                    <p id="word-status-14" class="font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="word-status-13" class="font-bold text-sm text-center w-full transition-colors"></p>
                 </div>
-                <button id="word-btn-14" onclick="checkWordOrder(14)"
+                <button id="word-btn-13" onclick="checkWordOrder(13)"
                     class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
                     Valider
                 </button>
@@ -419,23 +412,23 @@
         <!-- ══════════════════════════════
              PAGE 15 — MCQ : Qu'est-ce que vous détestez?
         ══════════════════════════════ -->
-        <div id="page-15" class="page">
+        <div id="page-14" class="page">
             <div class="content-area gap-4">
                 <h2 class="consigne">Choisissez la bonne traduction.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">Qu'est-ce que vous détestez ?</p>
                     <p class="text-xs text-slate-400 mt-1">présent / formel</p>
                 </div>
-                <div id="quiz-15-options" class="quiz-grid flex flex-col gap-3 w-full max-w-sm">
+                <div id="quiz-14-options" class="quiz-grid flex flex-col gap-3 w-full max-w-sm">
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">1. 무엇이 싫어해요?</button>
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">2. 누구를 좋아합니까?</button>
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">3. 무엇을 싫어합니까?</button>
                     <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">4. 뭐 싫어이에요?</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
-                    <p id="quiz-15-status" class="font-bold text-center text-sm w-full transition-colors"></p>
+                    <p id="quiz-14-status" class="font-bold text-center text-sm w-full transition-colors"></p>
                 </div>
-                <button id="quiz-15-btn" onclick="checkSingleQuiz(15)"
+                <button id="quiz-14-btn" onclick="checkSingleQuiz(14)"
                     class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
                     Valider
                 </button>
@@ -445,7 +438,7 @@
         <!-- ══════════════════════════════
              PAGE 16 — Card repeat : 무엇을 좋아합니까?
         ══════════════════════════════ -->
-        <div id="page-16" class="page">
+        <div id="page-15" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223994/7-S4_uu9wkt.mp3')"
@@ -454,13 +447,13 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Qu'est-ce que vous aimez ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-16" onclick="toggleRecordSpeech(this,'status-16','무엇을 좋아합니까','repeat')"
+                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15','무엇을 좋아합니까','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-16"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-16" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                    <p id="status-15"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-15" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -468,7 +461,7 @@
         <!-- ══════════════════════════════
              PAGE 17 — Card repeat : 뭘 싫어해요?
         ══════════════════════════════ -->
-        <div id="page-17" class="page">
+        <div id="page-16" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777224007/7-S8_e6twak.mp3')"
@@ -477,13 +470,13 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Qu'est-ce que tu détestes ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-17" onclick="toggleRecordSpeech(this,'status-17','뭘 싫어해요','repeat')"
+                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15','뭘 싫어해요','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-17"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-17" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                    <p id="status-15"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-15" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -491,7 +484,7 @@
         <!-- ══════════════════════════════
              PAGE 18 — Card repeat : 여행을 좋아해요?
         ══════════════════════════════ -->
-        <div id="page-18" class="page">
+        <div id="page-17" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223987/7-S2_eexciq.mp3')"
@@ -500,13 +493,13 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Aimez-vous les voyages ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-18" onclick="toggleRecordSpeech(this,'status-18','여행을 좋아해요','repeat')"
+                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15','여행을 좋아해요','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-18"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-18" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                    <p id="status-15"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-15" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -514,23 +507,23 @@
         <!-- ══════════════════════════════
              PAGE 19 — Card repeat S10 : 여행 싫어해?
         ══════════════════════════════ -->
-        <div id="page-19" class="page">
+        <div id="page-18" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777224013/7-S10_xx6bty.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">여행</span> <span class="text-red-600">싫어해</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">voyage</span>, <span class="text-red-600">détester</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">voyage</span><span class="sub1-sep">, </span><span class="text-red-600">détester</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">tu n'aimes pas voyager ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-19" onclick="toggleRecordSpeech(this,'status-19','여행 싫어해','repeat')"
+                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15','여행 싫어해','repeat')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="status-19"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="transcript-19" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
+                    <p id="status-15"     class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                    <p id="transcript-15" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
         </div>
@@ -538,7 +531,7 @@
         <!-- ══════════════════════════════
              PAGE 20 — Outro
         ══════════════════════════════ -->
-        <div id="page-20" class="page justify-center items-center bg-green-50">
+        <div id="page-19" class="page justify-center items-center bg-green-50">
             <div class="content-area">
                 <div class="bg-white p-5 rounded-full shadow-md mb-6">
                     <i class="ph-fill ph-check-circle text-5xl text-green-500"></i>
@@ -568,9 +561,9 @@
     /* ═══════════════════════════════════════
        STATE & CONFIG
     ═══════════════════════════════════════ */
-    const TOTAL_PAGES = 21; // pages 0–20
+    const TOTAL_PAGES = 20; // pages 0–20
 
-    const interactivePages = new Set([2,4,8,10,11,12,13,14,15,16,17,18,19]);
+    const interactivePages = new Set([2,4,7,9,10,11,12,13,14,15,16,17,18]);
 
     const completedPages = new Set();
     const pageStates = {};
@@ -589,29 +582,29 @@
 
     const pageTextAudios = {
         1:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223966/7-1_kpnxf0.wav',
-        6:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223974/7-3_zlnhgg.mp3',
-        20: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777223981/7-6_culedd.mp3',
+        5:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223974/7-3_zlnhgg.mp3',
+        19: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777223981/7-6_culedd.mp3',
     };
 
     // text+audio combo pages: auto-play the explanation audio
     const pageExplanationAudios = {
         3:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223968/7-2_js2skl.mp3',
-        7:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223978/7-4_lepnnr.mp3',
-        9:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223971/7-5_gxn5kn.mp3',
+        6:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223978/7-4_lepnnr.mp3',
+        8:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223971/7-5_gxn5kn.mp3',
     };
 
     const repeatCardAudios = {
         2:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777224017/%E1%84%8B%E1%85%A7%E1%84%92%E1%85%A2%E1%86%BC_scdbpg.mp3',
         4:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223984/7-S1_t6uvfq.mp3',
-        8:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223994/7-S4_uu9wkt.mp3',
-        10: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777223997/7-S5_yxjt8i.mp3',
-        11: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777224000/7-S6_pi3bde.mp3',
-        12: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777224003/7-S7_tth5id.mp3',
-        13: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777224007/7-S8_e6twak.mp3',
-        16: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777223994/7-S4_uu9wkt.mp3',
-        17: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777224007/7-S8_e6twak.mp3',
-        18: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777223987/7-S2_eexciq.mp3',
-        19: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777224013/7-S10_xx6bty.mp3',
+        7:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777223994/7-S4_uu9wkt.mp3',
+        9: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777223997/7-S5_yxjt8i.mp3',
+        10: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777224000/7-S6_pi3bde.mp3',
+        11: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777224003/7-S7_tth5id.mp3',
+        12: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777224007/7-S8_e6twak.mp3',
+        15: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777223994/7-S4_uu9wkt.mp3',
+        16: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777224007/7-S8_e6twak.mp3',
+        17: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777223987/7-S2_eexciq.mp3',
+        18: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777224013/7-S10_xx6bty.mp3',
     };
 
     // Word-order: multiple correct answers
@@ -622,7 +615,7 @@
         ['est-ce que','vous','aimez','les','pommes'],
     ];
     const wordOrderState = {};
-    [14].forEach(id => { wordOrderState[id] = { placed: [], attempts: 0 }; });
+    [13].forEach(id => { wordOrderState[id] = { placed: [], attempts: 0 }; });
 
     /* ═══════════════════════════════════════
        INIT
@@ -712,7 +705,7 @@
                 audioTimeoutId = setTimeout(() => playCardAudio(repeatAudio), 300);
             }
             // word-order: auto-play sentence audio
-            if (currentPage === 14) {
+            if (currentPage === 13) {
                 audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777224010/7-S9_dhnrn5.mp3'), 300);
             }
         }
@@ -768,10 +761,10 @@
     /* ═══════════════════════════════════════
        MCQ QUIZ
     ═══════════════════════════════════════ */
-    document.querySelectorAll(`#quiz-15-options .single-opt`).forEach(opt => {
+    document.querySelectorAll(`#quiz-14-options .single-opt`).forEach(opt => {
         opt.addEventListener('click', function () {
-            if (pageStates[15].completed) return;
-            document.querySelectorAll(`#quiz-15-options .single-opt`).forEach(s => s.classList.remove('selected'));
+            if (pageStates[14].completed) return;
+            document.querySelectorAll(`#quiz-14-options .single-opt`).forEach(s => s.classList.remove('selected'));
             this.classList.add('selected');
         });
     });
