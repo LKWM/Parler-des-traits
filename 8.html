@@ -668,28 +668,30 @@
                 micBtn.disabled = true;
                 micBtn.classList.add('opacity-50','cursor-not-allowed');
             }
-            const audio = new Audio(repeatCardAudios[pid]);
-            currentAudio = audio;
-            audio.play().catch(()=>{});
-            audio.onended = () => {
+            audioTimeoutId = setTimeout(() => {
                 if (currentPage !== pid) return;
-                if (micBtn && !pageStates[pid].completed) {
-                    micBtn.disabled = false;
-                    micBtn.classList.remove('opacity-50','cursor-not-allowed');
-                }
-            };
+                const audio = playCardAudio(repeatCardAudios[pid]);
+                audio.onended = () => {
+                    if (currentPage !== pid) return;
+                    if (micBtn && !pageStates[pid].completed) {
+                        micBtn.disabled = false;
+                        micBtn.classList.remove('opacity-50','cursor-not-allowed');
+                    }
+                };
+            }, 300);
             return;
         }
         if (geminiPageConfig[pid]) {
             const gBtn = document.getElementById('gemini-mic-'+pid);
             if (gBtn && !pageStates[pid].completed) gBtn.disabled = true;
-            const audio = new Audio(geminiPageConfig[pid].audioUrl);
-            currentAudio = audio;
-            audio.play().catch(()=>{});
-            audio.onended = () => {
+            audioTimeoutId = setTimeout(() => {
                 if (currentPage !== pid) return;
-                if (gBtn && !pageStates[pid].completed) gBtn.disabled = false;
-            };
+                const audio = playCardAudio(geminiPageConfig[pid].audioUrl);
+                audio.onended = () => {
+                    if (currentPage !== pid) return;
+                    if (gBtn && !pageStates[pid].completed) gBtn.disabled = false;
+                };
+            }, 300);
             return;
         }
         if (pid === 13) {
