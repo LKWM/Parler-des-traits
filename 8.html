@@ -581,12 +581,11 @@
         },
     };
     const wordOrderCorrectAnswers = {
-        13: [['Non','je','n\'','aime','pas','la','natation']],
-        16: [['네','저는','한국','음식','을','좋아해요']],
+        13: [["Non","je","n'","aime","pas","la","natation"]],
+        16: [["네","저는","한국","음식","을","좋아해요"]],
     };
     const wordOrderState = { 13: { placed:[], attempts:0 }, 16: { placed:[], attempts:0 } };
 
-    /* INIT */
     async function initAudioContext() {
         await Tone.start();
         correctSound    = new Tone.Synth({ oscillator:{type:'sine'} }).toDestination();
@@ -605,343 +604,433 @@
         changePage(1);
     }
 
-    /* NAVIGATION */
     function updateProgress() {
         document.getElementById('progress-bar').style.width = (currentPage/(TOTAL_PAGES-1)*100)+'%';
     }
     function unlockNextButton(pageId) {
         completedPages.add(pageId);
-        if (currentPage===pageId) document.getElementById('btn-next').disabled=false;
+        if (currentPage === pageId) document.getElementById('btn-next').disabled = false;
     }
+    function playCardAudio(url) {
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+        const audio = new Audio(url); currentAudio = audio; audio.play().catch(()=>{});
+        return audio;
+    }
+    function triggerLessonComplete() {
+        if (window.parent !== window) window.parent.postMessage({type:'lesson_complete'},'*');
+    }
+
     function changePage(dir) {
-        if (dir!==0 && transitionSynth) transitionSynth.triggerAttackRelease('C6','0.05s');
-        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime=0; currentAudio=null; }
-        if (audioTimeoutId) { clearTimeout(audioTimeoutId); audioTimeoutId=null; }
-        if (activeRecorder && activeRecorder.state==='recording') { activeRecorder.stop(); clearTimeout(recordingTimeout); }
+        if (dir !== 0 && transitionSynth) transitionSynth.triggerAttackRelease('C6','0.05s');
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+        if (audioTimeoutId) { clearTimeout(audioTimeoutId); audioTimeoutId = null; }
+        if (activeRecorder && activeRecorder.state === 'recording') { activeRecorder.stop(); clearTimeout(recordingTimeout); }
+
         document.getElementById('page-'+currentPage).classList.remove('active');
         currentPage = Math.max(1, Math.min(currentPage+dir, TOTAL_PAGES-1));
         document.getElementById('page-'+currentPage).classList.add('active');
+
         quizAttempts = pageStates[currentPage].attempts;
         updateProgress();
-        const btnPrev=document.getElementById('btn-prev'), btnNext=document.getElementById('btn-next');
-        if (currentPage===TOTAL_PAGES-1) {
+
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+
+        if (currentPage === TOTAL_PAGES-1) {
             document.getElementById('bottom-nav').classList.add('hidden');
-            if (completionSynth && dir>0) {
+            if (completionSynth && dir > 0) {
                 completionSynth.triggerAttackRelease(['C5','E5','G5','C6'],'4n');
-                if (pageTextAudios[TOTAL_PAGES-1]) audioTimeoutId=setTimeout(()=>playCardAudio(pageTextAudios[TOTAL_PAGES-1]),700);
+                if (pageTextAudios[TOTAL_PAGES-1])
+                    audioTimeoutId = setTimeout(() => playCardAudio(pageTextAudios[TOTAL_PAGES-1]), 700);
             }
             triggerLessonComplete();
-        } else {
-            document.getElementById('bottom-nav').classList.remove('hidden');
-            btnPrev.style.display='flex'; btnNext.style.display='flex';
-            btnPrev.disabled=(currentPage<=1);
-            btnNext.disabled = (interactivePages.has(currentPage) && !completedPages.has(currentPage));
+            return;
         }
-        onPageEnter(currentPage);
-    }
 
-    function onPageEnter(pageId) {
-        if (pageTextAudios[pageId] && pageId!==TOTAL_PAGES-1)
-            audioTimeoutId=setTimeout(()=>playCardAudio(pageTextAudios[pageId]),300);
-        if (pageExplanationAudios[pageId])
-            audioTimeoutId=setTimeout(()=>playCardAudio(pageExplanationAudios[pageId]),400);
-        if (repeatCardAudios[pageId]) {
-            const audio=new Audio(repeatCardAudios[pageId]); currentAudio=audio;
-            const micBtn=document.querySelector('#page-'+pageId+' .mic-req');
-            if (micBtn) { micBtn.disabled=true; micBtn.classList.add('opacity-50','cursor-not-allowed'); }
+        document.getElementById('bottom-nav').classList.remove('hidden');
+        btnPrev.style.display = 'flex'; btnNext.style.display = 'flex';
+        btnPrev.disabled = (currentPage <= 1);
+        btnNext.disabled = (interactivePages.has(currentPage) && !completedPages.has(currentPage));
+
+        const pid = currentPage;
+
+        if (pageTextAudios[pid]) {
+            audioTimeoutId = setTimeout(() => playCardAudio(pageTextAudios[pid]), 300);
+            return;
+        }
+        if (pageExplanationAudios[pid]) {
+            audioTimeoutId = setTimeout(() => playCardAudio(pageExplanationAudios[pid]), 400);
+            return;
+        }
+        if (repeatCardAudios[pid]) {
+            const micBtn = document.getElementById('mic-btn-'+pid);
+            if (micBtn && !pageStates[pid].completed) {
+                micBtn.disabled = true;
+                micBtn.classList.add('opacity-50','cursor-not-allowed');
+            }
+            const audio = new Audio(repeatCardAudios[pid]);
+            currentAudio = audio;
             audio.play().catch(()=>{});
-            audio.onended=()=>{
-                if (micBtn && !pageStates[pageId].completed) {
-                    micBtn.disabled=false; micBtn.classList.remove('opacity-50','cursor-not-allowed');
+            audio.onended = () => {
+                if (currentPage !== pid) return;
+                if (micBtn && !pageStates[pid].completed) {
+                    micBtn.disabled = false;
+                    micBtn.classList.remove('opacity-50','cursor-not-allowed');
                 }
             };
+            return;
         }
-        if (geminiPageConfig[pageId]) {
-            const gBtn=document.getElementById('gemini-mic-'+pageId);
-            if (gBtn) gBtn.disabled=true;
-            const audio=new Audio(geminiPageConfig[pageId].audioUrl); currentAudio=audio;
+        if (geminiPageConfig[pid]) {
+            const gBtn = document.getElementById('gemini-mic-'+pid);
+            if (gBtn && !pageStates[pid].completed) gBtn.disabled = true;
+            const audio = new Audio(geminiPageConfig[pid].audioUrl);
+            currentAudio = audio;
             audio.play().catch(()=>{});
-            audio.onended=()=>{ if (gBtn && !pageStates[pageId].completed) gBtn.disabled=false; };
+            audio.onended = () => {
+                if (currentPage !== pid) return;
+                if (gBtn && !pageStates[pid].completed) gBtn.disabled = false;
+            };
+            return;
         }
-        if (pageId===13)
-            audioTimeoutId=setTimeout(()=>playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291268/8-S8_oancq2.mp3'),400);
+        if (pid === 13) {
+            audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291268/8-S8_oancq2.mp3'), 400);
+        }
     }
 
-    function playCardAudio(url) {
-        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime=0; }
-        const audio=new Audio(url); currentAudio=audio; audio.play().catch(()=>{});
+    const CLOVA_API_FUNCTION_URL = 'https://coreeno.base44.app/api/functions/naverClovaSpeech';
+    function calculateSimilarity(s1, s2) {
+        s1 = s1.replace(/[\s.,?!]/g,'').toLowerCase();
+        s2 = s2.replace(/[\s.,?!]/g,'').toLowerCase();
+        if (s1 === s2) return 100;
+        if (!s1.length || !s2.length) return 0;
+        const m = Array(s2.length+1).fill(null).map(() => Array(s1.length+1).fill(0));
+        for (let i = 0; i <= s1.length; i++) m[0][i] = i;
+        for (let j = 0; j <= s2.length; j++) m[j][0] = j;
+        for (let j = 1; j <= s2.length; j++)
+            for (let i = 1; i <= s1.length; i++) {
+                const ind = s1[i-1] === s2[j-1] ? 0 : 1;
+                m[j][i] = Math.min(m[j][i-1]+1, m[j-1][i]+1, m[j-1][i-1]+ind);
+            }
+        return Math.max(0, Math.round((1 - m[s2.length][s1.length] / Math.max(s1.length, s2.length)) * 100));
     }
-    function triggerLessonComplete() {
-        if (window.parent!==window) window.parent.postMessage({type:'lesson_complete'},'*');
-    }
-
-    /* CLOVA REPEAT */
-    const CLOVA_API_FUNCTION_URL='https://coreeno.base44.app/api/functions/naverClovaSpeech';
-    function calculateSimilarity(s1,s2) {
-        s1=s1.replace(/[\s.,?!]/g,'').toLowerCase(); s2=s2.replace(/[\s.,?!]/g,'').toLowerCase();
-        if(s1===s2) return 100; if(!s1.length||!s2.length) return 0;
-        const m=Array(s2.length+1).fill(null).map(()=>Array(s1.length+1).fill(0));
-        for(let i=0;i<=s1.length;i++) m[0][i]=i;
-        for(let j=0;j<=s2.length;j++) m[j][0]=j;
-        for(let j=1;j<=s2.length;j++) for(let i=1;i<=s1.length;i++){
-            const ind=s1[i-1]===s2[j-1]?0:1;
-            m[j][i]=Math.min(m[j][i-1]+1,m[j-1][i]+1,m[j-1][i-1]+ind);
-        }
-        return Math.max(0,Math.round((1-m[s2.length][s1.length]/Math.max(s1.length,s2.length))*100));
-    }
-    async function toggleRecordSpeech(btn,statusId,ref,mode) {
-        const statusEl=document.getElementById(statusId);
+    async function toggleRecordSpeech(btn, statusId, ref, mode) {
+        const statusEl = document.getElementById(statusId);
+        const pageNum = parseInt(statusId.replace('status-',''));
         if (btn.classList.contains('recording-pulse')) {
-            if (activeRecorder&&activeRecorder.state==='recording'){activeRecorder.stop();clearTimeout(recordingTimeout);}
+            if (activeRecorder && activeRecorder.state === 'recording') {
+                activeRecorder.stop(); clearTimeout(recordingTimeout);
+            }
             return;
         }
         try {
-            const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-            const mr=new MediaRecorder(stream); const chunks=[];
-            mr.ondataavailable=e=>chunks.push(e.data);
-            mr.onstop=async()=>{
+            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const mr = new MediaRecorder(stream);
+            const chunks = [];
+            mr.ondataavailable = e => chunks.push(e.data);
+            mr.onstop = async () => {
                 btn.classList.remove('recording-pulse');
-                btn.innerHTML='<i class="ph ph-spinner animate-spin text-4xl"></i>'; btn.disabled=true;
-                statusEl.innerText='Analyse...'; statusEl.className='text-slate-500 font-bold text-sm text-center w-full';
-                const tEl=document.getElementById(statusId.replace('status','transcript'));
-                if(tEl) tEl.innerHTML='';
-                const blob=new Blob(chunks,{type:'audio/webm'});
-                const fd=new FormData(); fd.append('audio',blob,'recording.webm'); fd.append('language','Kor');
+                btn.innerHTML = '<i class="ph ph-spinner animate-spin text-4xl"></i>';
+                btn.disabled = true;
+                statusEl.innerText = 'Analyse...';
+                statusEl.className = 'text-slate-500 font-bold text-sm text-center w-full';
+                const tEl = document.getElementById('transcript-'+pageNum);
+                if (tEl) tEl.innerHTML = '';
+                const blob = new Blob(chunks, {type:'audio/webm'});
+                const fd = new FormData();
+                fd.append('audio', blob, 'recording.webm');
+                fd.append('language', 'Kor');
                 try {
-                    const res=await fetch(CLOVA_API_FUNCTION_URL,{method:'POST',body:fd});
-                    const d=await res.json();
-                    const transcript=(d.text||'').trim();
-                    const score=calculateSimilarity(transcript,ref);
-                    const pId=currentPage; pageStates[pId].attempts++;
-                    const isPass=score>=80, forcePass=pageStates[pId].attempts>=2;
-                    if(tEl) tEl.innerText=transcript?'« '+transcript+' »':'';
-                    if(isPass||forcePass){
-                        pageStates[pId].completed=true;
-                        if(correctSound) correctSound.triggerAttackRelease('C5','0.2s');
-                        statusEl.innerText=isPass?'✓ '+score+'pts — Très bien !':'Bien essayé ! ('+score+'pts)';
-                        statusEl.className='text-green-600 font-bold text-sm text-center w-full';
-                        btn.disabled=true; btn.className='mic-req text-white rounded-full p-6 bg-green-500';
-                        btn.innerHTML='<i class="ph-bold ph-check text-4xl"></i>'; unlockNextButton(pId);
+                    const res = await fetch(CLOVA_API_FUNCTION_URL, {method:'POST', body:fd});
+                    const d = await res.json();
+                    const transcript = (d.text || '').trim();
+                    const score = calculateSimilarity(transcript, ref);
+                    pageStates[pageNum].attempts++;
+                    const isPass = score >= 80;
+                    const forcePass = pageStates[pageNum].attempts >= 2;
+                    if (tEl) tEl.innerText = transcript ? '« '+transcript+' »' : '';
+                    if (isPass || forcePass) {
+                        pageStates[pageNum].completed = true;
+                        if (correctSound) correctSound.triggerAttackRelease('C5','0.2s');
+                        statusEl.innerText = isPass ? '✓ '+score+'pts — Très bien !' : 'Bien essayé ! ('+score+'pts)';
+                        statusEl.className = 'text-green-600 font-bold text-sm text-center w-full';
+                        btn.disabled = true;
+                        btn.className = 'mic-req text-white rounded-full p-6 bg-green-500';
+                        btn.innerHTML = '<i class="ph-bold ph-check text-4xl"></i>';
+                        unlockNextButton(pageNum);
                     } else {
-                        if(errorSound) errorSound.triggerAttackRelease('C4','0.1s');
-                        statusEl.innerText=score+'pts — On y est presque !';
-                        statusEl.className='text-orange-500 font-bold text-sm text-center w-full';
-                        btn.disabled=false; btn.className='mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6';
-                        btn.innerHTML='<i class="ph-fill ph-microphone text-4xl"></i>';
+                        if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+                        statusEl.innerText = score+'pts — On y est presque !';
+                        statusEl.className = 'text-orange-500 font-bold text-sm text-center w-full';
+                        btn.disabled = false;
+                        btn.className = 'mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6';
+                        btn.innerHTML = '<i class="ph-fill ph-microphone text-4xl"></i>';
                     }
-                } catch(e){
-                    statusEl.innerText='Erreur. Réessayez.'; statusEl.className='text-red-500 font-bold text-sm text-center w-full';
-                    btn.disabled=false; btn.className='mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6';
-                    btn.innerHTML='<i class="ph-fill ph-microphone text-4xl"></i>';
+                } catch(e) {
+                    statusEl.innerText = 'Erreur. Réessayez.';
+                    statusEl.className = 'text-red-500 font-bold text-sm text-center w-full';
+                    btn.disabled = false;
+                    btn.className = 'mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6';
+                    btn.innerHTML = '<i class="ph-fill ph-microphone text-4xl"></i>';
                 }
-                stream.getTracks().forEach(t=>t.stop());
+                stream.getTracks().forEach(t => t.stop());
             };
-            mr.start(); activeRecorder=mr;
-            btn.classList.add('recording-pulse'); btn.innerHTML='<i class="ph-fill ph-stop text-4xl"></i>';
-            statusEl.innerText='Enregistrement...'; statusEl.className='text-red-500 font-bold text-sm text-center w-full animate-pulse';
-            recordingTimeout=setTimeout(()=>{if(mr.state==='recording')mr.stop();},11000);
-        } catch(e){
-            statusEl.innerText='Erreur de microphone.'; statusEl.className='text-red-500 font-bold text-sm text-center w-full';
+            mr.start(); activeRecorder = mr;
+            btn.classList.add('recording-pulse');
+            btn.innerHTML = '<i class="ph-fill ph-stop text-4xl"></i>';
+            statusEl.innerText = 'Enregistrement...';
+            statusEl.className = 'text-red-500 font-bold text-sm text-center w-full animate-pulse';
+            recordingTimeout = setTimeout(() => { if (mr.state === 'recording') mr.stop(); }, 11000);
+        } catch(e) {
+            statusEl.innerText = 'Erreur de microphone.';
+            statusEl.className = 'text-red-500 font-bold text-sm text-center w-full';
         }
     }
 
-    /* GEMINI SPEAKING */
     async function toggleGeminiMic(pageId) {
-        const btn=document.getElementById('gemini-mic-'+pageId);
-        const statusEl=document.getElementById('gemini-status-'+pageId);
-        if(btn.classList.contains('recording-pulse')){
-            if(activeRecorder&&activeRecorder.state==='recording'){isDiscarding=false;activeRecorder.stop();clearTimeout(recordingTimeout);}
+        const btn = document.getElementById('gemini-mic-'+pageId);
+        const statusEl = document.getElementById('gemini-status-'+pageId);
+        if (btn.classList.contains('recording-pulse')) {
+            if (activeRecorder && activeRecorder.state === 'recording') {
+                isDiscarding = false; activeRecorder.stop(); clearTimeout(recordingTimeout);
+            }
             return;
         }
         try {
-            const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-            const mr=new MediaRecorder(stream); const chunks=[];
-            mr.ondataavailable=e=>chunks.push(e.data);
-            mr.onstop=async()=>{
-                if(isDiscarding){isDiscarding=false;return;}
+            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const mr = new MediaRecorder(stream);
+            const chunks = [];
+            mr.ondataavailable = e => chunks.push(e.data);
+            mr.onstop = async () => {
+                if (isDiscarding) { isDiscarding = false; return; }
                 btn.classList.remove('recording-pulse');
-                btn.innerHTML='<i class="ph ph-spinner animate-spin text-3xl"></i>'; btn.disabled=true;
-                statusEl.innerText='Analyse en cours...'; statusEl.className='text-slate-500 font-medium text-sm text-center';
-                const blob=new Blob(chunks,{type:'audio/webm'});
-                const mimeType=blob.type.split(';')[0]||'audio/webm';
-                const reader=new FileReader(); reader.readAsDataURL(blob);
-                reader.onloadend=async()=>{
-                    const b64=reader.result.split(',')[1];
-                    await processGeminiSpeech(pageId,b64,mimeType);
+                btn.innerHTML = '<i class="ph ph-spinner animate-spin text-3xl"></i>';
+                btn.disabled = true;
+                statusEl.innerText = 'Analyse en cours...';
+                statusEl.className = 'text-slate-500 font-medium text-sm text-center';
+                const blob = new Blob(chunks, {type:'audio/webm'});
+                const mimeType = blob.type.split(';')[0] || 'audio/webm';
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = async () => {
+                    const b64 = reader.result.split(',')[1];
+                    await processGeminiSpeech(pageId, b64, mimeType);
                 };
-                stream.getTracks().forEach(t=>t.stop());
+                stream.getTracks().forEach(t => t.stop());
             };
-            mr.start(); activeRecorder=mr;
-            btn.classList.add('recording-pulse'); btn.innerHTML='<i class="ph-fill ph-stop text-3xl"></i>';
-            statusEl.innerText='Enregistrement...'; statusEl.className='text-red-500 font-bold text-sm text-center animate-pulse';
-            recordingTimeout=setTimeout(()=>{if(mr.state==='recording')mr.stop();},11000);
-        } catch(e){
-            statusEl.innerText='Erreur de microphone.'; statusEl.className='text-red-500 font-medium text-sm text-center';
+            mr.start(); activeRecorder = mr;
+            btn.classList.add('recording-pulse');
+            btn.innerHTML = '<i class="ph-fill ph-stop text-3xl"></i>';
+            statusEl.innerText = 'Enregistrement...';
+            statusEl.className = 'text-red-500 font-bold text-sm text-center animate-pulse';
+            recordingTimeout = setTimeout(() => { if (mr.state === 'recording') mr.stop(); }, 11000);
+        } catch(e) {
+            statusEl.innerText = 'Erreur de microphone.';
+            statusEl.className = 'text-red-500 font-medium text-sm text-center';
         }
     }
-    async function processGeminiSpeech(pageId,audioBase64,mimeType){
-        const btn=document.getElementById('gemini-mic-'+pageId);
-        const statusEl=document.getElementById('gemini-status-'+pageId);
-        const popupEl=document.getElementById('gemini-popup-'+pageId);
-        const verdictEl=document.getElementById('gemini-verdict-'+pageId);
-        const cfg=geminiPageConfig[pageId]; const state=pageStates[pageId];
-        const payload={
-            model:'gemini-2.5-flash',
-            contents:[{role:'user',parts:[
+    async function processGeminiSpeech(pageId, audioBase64, mimeType) {
+        const btn = document.getElementById('gemini-mic-'+pageId);
+        const statusEl = document.getElementById('gemini-status-'+pageId);
+        const popupEl = document.getElementById('gemini-popup-'+pageId);
+        const verdictEl = document.getElementById('gemini-verdict-'+pageId);
+        const cfg = geminiPageConfig[pageId];
+        const state = pageStates[pageId];
+        const payload = {
+            model: 'gemini-2.5-flash',
+            contents: [{role:'user', parts:[
                 {text:'Analyze the audio response.'},
-                {inline_data:{mime_type:mimeType,data:audioBase64}}
+                {inline_data:{mime_type:mimeType, data:audioBase64}}
             ]}],
-            systemInstruction:cfg.sysPrompt
+            systemInstruction: cfg.sysPrompt
         };
-        let transcript='???', score=0, feedback='', isPass=false;
+        let transcript = '???', score = 0, feedback = '', isPass = false;
         try {
-            const res=await fetch('https://coreeno.base44.app/api/functions/Geminichat',{
-                method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)
+            const res = await fetch('https://coreeno.base44.app/api/functions/Geminichat', {
+                method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
             });
-            if(!res.ok) throw new Error('API error '+res.status);
-            const data=await res.json(); const txt=data.text||'';
-            const tM=txt.match(/\[transcription\]\s*(.*?)(?=\[Note\]|\[Feedback\]|$)/si);
-            const nM=txt.match(/\[Note\]\s*(\d+)/i);
-            const fM=txt.match(/\[Feedback\]\s*(.*)/si);
-            if(tM&&tM[1].trim()) transcript=tM[1].trim();
-            if(nM) score=parseInt(nM[1]);
-            if(fM&&fM[1].trim()) feedback=fM[1].trim();
-            isPass=score>=cfg.threshold;
-        } catch(e){
-            statusEl.innerText='Erreur de connexion. Réessayez.'; statusEl.className='text-red-500 font-medium text-sm text-center';
-            btn.disabled=false; btn.innerHTML='<i class="ph-fill ph-microphone text-3xl"></i>'; return;
+            if (!res.ok) throw new Error('API error '+res.status);
+            const data = await res.json();
+            const txt = data.text || '';
+            const tM = txt.match(/\[transcription\]\s*(.*?)(?=\[Note\]|\[Feedback\]|$)/si);
+            const nM = txt.match(/\[Note\]\s*(\d+)/i);
+            const fM = txt.match(/\[Feedback\]\s*(.*)/si);
+            if (tM && tM[1].trim()) transcript = tM[1].trim();
+            if (nM) score = parseInt(nM[1]);
+            if (fM && fM[1].trim()) feedback = fM[1].trim();
+            isPass = score >= cfg.threshold;
+        } catch(e) {
+            statusEl.innerText = 'Erreur de connexion. Réessayez.';
+            statusEl.className = 'text-red-500 font-medium text-sm text-center';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="ph-fill ph-microphone text-3xl"></i>';
+            return;
         }
         state.attempts++;
-        const forcePass=state.attempts>=cfg.maxAttempts;
-        document.getElementById('gemini-transcript-'+pageId).innerText=transcript;
-        document.getElementById('gemini-score-'+pageId).innerText=score;
-        const fbRow=document.getElementById('gemini-feedback-row-'+pageId);
-        if(feedback){document.getElementById('gemini-feedback-'+pageId).innerText=feedback;fbRow.classList.remove('hidden');}
-        else{fbRow.classList.add('hidden');}
-        popupEl.classList.remove('hidden'); statusEl.innerText='';
-        if(isPass||forcePass){
-            state.completed=true;
-            if(correctSound) correctSound.triggerAttackRelease('C5','0.2s');
-            verdictEl.innerText=isPass?'✓ Très bien !':'Bien essayé !';
-            verdictEl.className='font-bold text-base text-center text-green-600';
-            btn.disabled=true; btn.innerHTML='<i class="ph-bold ph-check text-3xl"></i>';
-            btn.classList.remove('recording-pulse'); btn.style.background='#22c55e'; unlockNextButton(pageId);
+        const forcePass = state.attempts >= cfg.maxAttempts;
+        document.getElementById('gemini-transcript-'+pageId).innerText = transcript;
+        document.getElementById('gemini-score-'+pageId).innerText = score;
+        const fbRow = document.getElementById('gemini-feedback-row-'+pageId);
+        if (feedback) {
+            document.getElementById('gemini-feedback-'+pageId).innerText = feedback;
+            fbRow.classList.remove('hidden');
         } else {
-            if(errorSound) errorSound.triggerAttackRelease('C4','0.1s');
-            verdictEl.innerText='On y est presque ! Réessayez.'; verdictEl.className='font-bold text-base text-center text-orange-500';
-            btn.disabled=false; btn.innerHTML='<i class="ph-fill ph-microphone text-3xl"></i>';
+            fbRow.classList.add('hidden');
+        }
+        popupEl.classList.remove('hidden');
+        statusEl.innerText = '';
+        if (isPass || forcePass) {
+            state.completed = true;
+            if (correctSound) correctSound.triggerAttackRelease('C5','0.2s');
+            verdictEl.innerText = isPass ? '✓ Très bien !' : 'Bien essayé !';
+            verdictEl.className = 'font-bold text-base text-center text-green-600';
+            btn.disabled = true;
+            btn.innerHTML = '<i class="ph-bold ph-check text-3xl"></i>';
+            btn.classList.remove('recording-pulse');
+            btn.style.background = '#22c55e';
+            unlockNextButton(pageId);
+        } else {
+            if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+            verdictEl.innerText = 'On y est presque ! Réessayez.';
+            verdictEl.className = 'font-bold text-base text-center text-orange-500';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="ph-fill ph-microphone text-3xl"></i>';
         }
     }
 
-    /* MULTI-SELECT MCQ */
-    document.querySelectorAll('#quiz-14-options .multi-opt').forEach(opt=>{
-        opt.addEventListener('click',function(){
-            if(pageStates[14].completed) return;
+    document.querySelectorAll('#quiz-14-options .multi-opt').forEach(opt => {
+        opt.addEventListener('click', function() {
+            if (pageStates[14].completed) return;
             this.classList.toggle('selected');
         });
     });
-    function checkMultiQuiz(pageId){
-        if(pageStates[pageId].completed) return;
-        quizAttempts++; pageStates[pageId].attempts=quizAttempts;
-        const opts=document.querySelectorAll('#quiz-'+pageId+'-options .multi-opt');
-        const statusEl=document.getElementById('quiz-'+pageId+'-status');
-        const selected=Array.from(opts).filter(o=>o.classList.contains('selected'));
-        if(selected.length===0){
-            statusEl.innerText='Veuillez sélectionner au moins une réponse.';
-            statusEl.className='font-bold text-center text-orange-500 text-sm w-full'; return;
+    function checkMultiQuiz(pageId) {
+        if (pageStates[pageId].completed) return;
+        quizAttempts++; pageStates[pageId].attempts = quizAttempts;
+        const opts = document.querySelectorAll('#quiz-'+pageId+'-options .multi-opt');
+        const statusEl = document.getElementById('quiz-'+pageId+'-status');
+        const selected = Array.from(opts).filter(o => o.classList.contains('selected'));
+        if (selected.length === 0) {
+            statusEl.innerText = 'Veuillez sélectionner au moins une réponse.';
+            statusEl.className = 'font-bold text-center text-orange-500 text-sm w-full'; return;
         }
-        const correctOpts=Array.from(opts).filter(o=>o.dataset.correct==='true');
-        const selOK=selected.filter(o=>o.dataset.correct==='true');
-        const selWrong=selected.filter(o=>o.dataset.correct==='false');
-        const isCorrect=selOK.length===correctOpts.length&&selWrong.length===0;
-        if(isCorrect){
-            pageStates[pageId].completed=true;
-            if(completionSynth) completionSynth.triggerAttackRelease(['C5','E5','G5'],'8n');
-            statusEl.innerText='Parfait !'; statusEl.className='font-bold text-center text-green-500 text-sm w-full';
-            opts.forEach(o=>{o.style.pointerEvents='none';if(o.dataset.correct==='true'){o.classList.remove('selected');o.classList.add('correct');}});
-            document.getElementById('quiz-'+pageId+'-btn').disabled=true;
+        const correctOpts = Array.from(opts).filter(o => o.dataset.correct === 'true');
+        const selOK = selected.filter(o => o.dataset.correct === 'true');
+        const selWrong = selected.filter(o => o.dataset.correct === 'false');
+        const isCorrect = selOK.length === correctOpts.length && selWrong.length === 0;
+        if (isCorrect) {
+            pageStates[pageId].completed = true;
+            if (completionSynth) completionSynth.triggerAttackRelease(['C5','E5','G5'],'8n');
+            statusEl.innerText = 'Parfait !';
+            statusEl.className = 'font-bold text-center text-green-500 text-sm w-full';
+            opts.forEach(o => {
+                o.style.pointerEvents = 'none';
+                if (o.dataset.correct === 'true') { o.classList.remove('selected'); o.classList.add('correct'); }
+            });
+            document.getElementById('quiz-'+pageId+'-btn').disabled = true;
             document.getElementById('quiz-'+pageId+'-btn').classList.add('opacity-40','cursor-not-allowed');
             unlockNextButton(pageId);
         } else {
-            if(errorSound) errorSound.triggerAttackRelease('C4','0.1s');
-            selWrong.forEach(o=>{o.classList.add('wrong');setTimeout(()=>{o.classList.remove('wrong','selected');},800);});
-            if(quizAttempts>=2){
-                statusEl.innerText='💡 Les réponses 2, 3 et 5 sont correctes.';
-                statusEl.className='font-bold text-center text-blue-500 text-sm w-full';
+            if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+            selWrong.forEach(o => { o.classList.add('wrong'); setTimeout(() => { o.classList.remove('wrong','selected'); }, 800); });
+            if (quizAttempts >= 2) {
+                statusEl.innerText = '💡 Les réponses 2, 3 et 5 sont correctes.';
+                statusEl.className = 'font-bold text-center text-blue-500 text-sm w-full';
             } else {
-                statusEl.innerText='Incorrect. Vérifiez vos réponses !';
-                statusEl.className='font-bold text-center text-red-500 text-sm w-full';
+                statusEl.innerText = 'Incorrect. Vérifiez vos réponses !';
+                statusEl.className = 'font-bold text-center text-red-500 text-sm w-full';
             }
-            if(quizAttempts>=3){
-                pageStates[pageId].completed=true;
-                opts.forEach(o=>{
-                    o.style.pointerEvents='none';
+            if (quizAttempts >= 3) {
+                pageStates[pageId].completed = true;
+                opts.forEach(o => {
+                    o.style.pointerEvents = 'none';
                     o.classList.remove('selected','wrong');
-                    if(o.dataset.correct==='true') o.classList.add('correct');
+                    if (o.dataset.correct === 'true') o.classList.add('correct');
                 });
-                document.getElementById('quiz-'+pageId+'-btn').disabled=true;
+                document.getElementById('quiz-'+pageId+'-btn').disabled = true;
                 document.getElementById('quiz-'+pageId+'-btn').classList.add('opacity-40','cursor-not-allowed');
-                statusEl.innerText='Voici les bonnes réponses.'; statusEl.className='font-bold text-center text-blue-500 text-sm w-full';
+                statusEl.innerText = 'Voici les bonnes réponses.';
+                statusEl.className = 'font-bold text-center text-blue-500 text-sm w-full';
                 unlockNextButton(pageId);
             }
         }
     }
 
-    /* WORD-ORDER */
-    function placeToken(btn,pageId){
-        if(btn.disabled||pageStates[pageId].completed) return;
-        const state=wordOrderState[pageId]; const word=btn.innerText;
-        if(!btn.id) btn.id='wt-'+pageId+'-'+Date.now()+'-'+Math.random().toString(36).slice(2);
-        btn.disabled=true; btn.classList.add('opacity-30','cursor-not-allowed');
-        const aa=document.getElementById('answer-area-'+pageId);
-        const slot=document.createElement('button'); slot.className='word-token placed'; slot.innerText=word; slot.dataset.srcId=btn.id;
-        slot.onclick=()=>removeToken(slot,pageId); aa.appendChild(slot); state.placed.push(word);
-        document.getElementById('word-status-'+pageId).innerText='';
+    function placeToken(btn, pageId) {
+        if (btn.disabled || pageStates[pageId].completed) return;
+        const state = wordOrderState[pageId];
+        const word = btn.innerText;
+        if (!btn.id) btn.id = 'wt-'+pageId+'-'+Date.now()+'-'+Math.random().toString(36).slice(2);
+        btn.disabled = true; btn.classList.add('opacity-30','cursor-not-allowed');
+        const aa = document.getElementById('answer-area-'+pageId);
+        const slot = document.createElement('button');
+        slot.className = 'word-token placed'; slot.innerText = word; slot.dataset.srcId = btn.id;
+        slot.onclick = () => removeToken(slot, pageId);
+        aa.appendChild(slot); state.placed.push(word);
+        document.getElementById('word-status-'+pageId).innerText = '';
     }
-    function removeToken(slot,pageId){
-        if(pageStates[pageId].completed) return;
-        const state=wordOrderState[pageId]; const idx=state.placed.indexOf(slot.innerText);
-        if(idx!==-1) state.placed.splice(idx,1);
-        const src=document.getElementById(slot.dataset.srcId);
-        if(src){src.disabled=false;src.classList.remove('opacity-30','cursor-not-allowed');}
-        slot.remove(); document.getElementById('word-status-'+pageId).innerText='';
+    function removeToken(slot, pageId) {
+        if (pageStates[pageId].completed) return;
+        const state = wordOrderState[pageId];
+        const idx = state.placed.indexOf(slot.innerText);
+        if (idx !== -1) state.placed.splice(idx, 1);
+        const src = document.getElementById(slot.dataset.srcId);
+        if (src) { src.disabled = false; src.classList.remove('opacity-30','cursor-not-allowed'); }
+        slot.remove();
+        document.getElementById('word-status-'+pageId).innerText = '';
     }
-    function checkWordOrder(pageId){
-        if(pageStates[pageId].completed) return;
-        const state=wordOrderState[pageId]; const statusEl=document.getElementById('word-status-'+pageId);
-        if(state.placed.length===0){
-            statusEl.innerText='Placez des mots dans la réponse.'; statusEl.className='font-bold text-sm text-center w-full text-orange-500'; return;
+    function checkWordOrder(pageId) {
+        if (pageStates[pageId].completed) return;
+        const state = wordOrderState[pageId];
+        const statusEl = document.getElementById('word-status-'+pageId);
+        if (state.placed.length === 0) {
+            statusEl.innerText = 'Placez des mots dans la réponse.';
+            statusEl.className = 'font-bold text-sm text-center w-full text-orange-500'; return;
         }
         state.attempts++;
-        const answers=wordOrderCorrectAnswers[pageId];
-        const isCorrect=answers.some(ans=>state.placed.length===ans.length&&state.placed.every((w,i)=>w===ans[i]));
-        if(isCorrect){
-            pageStates[pageId].completed=true;
-            if(completionSynth) completionSynth.triggerAttackRelease(['C5','E5','G5'],'8n');
-            statusEl.innerText='Très bien !'; statusEl.className='font-bold text-sm text-center w-full text-green-500';
-            document.querySelectorAll('#answer-area-'+pageId+' .word-token').forEach(t=>{t.className='word-token correct-token';t.onclick=null;});
-            document.getElementById('word-btn-'+pageId).disabled=true;
+        const answers = wordOrderCorrectAnswers[pageId];
+        const isCorrect = answers.some(ans =>
+            state.placed.length === ans.length && state.placed.every((w,i) => w === ans[i])
+        );
+        if (isCorrect) {
+            pageStates[pageId].completed = true;
+            if (completionSynth) completionSynth.triggerAttackRelease(['C5','E5','G5'],'8n');
+            statusEl.innerText = 'Très bien !';
+            statusEl.className = 'font-bold text-sm text-center w-full text-green-500';
+            document.querySelectorAll('#answer-area-'+pageId+' .word-token').forEach(t => {
+                t.className = 'word-token correct-token'; t.onclick = null;
+            });
+            document.getElementById('word-btn-'+pageId).disabled = true;
             document.getElementById('word-btn-'+pageId).classList.add('opacity-40','cursor-not-allowed');
             unlockNextButton(pageId);
         } else {
-            if(errorSound) errorSound.triggerAttackRelease('C4','0.1s');
-            document.querySelectorAll('#answer-area-'+pageId+' .word-token').forEach(t=>{t.classList.add('wrong-token');setTimeout(()=>t.classList.remove('wrong-token'),700);});
-            if(state.attempts>=3){
-                const aa=document.getElementById('answer-area-'+pageId); aa.innerHTML='';
-                answers[0].forEach(w=>{const t=document.createElement('span');t.className='word-token correct-token';t.innerText=w;aa.appendChild(t);});
-                statusEl.innerText='Voici la bonne réponse.'; statusEl.className='font-bold text-sm text-center w-full text-blue-500';
-                document.getElementById('word-btn-'+pageId).disabled=true;
-                document.getElementById('word-btn-'+pageId).classList.add('opacity-40','cursor-not-allowed');
-                document.querySelectorAll('#bank-'+pageId+' .word-token').forEach(b=>{b.disabled=true;b.classList.add('opacity-30','cursor-not-allowed');});
-                pageStates[pageId].completed=true; unlockNextButton(pageId);
-            } else {
-                statusEl.innerText='Incorrect. Réessayez !'; statusEl.className='font-bold text-sm text-center w-full text-red-500';
-                const aa=document.getElementById('answer-area-'+pageId);
-                Array.from(aa.children).forEach(slot=>{
-                    const src=document.getElementById(slot.dataset.srcId);
-                    if(src){src.disabled=false;src.classList.remove('opacity-30','cursor-not-allowed');}
+            if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+            document.querySelectorAll('#answer-area-'+pageId+' .word-token').forEach(t => {
+                t.classList.add('wrong-token'); setTimeout(() => t.classList.remove('wrong-token'), 700);
+            });
+            if (state.attempts >= 3) {
+                const aa = document.getElementById('answer-area-'+pageId);
+                aa.innerHTML = '';
+                answers[0].forEach(w => {
+                    const t = document.createElement('span');
+                    t.className = 'word-token correct-token'; t.innerText = w; aa.appendChild(t);
                 });
-                aa.innerHTML=''; state.placed=[];
+                statusEl.innerText = 'Voici la bonne réponse.';
+                statusEl.className = 'font-bold text-sm text-center w-full text-blue-500';
+                document.getElementById('word-btn-'+pageId).disabled = true;
+                document.getElementById('word-btn-'+pageId).classList.add('opacity-40','cursor-not-allowed');
+                document.querySelectorAll('#bank-'+pageId+' .word-token').forEach(b => {
+                    b.disabled = true; b.classList.add('opacity-30','cursor-not-allowed');
+                });
+                pageStates[pageId].completed = true; unlockNextButton(pageId);
+            } else {
+                statusEl.innerText = 'Incorrect. Réessayez !';
+                statusEl.className = 'font-bold text-sm text-center w-full text-red-500';
+                const aa = document.getElementById('answer-area-'+pageId);
+                Array.from(aa.children).forEach(slot => {
+                    const src = document.getElementById(slot.dataset.srcId);
+                    if (src) { src.disabled = false; src.classList.remove('opacity-30','cursor-not-allowed'); }
+                });
+                aa.innerHTML = ''; state.placed = [];
             }
         }
     }
