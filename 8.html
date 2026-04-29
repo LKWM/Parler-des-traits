@@ -825,7 +825,7 @@
         if (isPass || forcePass) {
             state.completed = true;
             if (correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
-            verdictEl.innerText = isPass ? 'Très bien ! Passez à la suite.' : 'Bien essayé ! Passez à la suite.';
+            verdictEl.innerText = isPass ? 'Très bien ! Passez à la suite. Passez à la suite.' : 'Bien essayé ! Passez à la suite. Passez à la suite.';
             verdictEl.className = 'font-bold text-base text-center text-green-600';
             btn.disabled        = true;
             btn.innerHTML       = '<i class="ph-bold ph-check text-3xl"></i>';
@@ -834,7 +834,7 @@
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-            verdictEl.innerText = 'On y est presque ! Essayons encore une fois.';
+            verdictEl.innerText = 'On y est presque ! Essayons encore une fois. Essayons encore une fois.';
             verdictEl.className = 'font-bold text-base text-center text-orange-500';
             btn.disabled   = false;
             btn.innerHTML  = '<i class="ph-fill ph-microphone text-3xl"></i>';
@@ -905,7 +905,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.innerText = 'Très bien !';
+            statusEl.innerText = 'Très bien ! Passez à la suite.';
             statusEl.className = 'font-bold text-center text-green-500 text-sm w-full transition-colors';
             opts.forEach(o => {
                 o.style.pointerEvents = 'none';
@@ -998,7 +998,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.innerText = "Très bien !";
+            statusEl.innerText = "Très bien ! Passez à la suite.";
             statusEl.className = "font-bold text-sm text-center w-full text-green-500 transition-colors";
             document.querySelectorAll(`#answer-area-${pageId} .word-token`).forEach(t => { t.className = 'word-token correct-token'; t.onclick = null; });
             document.getElementById(`word-btn-${pageId}`).disabled = true;
@@ -1149,7 +1149,7 @@
 
         if (mode === 'repeat') {
             if (currentAttempts === 1) {
-                msg = isPass ? "Très bien, essayons encore." : "On y est presque !";
+                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
                 const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                 if (cardBtns.length > 0) {
@@ -1158,7 +1158,7 @@
                     audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
                 }
             } else {
-                msg = isPass ? "Très bien !" : "Bien essayé !";
+                msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
                 isComplete = true;
             }
         }
