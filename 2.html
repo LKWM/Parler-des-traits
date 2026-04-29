@@ -273,7 +273,7 @@
                 </div>
 
                 <div class="relative w-full flex flex-col items-center mt-2 mb-4">
-                    <p class="invisible font-bold text-center text-sm w-full">Très bien !</p>
+                    <p class="invisible font-bold text-center text-sm w-full">Très bien ! Passez à la suite.</p>
                     <p id="quiz-8-status" class="absolute inset-0 font-bold text-center text-sm w-full"></p>
                 </div>
                 
@@ -318,7 +318,7 @@
                 </div>
 
                 <div class="relative w-full flex flex-col items-center mt-2 mb-4">
-                    <p class="invisible font-bold text-center text-sm w-full">Très bien !</p>
+                    <p class="invisible font-bold text-center text-sm w-full">Très bien ! Passez à la suite.</p>
                     <p id="cat-status-9" class="absolute inset-0 font-bold text-center text-sm w-full"></p>
                 </div>
                 
@@ -477,7 +477,7 @@
                 </div>
 
                 <div class="relative w-full flex flex-col items-center mt-2 mb-4">
-                    <p class="invisible font-bold text-center text-sm w-full">Très bien !</p>
+                    <p class="invisible font-bold text-center text-sm w-full">Très bien ! Passez à la suite.</p>
                     <p id="quiz-15-status" class="absolute inset-0 font-bold text-center text-sm w-full"></p>
                 </div>
                 
@@ -953,7 +953,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if(completionSynth) completionSynth.triggerAttackRelease(["C5", "E5", "G5"], "8n");
-            statusEl.innerText = "Très bien !";
+            statusEl.innerText = "Très bien ! Passez à la suite.";
             statusEl.className = "absolute inset-0 font-bold text-center text-green-500 text-sm w-full transition-colors";
             selectedOpt.classList.remove('selected');
             selectedOpt.classList.add('correct');
@@ -1005,7 +1005,7 @@
         if (allCorrect) {
             pageStates[pageId].completed = true;
             if(completionSynth) completionSynth.triggerAttackRelease(["C5", "E5", "G5"], "8n");
-            statusEl.innerText = "Très bien !";
+            statusEl.innerText = "Très bien ! Passez à la suite.";
             statusEl.className = "absolute inset-0 font-bold text-center text-green-500 text-sm w-full transition-colors";
             document.getElementById(`cat-btn-${pageId}`).disabled = true;
             document.getElementById(`cat-btn-${pageId}`).classList.add('opacity-50', 'cursor-not-allowed');
@@ -1086,7 +1086,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if(completionSynth) completionSynth.triggerAttackRelease(["C5", "E5", "G5"], "8n");
-            statusEl.innerText = "Très bien !";
+            statusEl.innerText = "Très bien ! Passez à la suite.";
             statusEl.className = "absolute inset-0 font-bold text-center text-green-500 text-sm w-full transition-colors";
             inputEl.disabled = true;
             inputEl.classList.add('text-green-600', 'border-green-500');
@@ -1240,7 +1240,7 @@
 
         if (mode === 'repeat') {
             if (currentAttempts === 1) {
-                msg = isPass ? "Très bien, essayons encore." : "On y est presque !";
+                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
                 
                 // Extract audio url dynamically from the sibling play button if exists
@@ -1259,17 +1259,17 @@
                     audioTimeoutId = setTimeout(() => { playCardAudio(audioUrl); }, 600);
                 }
             } else {
-                msg = isPass ? "Très bien !" : "Bien essayé !";
+                msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
                 isComplete = true;
             }
         } 
         else if (mode === 'repeat_sentence') {
             if (isPass) {
-                msg = "Très bien !";
+                msg = "Très bien ! Passez à la suite.";
                 isComplete = true;
             } else {
                 if (currentAttempts === 1) {
-                    msg = "On y est presque !";
+                    msg = "On y est presque ! Essayons encore une fois.";
                     isComplete = false;
                     
                     // Extract audio url dynamically from the sibling play button if exists
@@ -1288,7 +1288,7 @@
                         audioTimeoutId = setTimeout(() => { playCardAudio(audioUrl); }, 600);
                     }
                 } else {
-                    msg = "Bien essayé !";
+                    msg = "Bien essayé ! Passez à la suite.";
                     isComplete = true;
                 }
             }
@@ -1298,16 +1298,16 @@
             const answerStr = Array.isArray(referenceData) ? referenceData.join(" / ") : referenceData;
 
             if (isPass) {
-                msg = "Très bien !";
+                msg = "Très bien ! Passez à la suite.";
                 isComplete = true;
                 if(textEl) textEl.innerText = answerStr;
             } else {
                 if (currentAttempts === 1) {
-                    msg = "On y est presque !";
+                    msg = "On y est presque ! Essayons encore une fois.";
                     isComplete = false;
                     if(textEl) textEl.innerText = answerStr; // Show text on fail 1
                 } else {
-                    msg = "Bien essayé !";
+                    msg = "Bien essayé ! Passez à la suite.";
                     isComplete = true;
                     if(textEl) textEl.innerText = answerStr;
                 }
