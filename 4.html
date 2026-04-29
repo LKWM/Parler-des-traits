@@ -863,7 +863,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.innerText = "Très bien !";
+            statusEl.innerText = "Très bien ! Passez à la suite.";
             statusEl.className = "font-bold text-center text-green-500 text-sm w-full transition-colors";
             selected.classList.remove('selected'); selected.classList.add('correct');
             document.getElementById(`quiz-${pageId}-btn`).disabled = true;
@@ -948,7 +948,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.innerText = "Très bien !";
+            statusEl.innerText = "Très bien ! Passez à la suite.";
             statusEl.className = "font-bold text-sm text-center w-full text-green-500 transition-colors";
             document.querySelectorAll(`#answer-area-${pageId} .word-token`).forEach(t => { t.className = 'word-token correct-token'; t.onclick = null; });
             document.getElementById(`word-btn-${pageId}`).disabled = true;
@@ -1099,7 +1099,7 @@
 
         if (mode === 'repeat') {
             if (currentAttempts === 1) {
-                msg = isPass ? "Très bien, essayons encore." : "On y est presque !";
+                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
                 // Replay card audio
                 const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
@@ -1109,15 +1109,15 @@
                     audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
                 }
             } else {
-                msg = isPass ? "Très bien !" : "Bien essayé !";
+                msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
                 isComplete = true;
             }
         } else if (mode === 'repeat_sentence') {
             if (isPass) {
-                msg = "Très bien !"; isComplete = true;
+                msg = "Très bien ! Passez à la suite."; isComplete = true;
             } else {
                 if (currentAttempts === 1) {
-                    msg = "On y est presque !"; isComplete = false;
+                    msg = "On y est presque ! Essayons encore une fois."; isComplete = false;
                     const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                     if (cardBtns.length > 0) {
                         const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
@@ -1125,7 +1125,7 @@
                         audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
                     }
                 } else {
-                    msg = "Bien essayé !"; isComplete = true;
+                    msg = "Bien essayé ! Passez à la suite."; isComplete = true;
                 }
             }
         }
