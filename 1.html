@@ -234,7 +234,7 @@
                 </div>
 
                 <div class="relative w-full flex flex-col items-center mt-2 mb-4">
-                    <p class="invisible font-bold text-center text-sm w-full">Très bien !</p>
+                    <p class="invisible font-bold text-center text-sm w-full">Très bien ! Passez à la suite.</p>
                     <p id="quiz-7-status" class="absolute inset-0 font-bold text-center text-sm w-full"></p>
                 </div>
                 
@@ -255,7 +255,7 @@
                 </div>
 
                 <div class="relative w-full flex flex-col items-center mt-2 mb-4">
-                    <p class="invisible font-bold text-center text-sm w-full">Très bien !</p>
+                    <p class="invisible font-bold text-center text-sm w-full">Très bien ! Passez à la suite.</p>
                     <p id="quiz-8-status" class="absolute inset-0 font-bold text-center text-sm w-full"></p>
                 </div>
                 
@@ -276,7 +276,7 @@
                 </div>
 
                 <div class="relative w-full flex flex-col items-center mt-2 mb-4">
-                    <p class="invisible font-bold text-center text-sm w-full">Très bien !</p>
+                    <p class="invisible font-bold text-center text-sm w-full">Très bien ! Passez à la suite.</p>
                     <p id="quiz-9-status" class="absolute inset-0 font-bold text-center text-sm w-full"></p>
                 </div>
                 
@@ -661,7 +661,7 @@
             pageStates[pageId].completed = true; // State record
             
             if(completionSynth) completionSynth.triggerAttackRelease(["C5", "E5", "G5"], "8n"); 
-            statusEl.innerText = "Très bien !";
+            statusEl.innerText = "Très bien ! Passez à la suite.";
             statusEl.className = "absolute inset-0 font-bold text-center text-green-500 text-sm w-full transition-colors";
             selectedOpt.classList.remove('selected');
             selectedOpt.classList.add('correct');
@@ -811,7 +811,7 @@
         // Logique de validation
         if (mode === 'repeat') {
             if (quizAttempts === 1) {
-                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
+                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois. Essayons encore une fois.";
                 isComplete = false;
                 
                 if (repeatCardAudios[currentPage]) {
@@ -821,7 +821,7 @@
                     }, 600); 
                 }
             } else {
-                msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
+                msg = isPass ? "Très bien ! Passez à la suite. Passez à la suite." : "Bien essayé ! Passez à la suite. Passez à la suite.";
                 isComplete = true;
             }
         } 
@@ -830,13 +830,13 @@
             const textEl = document.getElementById(`sq-text-${currentPage}`);
             
             if (isPass) {
-                msg = "Très bien ! Passez à la suite.";
+                msg = "Très bien ! Passez à la suite. Passez à la suite.";
                 isComplete = true;
                 if(textEl) textEl.innerText = referenceText;
                 if(audioBtn) audioBtn.classList.remove('hidden');
             } else {
                 if (quizAttempts === 1) {
-                    msg = "On y est presque ! Essayons encore une fois.";
+                    msg = "On y est presque ! Essayons encore une fois. Essayons encore une fois.";
                     isComplete = false;
                     if(audioBtn) {
                         audioBtn.classList.remove('hidden');
@@ -848,12 +848,12 @@
                     }
                 } 
                 else if (quizAttempts === 2) {
-                    msg = "On y est presque ! Essayons encore une fois.";
+                    msg = "On y est presque ! Essayons encore une fois. Essayons encore une fois.";
                     isComplete = false;
                     if(textEl) textEl.innerText = referenceText;
                 } 
                 else {
-                    msg = "Bien essayé ! Passez à la suite.";
+                    msg = "Bien essayé ! Passez à la suite. Passez à la suite.";
                     isComplete = true;
                     if(textEl) textEl.innerText = referenceText;
                     if(audioBtn) audioBtn.classList.remove('hidden');
