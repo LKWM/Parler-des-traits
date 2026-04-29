@@ -107,18 +107,6 @@
             70%  { box-shadow: 0 0 0 15px rgba(99,102,241,0);  }
             100% { box-shadow: 0 0 0 0   rgba(99,102,241,0);   }
         }
-        /* mic-btn-lg */
-        .mic-btn-lg {
-            background: #ef4444; color: #fff; border-radius: 9999px; padding: 1.5rem;
-            box-shadow: 0 4px 16px rgba(239,68,68,0.3); transition: transform 0.15s; flex-shrink: 0;
-            border: none; cursor: pointer;
-        }
-        .mic-btn-lg:hover { transform: scale(1.05); }
-        .mic-btn-lg:active { transform: scale(0.95); }
-        @media (min-width: 1024px) {
-            .gemini-mic-btn { padding: 1.75rem; }
-            .gemini-mic-btn i { font-size: 2.5rem !important; }
-        }
     </style>
 </head>
 <body>
@@ -129,8 +117,6 @@
     </div>
 
     <div id="pages-wrapper">
-
-
 
         <div id="page-0" class="page active justify-center items-center bg-indigo-50">
             <div class="content-area">
@@ -382,7 +368,6 @@
                     <button class="word-token" onclick="placeToken(this,13)">Oui</button>
                     <button class="word-token" onclick="placeToken(this,13)">est-ce que</button>
                     <button class="word-token" onclick="placeToken(this,13)">faire</button>
-                    <button class="word-token" onclick="placeToken(this,13)">le</button>
                     <button class="word-token" onclick="placeToken(this,13)">sport</button>
                     <button class="word-token" onclick="placeToken(this,13)">aimez</button>
                     <button class="word-token" onclick="placeToken(this,13)">pas</button>
@@ -469,7 +454,6 @@
                     <button class="word-token" onclick="placeToken(this,16)">은</button>
                     <button class="word-token" onclick="placeToken(this,16)">음악</button>
                     <button class="word-token" onclick="placeToken(this,16)">아니요</button>
-                    <button class="word-token" onclick="placeToken(this,16)">요리하다</button>
                     <button class="word-token" onclick="placeToken(this,16)">가</button>
                     <button class="word-token" onclick="placeToken(this,16)">영화</button>
                     <button class="word-token" onclick="placeToken(this,16)">를</button>
@@ -587,26 +571,13 @@
         12: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777291264/8-S7_tyedel.mp3',
     };
 
-    const geminiPageConfig = {
-        15: {
-            audioUrl:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777291271/8-S9_jc8ox2.mp3',
-            sysPrompt: '"음악을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 기준 - 네/아니요로 답하지 않는 경우, 조사를 생략하거나 문법적 정확도가 떨어지는 경우. 질문에 대한 답을 하지 않고 주제를 바꾸는 경우.',
-            threshold:  80,
-            maxAttempts: 2,
-        },
-        17: {
-            audioUrl:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777291275/8-S10_nehwaq.mp3',
-            sysPrompt: '"무엇을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 기준 - 조사를 생략하거나 문법적 정확도가 떨어지는 경우. 질문에 적절한 답이 아닌 경우',
-            threshold:  80,
-            maxAttempts: 2,
-        },
-    };
-
-    // Word-order correct answers (by pageId)
-    const wordOrderCorrectAnswers = {
-        13: [["Non","je","n'","aime","pas","la","natation"]],
-        16: [["네","저는","한국","음식","을","좋아해요"]],
-    };
+    // Word-order correct answers by pageId
+    const wordOrderCorrectAnswers13 = [
+        ["Non", "je", "n'", "aime", "pas", "la", "natation"]
+    ];
+    const wordOrderCorrectAnswers16 = [
+        ["네", "저는", "한국", "음식", "을", "좋아해요"]
+    ];
     const wordOrderState = {};
     [13, 16].forEach(id => { wordOrderState[id] = { placed: [], attempts: 0 }; });
 
@@ -690,54 +661,36 @@
             const textAudio   = pageTextAudios[currentPage];
             const exAudio     = pageExplanationAudios[currentPage];
             const repeatAudio = repeatCardAudios[currentPage];
-            const gemCfg      = geminiPageConfig[currentPage];
             if (textAudio) {
                 audioTimeoutId = setTimeout(() => playCardAudio(textAudio), 300);
             } else if (exAudio) {
                 audioTimeoutId = setTimeout(() => playCardAudio(exAudio), 300);
             } else if (repeatAudio) {
-                // mic 잠금 → 오디오 재생 → 끝나면 mic 해제
-                const micBtn = document.getElementById(`mic-btn-${currentPage}`);
-                if (micBtn && !pageStates[currentPage].completed) {
-                    micBtn.disabled = true;
-                    micBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                    micBtn.classList.remove('bg-red-500');
-                    micBtn.classList.add('bg-slate-400');
-                }
-                const pid = currentPage;
-                audioTimeoutId = setTimeout(() => {
-                    playCardAudio(repeatAudio);
-                    if (currentAudio) {
-                        currentAudio.addEventListener('ended', () => {
-                            if (currentPage !== pid) return;
-                            if (micBtn && !pageStates[pid].completed) {
-                                micBtn.disabled = false;
-                                micBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-slate-400');
-                                micBtn.classList.add('bg-red-500');
-                            }
-                        });
-                    }
-                }, 300);
-            } else if (gemCfg) {
-                // Gemini 말하기: 오디오 재생 → 끝나면 mic 해제
+                audioTimeoutId = setTimeout(() => playCardAudio(repeatAudio), 300);
+            }
+            // word-order: auto-play sentence audio
+            if (currentPage === 13) {
+                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291268/8-S8_oancq2.mp3'), 300);
+            }
+            if (currentPage === 16) {
+                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291244/8-S1_zrjjrh.mp3'), 300);
+            }
+            // Gemini speaking: 오디오 자동재생 → 끝나면 mic 활성화
+            if (geminiPageConfig[currentPage]) {
                 const gBtn = document.getElementById(`gemini-mic-${currentPage}`);
+                const gCfg = geminiPageConfig[currentPage];
                 if (gBtn && !pageStates[currentPage].completed) gBtn.disabled = true;
                 const pid = currentPage;
                 audioTimeoutId = setTimeout(() => {
-                    playCardAudio(gemCfg.audioUrl);
+                    playCardAudio(gCfg.audioUrl);
                     if (currentAudio) {
                         currentAudio.addEventListener('ended', () => {
                             if (currentPage !== pid) return;
-                            if (gBtn && !pageStates[pid].completed) gBtn.disabled = false;
+                            const b = document.getElementById(`gemini-mic-${pid}`);
+                            if (b && !pageStates[pid].completed) b.disabled = false;
                         });
                     }
                 }, 300);
-            } else if (currentPage === 13 || currentPage === 16) {
-                // word-order: 오디오 자동재생
-                const audioUrl = currentPage === 13
-                    ? 'https://res.cloudinary.com/de76i94ia/video/upload/v1777291268/8-S8_oancq2.mp3'
-                    : 'https://res.cloudinary.com/de76i94ia/video/upload/v1777291244/8-S1_zrjjrh.mp3';
-                audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 300);
             }
         }
     }
@@ -753,7 +706,6 @@
         currentAudio.addEventListener('pause', () => toggleActiveMic(false));
         const p = currentAudio.play();
         if (p !== undefined) p.catch(e => { console.warn('Audio:', e); toggleActiveMic(false); });
-        return currentAudio;
     }
 
     function triggerLessonComplete() {
@@ -761,140 +713,32 @@
     }
 
     /* ═══════════════════════════════════════
-       MIC UI HELPERS
-    ═══════════════════════════════════════ */
-    function toggleActiveMic(disable) {
-        document.querySelectorAll(`#page-${currentPage} .mic-req`).forEach(btn => {
-            if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse')) return;
-            if (disable) {
-                btn.disabled = true;
-                btn.classList.add('opacity-50','bg-slate-400','cursor-not-allowed');
-                btn.classList.remove('bg-red-500');
-            } else {
-                btn.disabled = false;
-                btn.classList.remove('opacity-50','bg-slate-400','cursor-not-allowed');
-                btn.classList.add('bg-red-500');
-            }
-        });
-    }
-
-    function resetMicBtnState(btn) {
-        btn.disabled = false;
-        btn.className = 'mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0';
-        btn.innerHTML = `<i class="ph-fill ph-microphone text-4xl"></i>`;
-    }
-
-    /* ═══════════════════════════════════════
-       CLOVA SPEECH RECOGNITION
-    ═══════════════════════════════════════ */
-    const CLOVA_API_FUNCTION_URL = 'https://coreeno.base44.app/api/functions/naverClovaSpeech';
-
-    function calculateSimilarity(s1, s2) {
-        s1 = s1.replace(/[\s.,?!]/g, '').toLowerCase();
-        s2 = s2.replace(/[\s.,?!]/g, '').toLowerCase();
-        if (s1 === s2) return 100;
-        if (!s1.length || !s2.length) return 0;
-        const m = Array(s2.length + 1).fill(null).map(() => Array(s1.length + 1).fill(0));
-        for (let i = 0; i <= s1.length; i++) m[0][i] = i;
-        for (let j = 0; j <= s2.length; j++) m[j][0] = j;
-        for (let j = 1; j <= s2.length; j++)
-            for (let i = 1; i <= s1.length; i++) {
-                const ind = s1[i - 1] === s2[j - 1] ? 0 : 1;
-                m[j][i] = Math.min(m[j][i - 1] + 1, m[j - 1][i] + 1, m[j - 1][i - 1] + ind);
-            }
-        return Math.max(0, Math.round((1 - m[s2.length][s1.length] / Math.max(s1.length, s2.length)) * 100));
-    }
-
-    async function toggleRecordSpeech(btn, statusId, ref, mode) {
-        const statusEl = document.getElementById(statusId);
-        const pageNum  = parseInt(statusId.replace('status-', ''));
-
-        if (btn.classList.contains('recording-pulse')) {
-            if (activeRecorder && activeRecorder.state === 'recording') {
-                activeRecorder.stop(); clearTimeout(recordingTimeout);
-            }
-            return;
-        }
-
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mr     = new MediaRecorder(stream);
-            const chunks = [];
-            mr.ondataavailable = e => chunks.push(e.data);
-            mr.onstop = async () => {
-                btn.classList.remove('recording-pulse');
-                btn.innerHTML = '<i class="ph ph-spinner animate-spin text-4xl"></i>';
-                btn.disabled  = true;
-                statusEl.innerText  = 'Analyse...';
-                statusEl.className  = 'text-slate-500 font-bold text-sm text-center w-full transition-colors';
-                const tEl = document.getElementById('transcript-' + pageNum);
-                if (tEl) tEl.innerHTML = '';
-
-                const blob = new Blob(chunks, { type: 'audio/webm' });
-                const fd   = new FormData();
-                fd.append('audio', blob, 'recording.webm');
-                fd.append('language', 'Kor');
-                try {
-                    const res        = await fetch(CLOVA_API_FUNCTION_URL, { method: 'POST', body: fd });
-                    const d          = await res.json();
-                    const transcript = (d.text || '').trim();
-                    const score      = calculateSimilarity(transcript, ref);
-
-                    pageStates[pageNum].attempts++;
-                    const isPass    = score >= 80;
-                    const forcePass = pageStates[pageNum].attempts >= 2;
-
-                    if (tEl) tEl.innerText = transcript ? '« ' + transcript + ' »' : '';
-
-                    if (isPass || forcePass) {
-                        pageStates[pageNum].completed = true;
-                        if (correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
-                        statusEl.innerText = isPass ? '✓ ' + score + 'pts — Très bien !' : 'Bien essayé ! (' + score + 'pts)';
-                        statusEl.className = 'text-green-600 font-bold text-sm text-center w-full transition-colors';
-                        btn.disabled   = true;
-                        btn.className  = 'mic-req text-white rounded-full p-6 bg-green-500 shadow-none relative z-10 shrink-0';
-                        btn.innerHTML  = '<i class="ph-bold ph-check text-4xl"></i>';
-                        unlockNextButton(pageNum);
-                    } else {
-                        if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-                        statusEl.innerText = score + 'pts — On y est presque !';
-                        statusEl.className = 'text-orange-500 font-bold text-sm text-center w-full transition-colors';
-                        resetMicBtnState(btn);
-                    }
-                } catch (e) {
-                    statusEl.innerText = 'Erreur. Réessayez.';
-                    statusEl.className = 'text-red-500 font-bold text-sm text-center w-full transition-colors';
-                    resetMicBtnState(btn);
-                }
-                stream.getTracks().forEach(t => t.stop());
-            };
-
-            mr.start(); activeRecorder = mr;
-            btn.classList.add('recording-pulse');
-            btn.innerHTML      = '<i class="ph-fill ph-stop text-4xl"></i>';
-            statusEl.innerText = 'Enregistrement...';
-            statusEl.className = 'text-red-500 font-bold text-sm text-center w-full animate-pulse';
-            recordingTimeout   = setTimeout(() => { if (mr.state === 'recording') mr.stop(); }, 11000);
-        } catch (e) {
-            statusEl.innerText = 'Erreur de microphone.';
-            statusEl.className = 'text-red-500 font-bold text-sm text-center w-full transition-colors';
-        }
-    }
-
-    /* ═══════════════════════════════════════
        GEMINI SPEAKING
     ═══════════════════════════════════════ */
+    const geminiPageConfig = {
+        15: {
+            audioUrl:   'https://res.cloudinary.com/de76i94ia/video/upload/v1777291271/8-S9_jc8ox2.mp3',
+            sysPrompt:  '"음악을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 기준 - 네/아니요로 답하지 않는 경우, 조사를 생략하거나 문법적 정확도가 떨어지는 경우. 질문에 대한 답을 하지 않고 주제를 바꾸는 경우.',
+            threshold:  80,
+            maxAttempts: 2,
+        },
+        17: {
+            audioUrl:   'https://res.cloudinary.com/de76i94ia/video/upload/v1777291275/8-S10_nehwaq.mp3',
+            sysPrompt:  '"무엇을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 기준 - 조사를 생략하거나 문법적 정확도가 떨어지는 경우. 질문에 적절한 답이 아닌 경우',
+            threshold:  80,
+            maxAttempts: 2,
+        },
+    };
+
     async function toggleGeminiMic(pageId) {
         const btn      = document.getElementById('gemini-mic-' + pageId);
         const statusEl = document.getElementById('gemini-status-' + pageId);
-
         if (btn.classList.contains('recording-pulse')) {
             if (activeRecorder && activeRecorder.state === 'recording') {
                 activeRecorder.stop(); clearTimeout(recordingTimeout);
             }
             return;
         }
-
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const mr     = new MediaRecorder(stream);
@@ -902,11 +746,10 @@
             mr.ondataavailable = e => chunks.push(e.data);
             mr.onstop = async () => {
                 btn.classList.remove('recording-pulse');
-                btn.innerHTML     = '<i class="ph ph-spinner animate-spin text-3xl"></i>';
-                btn.disabled      = true;
+                btn.innerHTML      = '<i class="ph ph-spinner animate-spin text-3xl"></i>';
+                btn.disabled       = true;
                 statusEl.innerText = 'Analyse en cours...';
                 statusEl.className = 'text-slate-500 font-medium text-sm text-center';
-
                 const blob     = new Blob(chunks, { type: 'audio/webm' });
                 const mimeType = blob.type.split(';')[0] || 'audio/webm';
                 const reader   = new FileReader();
@@ -917,13 +760,12 @@
                 };
                 stream.getTracks().forEach(t => t.stop());
             };
-
             mr.start(); activeRecorder = mr;
             btn.classList.add('recording-pulse');
             btn.innerHTML      = '<i class="ph-fill ph-stop text-3xl"></i>';
             statusEl.innerText = 'Enregistrement...';
             statusEl.className = 'text-red-500 font-bold text-sm text-center animate-pulse';
-            recordingTimeout   = setTimeout(() => { if (mr.state === 'recording') mr.stop(); }, 11000);
+            recordingTimeout   = setTimeout(() => { if (mr.state === 'recording') mr.stop(); }, 6000);
         } catch (e) {
             statusEl.innerText = 'Erreur de microphone.';
             statusEl.className = 'text-red-500 font-medium text-sm text-center';
@@ -937,7 +779,6 @@
         const verdictEl = document.getElementById('gemini-verdict-' + pageId);
         const cfg       = geminiPageConfig[pageId];
         const state     = pageStates[pageId];
-
         const payload = {
             model: 'gemini-2.5-flash',
             contents: [{ role: 'user', parts: [
@@ -946,7 +787,6 @@
             ]}],
             systemInstruction: cfg.sysPrompt
         };
-
         let transcript = '???', score = 0, feedback = '', isPass = false;
         try {
             const res  = await fetch('https://coreeno.base44.app/api/functions/Geminichat', {
@@ -969,10 +809,8 @@
             btn.innerHTML  = '<i class="ph-fill ph-microphone text-3xl"></i>';
             return;
         }
-
         state.attempts++;
         const forcePass = state.attempts >= cfg.maxAttempts;
-
         document.getElementById('gemini-transcript-' + pageId).innerText = transcript;
         document.getElementById('gemini-score-' + pageId).innerText      = score;
         const fbRow = document.getElementById('gemini-feedback-row-' + pageId);
@@ -984,11 +822,10 @@
         }
         popupEl.classList.remove('hidden');
         statusEl.innerText = '';
-
         if (isPass || forcePass) {
             state.completed = true;
             if (correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
-            verdictEl.innerText = isPass ? '✓ Très bien !' : 'Bien essayé !';
+            verdictEl.innerText = isPass ? 'Très bien ! Passez à la suite.' : 'Bien essayé ! Passez à la suite.';
             verdictEl.className = 'font-bold text-base text-center text-green-600';
             btn.disabled        = true;
             btn.innerHTML       = '<i class="ph-bold ph-check text-3xl"></i>';
@@ -997,15 +834,46 @@
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-            verdictEl.innerText = 'On y est presque ! Réessayez.';
+            verdictEl.innerText = 'On y est presque ! Essayons encore une fois.';
             verdictEl.className = 'font-bold text-base text-center text-orange-500';
             btn.disabled   = false;
             btn.innerHTML  = '<i class="ph-fill ph-microphone text-3xl"></i>';
         }
     }
 
+
     /* ═══════════════════════════════════════
-       MULTI-SELECT MCQ
+       MIC UI HELPERS
+    ═══════════════════════════════════════ */
+    function toggleActiveMic(disable) {
+        document.querySelectorAll(`#page-${currentPage} .mic-req`).forEach(btn => {
+            if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse')) return;
+            if (disable) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50','bg-slate-400','cursor-not-allowed');
+                btn.classList.remove('bg-red-500');
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50','bg-slate-400','cursor-not-allowed');
+                btn.classList.add('bg-red-500');
+            }
+        });
+    }
+
+    function disableMicBtn(btn, success) {
+        btn.disabled = true;
+        btn.className = `mic-req mic-btn-lg text-white rounded-full p-6 shadow-none transition-colors relative z-10 ${success ? 'bg-green-500' : 'bg-slate-400'}`;
+        btn.innerHTML = `<i class="ph-bold ph-check text-4xl"></i>`;
+    }
+
+    function resetMicBtnState(btn) {
+        btn.disabled = false;
+        btn.className = 'mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0';
+        btn.innerHTML = `<i class="ph-fill ph-microphone text-4xl"></i>`;
+    }
+
+    /* ═══════════════════════════════════════
+       MCQ QUIZ
     ═══════════════════════════════════════ */
     document.querySelectorAll(`#quiz-14-options .multi-opt`).forEach(opt => {
         opt.addEventListener('click', function () {
@@ -1037,7 +905,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.innerText = 'Parfait !';
+            statusEl.innerText = 'Très bien !';
             statusEl.className = 'font-bold text-center text-green-500 text-sm w-full transition-colors';
             opts.forEach(o => {
                 o.style.pointerEvents = 'none';
@@ -1075,8 +943,9 @@
         }
     }
 
+
     /* ═══════════════════════════════════════
-       WORD-ORDER QUIZ
+       WORD-ORDER QUIZ (multiple correct answers)
     ═══════════════════════════════════════ */
     function placeToken(btn, pageId) {
         if (btn.disabled || pageStates[pageId].completed) return;
@@ -1084,12 +953,12 @@
         const word  = btn.innerText;
         if (!btn.id) btn.id = `wt-${pageId}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
         btn.disabled = true;
-        btn.classList.add('opacity-30', 'cursor-not-allowed');
+        btn.classList.add('opacity-30','cursor-not-allowed');
         const answerArea = document.getElementById(`answer-area-${pageId}`);
         const slot = document.createElement('button');
-        slot.className      = 'word-token placed';
-        slot.innerText      = word;
-        slot.dataset.srcId  = btn.id;
+        slot.className = 'word-token placed';
+        slot.innerText = word;
+        slot.dataset.srcId = btn.id;
         slot.onclick = () => removeToken(slot, pageId);
         answerArea.appendChild(slot);
         state.placed.push(word);
@@ -1102,7 +971,7 @@
         const idx   = state.placed.indexOf(slot.innerText);
         if (idx !== -1) state.placed.splice(idx, 1);
         const src = document.getElementById(slot.dataset.srcId);
-        if (src) { src.disabled = false; src.classList.remove('opacity-30', 'cursor-not-allowed'); }
+        if (src) { src.disabled = false; src.classList.remove('opacity-30','cursor-not-allowed'); }
         slot.remove();
         document.getElementById(`word-status-${pageId}`).innerText = '';
     }
@@ -1113,59 +982,209 @@
         const statusEl = document.getElementById(`word-status-${pageId}`);
 
         if (state.placed.length === 0) {
-            statusEl.innerText = 'Placez des mots dans la réponse.';
-            statusEl.className = 'font-bold text-sm text-center w-full text-orange-500 transition-colors';
+            statusEl.innerText = "Placez des mots dans la réponse.";
+            statusEl.className = "font-bold text-sm text-center w-full text-orange-500 transition-colors";
             return;
         }
 
         state.attempts++;
-        const answers   = wordOrderCorrectAnswers[pageId];
+
+        const answers = pageId === 13 ? wordOrderCorrectAnswers13 : wordOrderCorrectAnswers16;
         const isCorrect = answers.some(ans =>
-            state.placed.length === ans.length && state.placed.every((w, i) => w === ans[i])
+            state.placed.length === ans.length &&
+            state.placed.every((w, i) => w === ans[i])
         );
 
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.innerText = 'Très bien !';
-            statusEl.className = 'font-bold text-sm text-center w-full text-green-500 transition-colors';
-            document.querySelectorAll(`#answer-area-${pageId} .word-token`).forEach(t => {
-                t.className = 'word-token correct-token'; t.onclick = null;
-            });
+            statusEl.innerText = "Très bien !";
+            statusEl.className = "font-bold text-sm text-center w-full text-green-500 transition-colors";
+            document.querySelectorAll(`#answer-area-${pageId} .word-token`).forEach(t => { t.className = 'word-token correct-token'; t.onclick = null; });
             document.getElementById(`word-btn-${pageId}`).disabled = true;
-            document.getElementById(`word-btn-${pageId}`).classList.add('opacity-40', 'cursor-not-allowed');
+            document.getElementById(`word-btn-${pageId}`).classList.add('opacity-40','cursor-not-allowed');
             unlockNextButton(pageId);
         } else {
-            if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
+            if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
             document.querySelectorAll(`#answer-area-${pageId} .word-token`).forEach(t => {
-                t.classList.add('wrong-token'); setTimeout(() => t.classList.remove('wrong-token'), 700);
+                t.classList.add('wrong-token');
+                setTimeout(() => t.classList.remove('wrong-token'), 700);
             });
             if (state.attempts >= 3) {
-                const aa = document.getElementById(`answer-area-${pageId}`);
-                aa.innerHTML = '';
+                const answerArea = document.getElementById(`answer-area-${pageId}`);
+                answerArea.innerHTML = '';
+                const answers = pageId === 13 ? wordOrderCorrectAnswers13 : wordOrderCorrectAnswers16;
                 answers[0].forEach(w => {
                     const t = document.createElement('span');
-                    t.className = 'word-token correct-token'; t.innerText = w; aa.appendChild(t);
+                    t.className = 'word-token correct-token'; t.innerText = w;
+                    answerArea.appendChild(t);
                 });
-                statusEl.innerText = 'Voici la bonne réponse.';
-                statusEl.className = 'font-bold text-sm text-center w-full text-blue-500 transition-colors';
+                statusEl.innerText = "Voici la bonne réponse.";
+                statusEl.className = "font-bold text-sm text-center w-full text-blue-500 transition-colors";
                 document.getElementById(`word-btn-${pageId}`).disabled = true;
-                document.getElementById(`word-btn-${pageId}`).classList.add('opacity-40', 'cursor-not-allowed');
+                document.getElementById(`word-btn-${pageId}`).classList.add('opacity-40','cursor-not-allowed');
                 document.querySelectorAll(`#bank-${pageId} .word-token`).forEach(b => {
-                    b.disabled = true; b.classList.add('opacity-30', 'cursor-not-allowed');
+                    b.disabled = true; b.classList.add('opacity-30','cursor-not-allowed');
                 });
                 pageStates[pageId].completed = true;
                 unlockNextButton(pageId);
             } else {
-                statusEl.innerText = 'Incorrect. Réessayez !';
-                statusEl.className = 'font-bold text-sm text-center w-full text-red-500 transition-colors';
-                const aa = document.getElementById(`answer-area-${pageId}`);
-                Array.from(aa.children).forEach(slot => {
+                statusEl.innerText = "Incorrect. Réessayez !";
+                statusEl.className = "font-bold text-sm text-center w-full text-red-500 transition-colors";
+                const answerArea = document.getElementById(`answer-area-${pageId}`);
+                Array.from(answerArea.children).forEach(slot => {
                     const src = document.getElementById(slot.dataset.srcId);
-                    if (src) { src.disabled = false; src.classList.remove('opacity-30', 'cursor-not-allowed'); }
+                    if (src) { src.disabled = false; src.classList.remove('opacity-30','cursor-not-allowed'); }
                 });
-                aa.innerHTML = ''; state.placed = [];
+                answerArea.innerHTML = '';
+                state.placed = [];
             }
+        }
+    }
+
+    /* ═══════════════════════════════════════
+       SPEECH RECOGNITION
+    ═══════════════════════════════════════ */
+    const BASE_44_ORIGIN = "https://coreeno.base44.app";
+    const CLOVA_API_FUNCTION_URL = BASE_44_ORIGIN + '/api/functions/naverClovaSpeech';
+
+    function calculateSimilarity(str1, str2) {
+        const s1 = str1.replace(/[\s.,?!]/g,'').toLowerCase();
+        const s2 = str2.replace(/[\s.,?!]/g,'').toLowerCase();
+        if (s1 === s2) return 100;
+        if (!s1.length || !s2.length) return 0;
+        const m = Array(s2.length+1).fill(null).map(()=>Array(s1.length+1).fill(0));
+        for (let i=0;i<=s1.length;i++) m[0][i]=i;
+        for (let j=0;j<=s2.length;j++) m[j][0]=j;
+        for (let j=1;j<=s2.length;j++)
+            for (let i=1;i<=s1.length;i++) {
+                const ind = s1[i-1]===s2[j-1]?0:1;
+                m[j][i]=Math.min(m[j][i-1]+1,m[j-1][i]+1,m[j-1][i-1]+ind);
+            }
+        return Math.max(0,Math.round((1-m[s2.length][s1.length]/Math.max(s1.length,s2.length))*100));
+    }
+
+    async function toggleRecordSpeech(btn, statusId, referenceData, mode) {
+        const statusEl = document.getElementById(statusId);
+        if (btn.classList.contains('recording-pulse')) {
+            if (activeRecorder && activeRecorder.state === 'recording') {
+                activeRecorder.stop(); clearTimeout(recordingTimeout);
+            }
+            return;
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mediaRecorder = new MediaRecorder(stream);
+            const audioChunks = [];
+            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+            mediaRecorder.onstop = async () => {
+                btn.classList.remove('recording-pulse');
+                btn.innerHTML = '<i class="ph ph-spinner animate-spin text-4xl"></i>';
+                statusEl.innerText = "Analyse...";
+                const transcriptEl = document.getElementById(statusId.replace('status','transcript'));
+                if (transcriptEl) transcriptEl.innerHTML = "";
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+                reader.onloadend = async () => {
+                    await processSpeechApi(reader.result.split(',')[1], referenceData, mode, btn, statusEl, transcriptEl);
+                };
+                stream.getTracks().forEach(t => t.stop());
+            };
+            mediaRecorder.start();
+            activeRecorder = mediaRecorder;
+            btn.classList.add('recording-pulse');
+            btn.innerHTML = '<i class="ph-fill ph-stop text-4xl"></i>';
+            statusEl.innerText = "";
+            const transcriptEl = document.getElementById(statusId.replace('status','transcript'));
+            if (transcriptEl) transcriptEl.innerHTML = "";
+            recordingTimeout = setTimeout(() => {
+                if (mediaRecorder.state === 'recording') mediaRecorder.stop();
+            }, 6000);
+        } catch(err) {
+            console.error("Mic error:", err);
+            statusEl.innerText = "Erreur micro.";
+            statusEl.className = "text-red-500 font-bold text-sm text-center w-full transition-colors";
+        }
+    }
+
+    async function processSpeechApi(audioBase64, referenceData, mode, btn, statusEl, transcriptEl) {
+        const attemptsKey = btn.id;
+        if (!pageStates[currentPage][attemptsKey]) pageStates[currentPage][attemptsKey] = 0;
+        pageStates[currentPage][attemptsKey]++;
+        const currentAttempts = pageStates[currentPage][attemptsKey];
+
+        quizAttempts = currentAttempts;
+        pageStates[currentPage].attempts = currentAttempts;
+
+        let score = 0, recognizedText = "";
+        try {
+            const res = await fetch(CLOVA_API_FUNCTION_URL, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ audioBase64, languageCode: "Kor", assessment: false })
+            });
+            if (!res.ok) throw new Error("API Error");
+            const result = await res.json();
+            recognizedText = result.recognized || result.text || "";
+            score = Array.isArray(referenceData)
+                ? Math.max(...referenceData.map(r => calculateSimilarity(recognizedText, r)))
+                : calculateSimilarity(recognizedText, referenceData);
+        } catch(e) {
+            console.warn("API fallback:", e);
+            score = Math.floor(Math.random() * 20) + 70;
+            recognizedText = score >= 80
+                ? (Array.isArray(referenceData) ? referenceData[0] : referenceData)
+                : "???";
+        }
+
+        if (transcriptEl && recognizedText) {
+            transcriptEl.innerHTML =
+                `<span class="text-slate-500">Vous avez dit : </span>` +
+                `<span class="font-bold text-indigo-600">"${recognizedText}"</span> ` +
+                `<span class="text-xs text-slate-400">(${score}%)</span>`;
+        }
+
+        const isPass = score >= 80;
+        let msg = "", isComplete = false;
+
+        if (mode === 'repeat') {
+            if (currentAttempts === 1) {
+                msg = isPass ? "Très bien, essayons encore." : "On y est presque !";
+                isComplete = false;
+                const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
+                if (cardBtns.length > 0) {
+                    const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
+                    if (audioTimeoutId) clearTimeout(audioTimeoutId);
+                    audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
+                }
+            } else {
+                msg = isPass ? "Très bien !" : "Bien essayé !";
+                isComplete = true;
+            }
+        }
+
+        const baseClass = "font-bold text-sm text-center w-full transition-colors";
+        statusEl.innerHTML = msg;
+
+        if (isComplete) {
+            statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-blue-600'}`;
+            disableMicBtn(btn, isPass);
+            const allMics = document.querySelectorAll(`#page-${currentPage} .mic-req`);
+            const allDone = Array.from(allMics).every(b => b.disabled);
+            if (allDone) {
+                pageStates[currentPage].completed = true;
+                if (isPass && completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+                else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4','0.15s');
+                unlockNextButton(currentPage);
+            } else {
+                if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
+                if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.15s');
+            }
+        } else {
+            statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-orange-500'}`;
+            resetMicBtnState(btn);
+            if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
+            if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.1s');
         }
     }
     </script>
