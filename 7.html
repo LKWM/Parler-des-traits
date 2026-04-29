@@ -536,7 +536,7 @@
                     <i class="ph-fill ph-check-circle text-5xl text-green-500"></i>
                 </div>
                 <p class="text-content text-green-900 font-medium text-sm sm:text-base leading-relaxed text-justify">
-                    Très bien ! Maintenant, vous pouvez poser des questions sur ce que quelqu'un d'autre aime et ce qu'il n'aime pas. Dans la leçon suivante, nous parlerons de ce que vous aimez et de ce que vous n'aimez pas !
+                    Très bien ! Passez à la suite. Maintenant, vous pouvez poser des questions sur ce que quelqu'un d'autre aime et ce qu'il n'aime pas. Dans la leçon suivante, nous parlerons de ce que vous aimez et de ce que vous n'aimez pas !
                 </p>
             </div>
         </div>
@@ -788,7 +788,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.innerText = "Très bien !";
+            statusEl.innerText = "Très bien ! Passez à la suite.";
             statusEl.className = "font-bold text-center text-green-500 text-sm w-full transition-colors";
             selected.classList.remove('selected'); selected.classList.add('correct');
             document.getElementById(`quiz-${pageId}-btn`).disabled = true;
@@ -857,7 +857,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.innerText = "Très bien !";
+            statusEl.innerText = "Très bien ! Passez à la suite.";
             statusEl.className = "font-bold text-sm text-center w-full text-green-500 transition-colors";
             document.querySelectorAll(`#answer-area-${pageId} .word-token`).forEach(t => { t.className = 'word-token correct-token'; t.onclick = null; });
             document.getElementById(`word-btn-${pageId}`).disabled = true;
@@ -1007,7 +1007,7 @@
 
         if (mode === 'repeat') {
             if (currentAttempts === 1) {
-                msg = isPass ? "Très bien, essayons encore." : "On y est presque !";
+                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
                 const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                 if (cardBtns.length > 0) {
@@ -1016,7 +1016,7 @@
                     audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
                 }
             } else {
-                msg = isPass ? "Très bien !" : "Bien essayé !";
+                msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
                 isComplete = true;
             }
         }
