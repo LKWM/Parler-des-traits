@@ -848,7 +848,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.textContent = "Très bien !";
+            statusEl.textContent = "Très bien ! Passez à la suite.";
             statusEl.className   = "font-bold text-center text-green-500 text-sm w-full transition-colors";
             selected.classList.remove('selected'); selected.classList.add('correct');
             document.getElementById(`mcq-btn-${pageId}`).disabled = true;
@@ -891,7 +891,7 @@
             // 정답
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.textContent = "Très bien ! Passez à la suite.";
+            statusEl.textContent = "Très bien ! Passez à la suite. Passez à la suite.";
             statusEl.className   = "font-bold text-center text-green-500 text-sm w-full transition-colors";
             input.classList.add('border-green-400','bg-green-50');
             input.disabled = true;
@@ -909,7 +909,7 @@
                     input.value = '';
                 }, 500);
                 pageStates[pageId].completed = true;
-                statusEl.textContent = "Bien essayé ! Passez à la suite.";
+                statusEl.textContent = "Bien essayé ! Passez à la suite. Passez à la suite.";
                 statusEl.className   = "font-bold text-center text-blue-500 text-sm w-full transition-colors";
                 input.disabled = true;
                 document.getElementById(`fillin-btn-${pageId}`).disabled = true;
@@ -923,7 +923,7 @@
                     input.value = '';
                     input.focus();
                 }, 700);
-                statusEl.textContent = "On y est presque ! Essayons encore une fois.";
+                statusEl.textContent = "On y est presque ! Essayons encore une fois. Essayons encore une fois.";
                 statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
             }
         }
@@ -1032,7 +1032,7 @@
 
         if (mode === 'repeat') {
             if (currentAttempts === 1) {
-                msg = isPass ? "Très bien ! Essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
+                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois. Essayons encore une fois.";
                 isComplete = false;
                 const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                 if (cardBtns.length > 0) {
@@ -1041,27 +1041,27 @@
                     audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
                 }
             } else {
-                msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
+                msg = isPass ? "Très bien ! Passez à la suite. Passez à la suite." : "Bien essayé ! Passez à la suite. Passez à la suite.";
                 isComplete = true;
             }
         } else if (mode === 'repeat_sentence') {
             if (isPass) {
-                msg = "Très bien ! Passez à la suite."; isComplete = true;
+                msg = "Très bien ! Passez à la suite. Passez à la suite."; isComplete = true;
             } else {
                 if (currentAttempts < 2) {
-                    msg = "On y est presque ! Essayons encore une fois."; isComplete = false;
+                    msg = "On y est presque ! Essayons encore une fois. Essayons encore une fois."; isComplete = false;
                 } else {
-                    msg = "Bien essayé ! Passez à la suite."; isComplete = true;
+                    msg = "Bien essayé ! Passez à la suite. Passez à la suite."; isComplete = true;
                 }
             }
         } else if (mode === 'speak') {
             if (isPass) {
-                msg = "Très bien ! Passez à la suite.";
+                msg = "Très bien ! Passez à la suite. Passez à la suite.";
                 isComplete = true;
             } else {
                 if (currentAttempts >= maxAttempts) {
                     // 3회 탈락 → 종료
-                    msg = "Bien essayé ! Passez à la suite.";
+                    msg = "Bien essayé ! Passez à la suite. Passez à la suite.";
                     isComplete = true;
                 } else {
                     if (currentAttempts === 2) {
@@ -1074,7 +1074,7 @@
                             blankEl2.style.fontWeight = '900';
                         }
                     }
-                    msg = "On y est presque ! Essayons encore une fois.";
+                    msg = "On y est presque ! Essayons encore une fois. Essayons encore une fois.";
                     isComplete = false;
                 }
             }
