@@ -383,12 +383,15 @@
         </div>
 
         <div id="page-14" class="page">
-            <div class="content-area gap-4">
+            <div class="content-area gap-3">
                 <h2 class="consigne">Choisissez toutes les réponses possibles.</h2>
-                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0">
-                    <p class="text-xl sm:text-2xl font-black text-slate-800">한국 영화를 좋아합니까?</p>
-                </div>
-                <div id="quiz-14-options" class="quiz-grid flex flex-col gap-3 w-full max-w-sm">
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777553224/8-S11_mti2pd.wav')"
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
+                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
+                    <p class="text-base sm:text-lg font-bold text-slate-700">Écouter la question</p>
+                </button>
+                <p id="quiz-14-question" class="hidden text-xl sm:text-2xl font-black text-slate-800 text-center">한국 영화를 좋아합니까?</p>
+                <div id="quiz-14-options" class="quiz-grid flex flex-col gap-2 w-full max-w-sm">
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">1. 아니요, 좋아합니다.</button>
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">2. 네, 좋아합니다.</button>
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">3. 아니요, 싫어합니다.</button>
@@ -438,26 +441,25 @@
         <div id="page-16" class="page">
             <div class="content-area gap-3">
                 <h2 class="consigne">Traduisez la phrase en coréen.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291244/8-S1_zrjjrh.mp3')"
-                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
-                    <h3 class="text-xl sm:text-2xl font-black text-slate-800">Oui, j'aime la nourriture coréenne.</h3>
-                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
-                </button>
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0">
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-800 text-center">Oui, j'aime la nourriture coréenne.</h3>
+                </div>
                 <div id="answer-area-16" class="flex flex-wrap justify-center gap-2 min-h-[3rem] mt-1 px-2"></div>
                 <div id="bank-16" class="flex flex-wrap justify-center gap-2 mt-1 px-2">
-                    <button class="word-token" onclick="placeToken(this,16)">네</button>
-                    <button class="word-token" onclick="placeToken(this,16)">저는</button>
-                    <button class="word-token" onclick="placeToken(this,16)">한국</button>
-                    <button class="word-token" onclick="placeToken(this,16)">음식</button>
-                    <button class="word-token" onclick="placeToken(this,16)">을</button>
-                    <button class="word-token" onclick="placeToken(this,16)">좋아해요</button>
                     <button class="word-token" onclick="placeToken(this,16)">은</button>
                     <button class="word-token" onclick="placeToken(this,16)">음악</button>
                     <button class="word-token" onclick="placeToken(this,16)">아니요</button>
+                    <button class="word-token" onclick="placeToken(this,16)">요리하다</button>
                     <button class="word-token" onclick="placeToken(this,16)">가</button>
+                    <button class="word-token" onclick="placeToken(this,16)">한국</button>
                     <button class="word-token" onclick="placeToken(this,16)">영화</button>
+                    <button class="word-token" onclick="placeToken(this,16)">좋아해요</button>
                     <button class="word-token" onclick="placeToken(this,16)">를</button>
+                    <button class="word-token" onclick="placeToken(this,16)">저는</button>
                     <button class="word-token" onclick="placeToken(this,16)">안</button>
+                    <button class="word-token" onclick="placeToken(this,16)">네</button>
+                    <button class="word-token" onclick="placeToken(this,16)">을</button>
+                    <button class="word-token" onclick="placeToken(this,16)">음식</button>
                     <button class="word-token" onclick="placeToken(this,16)">이</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
@@ -718,13 +720,13 @@
     const geminiPageConfig = {
         15: {
             audioUrl:   'https://res.cloudinary.com/de76i94ia/video/upload/v1777291271/8-S9_jc8ox2.mp3',
-            sysPrompt:  '"음악을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 기준 - 네/아니요로 답하지 않는 경우, 조사를 생략하거나 문법적 정확도가 떨어지는 경우. 질문에 대한 답을 하지 않고 주제를 바꾸는 경우.',
+            sysPrompt:  '"음악을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력 (약간의 오류 - 80점, 큰 오류 - 50점, 이해할 수 없는 문장 - 30점 미만)\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 요인 예시 - 네/아니요로 답하지 않는 경우, 조사 생략, 문법 오류, 비문 (네,아니요, 좋아요,싫어요가 호응되지 않는 경우, 별로 뒤에 부정형 부사가 오지 않는 경우 등). 질문에 대한 답을 하지 않고 주제를 바꾸는 경우.',
             threshold:  80,
             maxAttempts: 2,
         },
         17: {
             audioUrl:   'https://res.cloudinary.com/de76i94ia/video/upload/v1777291275/8-S10_nehwaq.mp3',
-            sysPrompt:  '"무엇을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 기준 - 조사를 생략하거나 문법적 정확도가 떨어지는 경우. 질문에 적절한 답이 아닌 경우',
+            sysPrompt:  '"무엇을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력 (약간의 오류 - 80점, 큰 오류 - 50점, 이해할 수 없는 문장 - 30점 미만)\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 기준 - 조사 생략, 문법 오류, 비문 (별로 뒤에 부정형 부사가 오지 않는 경우 등). 질문에 대한 답을 하지 않고 주제를 바꾸는 경우.',
             threshold:  80,
             maxAttempts: 2,
         },
