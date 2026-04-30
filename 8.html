@@ -971,6 +971,8 @@
 
         state.attempts++;
 
+        const wordOrderCorrectAnswers = pageId === 13 ? wordOrderCorrectAnswers13 : wordOrderCorrectAnswers16;
+
         const isCorrect = wordOrderCorrectAnswers.some(ans =>
             state.placed.length === ans.length &&
             state.placed.every((w, i) => w.toLowerCase() === ans[i].toLowerCase())
