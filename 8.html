@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Leçon 8 - Parler de ses préférences</title>
+    <title>Leçon 7 - Poser des questions sur les préférences</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -90,23 +90,6 @@
         .word-token.correct-token { background: #dcfce7; border-color: #22c55e; color: #15803d; pointer-events: none; }
         .word-token.wrong-token   { background: #fee2e2; border-color: #ef4444; color: #b91c1c; }
         @media (min-width: 1024px) { .word-token { font-size: 1.05rem; padding: 0.55rem 1rem; } }
-
-        /* Gemini mic */
-        .gemini-mic-btn {
-            background: #6366f1; color: #fff; border-radius: 9999px; padding: 1.25rem;
-            box-shadow: 0 4px 16px rgba(99,102,241,0.3); transition: transform 0.15s;
-            display: flex; align-items: center; justify-content: center;
-            border: none; cursor: pointer; flex-shrink: 0;
-        }
-        .gemini-mic-btn:hover:not(:disabled) { transform: scale(1.05); }
-        .gemini-mic-btn:active:not(:disabled) { transform: scale(0.95); }
-        .gemini-mic-btn:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; transform: none; }
-        .gemini-mic-btn.recording-pulse { animation: pulse-indigo 1.5s infinite; }
-        @keyframes pulse-indigo {
-            0%   { box-shadow: 0 0 0 0   rgba(99,102,241,0.7); }
-            70%  { box-shadow: 0 0 0 15px rgba(99,102,241,0);  }
-            100% { box-shadow: 0 0 0 0   rgba(99,102,241,0);   }
-        }
     </style>
 </head>
 <body>
@@ -118,6 +101,9 @@
 
     <div id="pages-wrapper">
 
+        <!-- ══════════════════════════════
+             PAGE 0 — Cover
+        ══════════════════════════════ -->
         <div id="page-0" class="page active justify-center items-center bg-indigo-50">
             <div class="content-area">
                 <p class="text-indigo-600 font-semibold mb-2 text-lg sm:text-xl">Chapitre 2 - Parler des préférences</p>
@@ -556,6 +542,7 @@
         18: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777290259/8-4_qz2lx0.mp3',
     };
 
+    // text+audio combo pages: auto-play the explanation audio
     const pageExplanationAudios = {
         8:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777291241/8-2_ofahmx.mp3',
         10: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777290257/8-3_x8nkx2.mp3',
@@ -720,13 +707,13 @@
     const geminiPageConfig = {
         15: {
             audioUrl:   'https://res.cloudinary.com/de76i94ia/video/upload/v1777291271/8-S9_jc8ox2.mp3',
-            sysPrompt:  '"음악을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력 (약간의 오류 - 80점, 큰 오류 - 50점, 이해할 수 없는 문장 - 30점 미만)\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 요인 예시 - 네/아니요로 답하지 않는 경우, 조사 생략, 문법 오류, 비문 (네,아니요, 좋아요,싫어요가 호응되지 않는 경우, 별로 뒤에 부정형 부사가 오지 않는 경우 등). 질문에 대한 답을 하지 않고 주제를 바꾸는 경우.',
+            sysPrompt:  '"음악을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력 (약간의 오류 - 80점, 큰 오류 - 50점, 이해할 수 없는 문장 - 30점 미만)\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 요인 예시 - 네/아니요로 답하지 않는 경우, 조사 생략, 문법 오류, 비문.',
             threshold:  80,
             maxAttempts: 2,
         },
         17: {
             audioUrl:   'https://res.cloudinary.com/de76i94ia/video/upload/v1777291275/8-S10_nehwaq.mp3',
-            sysPrompt:  '"무엇을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력 (약간의 오류 - 80점, 큰 오류 - 50점, 이해할 수 없는 문장 - 30점 미만)\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 기준 - 조사 생략, 문법 오류, 비문 (별로 뒤에 부정형 부사가 오지 않는 경우 등). 질문에 대한 답을 하지 않고 주제를 바꾸는 경우.',
+            sysPrompt:  '"무엇을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력 (약간의 오류 - 80점, 큰 오류 - 50점, 이해할 수 없는 문장 - 30점 미만)\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 기준 - 조사 생략, 문법 오류, 비문.',
             threshold:  80,
             maxAttempts: 2,
         },
@@ -840,41 +827,9 @@
             verdictEl.className = 'font-bold text-base text-center text-orange-500';
             btn.disabled   = false;
             btn.innerHTML  = '<i class="ph-fill ph-microphone text-3xl"></i>';
-            // 2회 시도 전 오디오 자동재생
             if (audioTimeoutId) clearTimeout(audioTimeoutId);
             audioTimeoutId = setTimeout(() => playCardAudio(cfg.audioUrl), 600);
         }
-    }
-
-
-    /* ═══════════════════════════════════════
-       MIC UI HELPERS
-    ═══════════════════════════════════════ */
-    function toggleActiveMic(disable) {
-        document.querySelectorAll(`#page-${currentPage} .mic-req`).forEach(btn => {
-            if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse')) return;
-            if (disable) {
-                btn.disabled = true;
-                btn.classList.add('opacity-50','bg-slate-400','cursor-not-allowed');
-                btn.classList.remove('bg-red-500');
-            } else {
-                btn.disabled = false;
-                btn.classList.remove('opacity-50','bg-slate-400','cursor-not-allowed');
-                btn.classList.add('bg-red-500');
-            }
-        });
-    }
-
-    function disableMicBtn(btn, success) {
-        btn.disabled = true;
-        btn.className = `mic-req mic-btn-lg text-white rounded-full p-6 shadow-none transition-colors relative z-10 ${success ? 'bg-green-500' : 'bg-slate-400'}`;
-        btn.innerHTML = `<i class="ph-bold ph-check text-4xl"></i>`;
-    }
-
-    function resetMicBtnState(btn) {
-        btn.disabled = false;
-        btn.className = 'mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0';
-        btn.innerHTML = `<i class="ph-fill ph-microphone text-4xl"></i>`;
     }
 
     /* ═══════════════════════════════════════
@@ -942,6 +897,36 @@
 
 
     /* ═══════════════════════════════════════
+       MIC UI HELPERS
+    ═══════════════════════════════════════ */
+    function toggleActiveMic(disable) {
+        document.querySelectorAll(`#page-${currentPage} .mic-req`).forEach(btn => {
+            if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse')) return;
+            if (disable) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50','bg-slate-400','cursor-not-allowed');
+                btn.classList.remove('bg-red-500');
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50','bg-slate-400','cursor-not-allowed');
+                btn.classList.add('bg-red-500');
+            }
+        });
+    }
+
+    function disableMicBtn(btn, success) {
+        btn.disabled = true;
+        btn.className = `mic-req mic-btn-lg text-white rounded-full p-6 shadow-none transition-colors relative z-10 ${success ? 'bg-green-500' : 'bg-slate-400'}`;
+        btn.innerHTML = `<i class="ph-bold ph-check text-4xl"></i>`;
+    }
+
+    function resetMicBtnState(btn) {
+        btn.disabled = false;
+        btn.className = 'mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0';
+        btn.innerHTML = `<i class="ph-fill ph-microphone text-4xl"></i>`;
+    }
+
+    /* ═══════════════════════════════════════
        WORD-ORDER QUIZ (multiple correct answers)
     ═══════════════════════════════════════ */
     function placeToken(btn, pageId) {
@@ -986,10 +971,9 @@
 
         state.attempts++;
 
-        const answers = pageId === 13 ? wordOrderCorrectAnswers13 : wordOrderCorrectAnswers16;
-        const isCorrect = answers.some(ans =>
+        const isCorrect = wordOrderCorrectAnswers.some(ans =>
             state.placed.length === ans.length &&
-            state.placed.every((w, i) => w === ans[i])
+            state.placed.every((w, i) => w.toLowerCase() === ans[i].toLowerCase())
         );
 
         if (isCorrect) {
@@ -1010,8 +994,7 @@
             if (state.attempts >= 3) {
                 const answerArea = document.getElementById(`answer-area-${pageId}`);
                 answerArea.innerHTML = '';
-                const answers = pageId === 13 ? wordOrderCorrectAnswers13 : wordOrderCorrectAnswers16;
-                answers[0].forEach(w => {
+                wordOrderCorrectAnswers[0].forEach(w => {
                     const t = document.createElement('span');
                     t.className = 'word-token correct-token'; t.innerText = w;
                     answerArea.appendChild(t);
@@ -1184,6 +1167,6 @@
             if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.1s');
         }
     }
-    </script>
+</script>
 </body>
 </html>
