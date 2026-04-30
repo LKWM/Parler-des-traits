@@ -827,7 +827,7 @@
         if (isPass || forcePass) {
             state.completed = true;
             if (correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
-            verdictEl.innerText = isPass ? 'Très bien ! Passez à la suite. Passez à la suite.' : 'Bien essayé ! Passez à la suite. Passez à la suite.';
+            verdictEl.innerText = isPass ? 'Très bien ! Passez à la suite.' : 'Bien essayé ! Passez à la suite.';
             verdictEl.className = 'font-bold text-base text-center text-green-600';
             btn.disabled        = true;
             btn.innerHTML       = '<i class="ph-bold ph-check text-3xl"></i>';
@@ -836,10 +836,13 @@
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-            verdictEl.innerText = 'On y est presque ! Essayons encore une fois. Essayons encore une fois.';
+            verdictEl.innerText = 'On y est presque ! Essayons encore une fois.';
             verdictEl.className = 'font-bold text-base text-center text-orange-500';
             btn.disabled   = false;
             btn.innerHTML  = '<i class="ph-fill ph-microphone text-3xl"></i>';
+            // 2회 시도 전 오디오 자동재생
+            if (audioTimeoutId) clearTimeout(audioTimeoutId);
+            audioTimeoutId = setTimeout(() => playCardAudio(cfg.audioUrl), 600);
         }
     }
 
