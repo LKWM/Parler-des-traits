@@ -889,18 +889,16 @@
 
     function checkMultiQuiz(pageId) {
         if (pageStates[pageId].completed) return;
-        quizAttempts++;
-        pageStates[pageId].attempts = quizAttempts;
+        if (!pageStates[pageId].mcqAttempts) pageStates[pageId].mcqAttempts = 0;
+        pageStates[pageId].mcqAttempts++;
+        const attempts = pageStates[pageId].mcqAttempts;
 
-        const opts     = document.querySelectorAll(`#quiz-${pageId}-options .multi-opt`);
-        const statusEl = document.getElementById(`quiz-${pageId}-status`);
-        const selected = Array.from(opts).filter(o => o.classList.contains('selected'));
+        const opts       = document.querySelectorAll(`#quiz-${pageId}-options .multi-opt`);
+        const statusEl   = document.getElementById(`quiz-${pageId}-status`);
+        const questionEl = document.getElementById(`quiz-${pageId}-question`);
+        const selected   = Array.from(opts).filter(o => o.classList.contains('selected'));
 
-        if (selected.length === 0) {
-            statusEl.innerText = 'Veuillez sélectionner au moins une réponse.';
-            statusEl.className = 'font-bold text-center text-orange-500 text-sm w-full transition-colors';
-            return;
-        }
+        if (selected.length === 0) return;
 
         const correctOpts = Array.from(opts).filter(o => o.dataset.correct === 'true');
         const selOK       = selected.filter(o => o.dataset.correct === 'true');
@@ -925,14 +923,8 @@
                 o.classList.add('wrong');
                 setTimeout(() => { o.classList.remove('wrong', 'selected'); }, 800);
             });
-            if (quizAttempts >= 2) {
-                statusEl.innerText = '💡 Les réponses 2, 3 et 5 sont correctes.';
-                statusEl.className = 'font-bold text-center text-blue-500 text-sm w-full transition-colors';
-            } else {
-                statusEl.innerText = 'Incorrect. Vérifiez vos réponses !';
-                statusEl.className = 'font-bold text-center text-red-500 text-sm w-full transition-colors';
-            }
-            if (quizAttempts >= 3) {
+            if (attempts >= 2 && questionEl) questionEl.classList.remove('hidden');
+            if (attempts >= 3) {
                 pageStates[pageId].completed = true;
                 opts.forEach(o => {
                     o.style.pointerEvents = 'none';
@@ -941,7 +933,7 @@
                 });
                 document.getElementById(`quiz-${pageId}-btn`).disabled = true;
                 document.getElementById(`quiz-${pageId}-btn`).classList.add('opacity-40', 'cursor-not-allowed');
-                statusEl.innerText = 'Voici les bonnes réponses.';
+                statusEl.innerText = 'Bien essayé ! Passez à la suite.';
                 statusEl.className = 'font-bold text-center text-blue-500 text-sm w-full transition-colors';
                 unlockNextButton(pageId);
             }
