@@ -403,20 +403,24 @@
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <p id="gemini-status-15" class="text-slate-500 font-bold text-sm text-center w-full transition-colors" style="min-height:1.25rem;"></p>
-                <div id="gemini-popup-15" class="invisible w-full max-w-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shrink-0">
+                <p id="gemini-status-15" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                <p id="gemini-verdict-15" class="font-bold text-sm text-center w-full transition-colors"></p>
+            </div>
+            <div id="gemini-popup-15" class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 rounded-2xl p-6 z-20">
+                <div class="w-full max-w-xs bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shadow-lg">
                     <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide">Transcription</p>
-                    <p id="gemini-transcript-15" class="text-slate-700 text-sm font-medium italic">—</p>
+                    <p id="gemini-transcript-15" class="text-slate-700 text-sm font-medium italic"></p>
                     <div class="flex items-center gap-2">
                         <p class="text-xs text-slate-400 font-semibold">Note :</p>
-                        <p id="gemini-score-15" class="text-slate-700 text-sm font-bold">—</p>
+                        <p id="gemini-score-15" class="text-slate-700 text-sm font-bold"></p>
                     </div>
-                    <div id="gemini-feedback-row-15" class="invisible">
-                        <p class="text-xs text-slate-400 font-semibold">Feedback</p>
-                        <p id="gemini-feedback-15" class="text-slate-600 text-sm">—</p>
+                    <div id="gemini-feedback-row-15" class="hidden">
+                        <p class="text-xs text-slate-400 font-semibold mt-1">Feedback</p>
+                        <p id="gemini-feedback-15" class="text-slate-600 text-sm"></p>
                     </div>
                 </div>
-                <p id="gemini-verdict-15" class="font-bold text-sm text-center w-full transition-colors" style="min-height:1.25rem;"></p>
+                <p id="gemini-verdict-popup-15" class="font-bold text-sm text-center w-full transition-colors"></p>
+                <button id="gemini-continue-15" onclick="closeGeminiPopup(15)" class="mt-1 px-6 py-2 bg-indigo-500 text-white font-bold rounded-full text-sm hover:bg-indigo-600 active:scale-95 transition-all">Continuer</button>
             </div>
         </div>
 
@@ -466,20 +470,24 @@
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <p id="gemini-status-17" class="text-slate-500 font-bold text-sm text-center w-full transition-colors" style="min-height:1.25rem;"></p>
-                <div id="gemini-popup-17" class="invisible w-full max-w-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shrink-0">
+                <p id="gemini-status-17" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                <p id="gemini-verdict-17" class="font-bold text-sm text-center w-full transition-colors"></p>
+            </div>
+            <div id="gemini-popup-17" class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 rounded-2xl p-6 z-20">
+                <div class="w-full max-w-xs bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shadow-lg">
                     <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide">Transcription</p>
-                    <p id="gemini-transcript-17" class="text-slate-700 text-sm font-medium italic">—</p>
+                    <p id="gemini-transcript-17" class="text-slate-700 text-sm font-medium italic"></p>
                     <div class="flex items-center gap-2">
                         <p class="text-xs text-slate-400 font-semibold">Note :</p>
-                        <p id="gemini-score-17" class="text-slate-700 text-sm font-bold">—</p>
+                        <p id="gemini-score-17" class="text-slate-700 text-sm font-bold"></p>
                     </div>
-                    <div id="gemini-feedback-row-17" class="invisible">
-                        <p class="text-xs text-slate-400 font-semibold">Feedback</p>
-                        <p id="gemini-feedback-17" class="text-slate-600 text-sm">—</p>
+                    <div id="gemini-feedback-row-17" class="hidden">
+                        <p class="text-xs text-slate-400 font-semibold mt-1">Feedback</p>
+                        <p id="gemini-feedback-17" class="text-slate-600 text-sm"></p>
                     </div>
                 </div>
-                <p id="gemini-verdict-17" class="font-bold text-sm text-center w-full transition-colors" style="min-height:1.25rem;"></p>
+                <p id="gemini-verdict-popup-17" class="font-bold text-sm text-center w-full transition-colors"></p>
+                <button id="gemini-continue-17" onclick="closeGeminiPopup(17)" class="mt-1 px-6 py-2 bg-indigo-500 text-white font-bold rounded-full text-sm hover:bg-indigo-600 active:scale-95 transition-all">Continuer</button>
             </div>
         </div>
 
@@ -806,29 +814,30 @@
         } else {
             fbRow.classList.add('hidden');
         }
-        popupEl.classList.remove('hidden');
         statusEl.innerText = '';
 
         const baseClass = 'font-bold text-sm text-center w-full transition-colors';
+        const popupVerdictEl = document.getElementById('gemini-verdict-popup-' + pageId);
+
         if (isLastAttempt) {
             // 2차 시도 (마지막)
             state.completed = true;
-            verdictEl.innerText = isPass ? 'Très bien ! Passez à la suite.' : 'Bien essayé ! Passez à la suite.';
-            verdictEl.className = baseClass + (isPass ? ' text-green-600' : ' text-blue-600');
+            const msg = isPass ? 'Très bien ! Passez à la suite.' : 'Bien essayé ! Passez à la suite.';
+            popupVerdictEl.innerText = msg;
+            popupVerdictEl.className = baseClass + (isPass ? ' text-green-600' : ' text-blue-600');
+            popupEl.classList.remove('hidden');
             if (isPass && correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
             else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
             disableMicBtn(btn, isPass);
             unlockNextButton(pageId);
         } else {
-            // 1차 시도
-            verdictEl.innerText = isPass ? 'Très bien, essayons encore une fois.' : 'On y est presque ! Essayons encore une fois.';
-            verdictEl.className = baseClass + (isPass ? ' text-green-600' : ' text-orange-500');
+            // 1차 시도 - 팝업 표시, Continuer 누르면 닫히고 재시도 가능
+            const msg = isPass ? 'Très bien, essayons encore une fois.' : 'On y est presque ! Essayons encore une fois.';
+            popupVerdictEl.innerText = msg;
+            popupVerdictEl.className = baseClass + (isPass ? ' text-green-600' : ' text-orange-500');
+            popupEl.classList.remove('hidden');
             if (isPass && correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
             else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-            btn.disabled  = false;
-            btn.innerHTML = '<i class="ph-fill ph-microphone text-4xl"></i>';
-            if (audioTimeoutId) clearTimeout(audioTimeoutId);
-            audioTimeoutId = setTimeout(() => playCardAudio(cfg.audioUrl), 600);
         }
     }
 
