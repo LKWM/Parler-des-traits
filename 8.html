@@ -404,7 +404,6 @@
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <p id="gemini-status-15" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                <p id="gemini-verdict-15" class="font-bold text-sm text-center w-full transition-colors"></p>
             </div>
             <div id="gemini-popup-15" class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 rounded-2xl p-6 z-20">
                 <div class="w-full max-w-xs bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shadow-lg">
@@ -418,9 +417,8 @@
                         <p class="text-xs text-slate-400 font-semibold mt-1">Feedback</p>
                         <p id="gemini-feedback-15" class="text-slate-600 text-sm"></p>
                     </div>
+                    <p id="gemini-verdict-popup-15" class="font-bold text-sm text-center w-full pt-1 transition-colors"></p>
                 </div>
-                <p id="gemini-verdict-popup-15" class="font-bold text-sm text-center w-full transition-colors"></p>
-                <button id="gemini-continue-15" onclick="closeGeminiPopup(15)" class="mt-1 px-6 py-2 bg-indigo-500 text-white font-bold rounded-full text-sm hover:bg-indigo-600 active:scale-95 transition-all">Continuer</button>
             </div>
         </div>
 
@@ -471,7 +469,6 @@
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
                 <p id="gemini-status-17" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                <p id="gemini-verdict-17" class="font-bold text-sm text-center w-full transition-colors"></p>
             </div>
             <div id="gemini-popup-17" class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 rounded-2xl p-6 z-20">
                 <div class="w-full max-w-xs bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shadow-lg">
@@ -485,9 +482,8 @@
                         <p class="text-xs text-slate-400 font-semibold mt-1">Feedback</p>
                         <p id="gemini-feedback-17" class="text-slate-600 text-sm"></p>
                     </div>
+                    <p id="gemini-verdict-popup-17" class="font-bold text-sm text-center w-full pt-1 transition-colors"></p>
                 </div>
-                <p id="gemini-verdict-popup-17" class="font-bold text-sm text-center w-full transition-colors"></p>
-                <button id="gemini-continue-17" onclick="closeGeminiPopup(17)" class="mt-1 px-6 py-2 bg-indigo-500 text-white font-bold rounded-full text-sm hover:bg-indigo-600 active:scale-95 transition-all">Continuer</button>
             </div>
         </div>
 
@@ -765,11 +761,10 @@
     }
 
     async function processGeminiSpeech(pageId, audioBase64, mimeType) {
-        const btn        = document.getElementById('gemini-mic-' + pageId);
-        const statusEl   = document.getElementById('gemini-status-' + pageId);
-        const popupEl    = document.getElementById('gemini-popup-' + pageId);
-        const verdictEl  = document.getElementById('gemini-verdict-' + pageId);
-        const cfg        = geminiPageConfig[pageId];
+        const btn      = document.getElementById('gemini-mic-' + pageId);
+        const statusEl = document.getElementById('gemini-status-' + pageId);
+        const popupEl  = document.getElementById('gemini-popup-' + pageId);
+        const cfg      = geminiPageConfig[pageId];
         const state      = pageStates[pageId];
         const payload = {
             model: 'gemini-2.5-flash',
@@ -838,11 +833,19 @@
             disableMicBtn(btn, false);
             unlockNextButton(pageId);
         } else {
-            // 1차 실패 - 재시도
+            // 1차 실패 - 팝업 표시, 유저가 탭하면 닫히고 마이크 재활성화
             popupVerdictEl.innerText = 'On y est presque ! Essayons encore une fois.';
             popupVerdictEl.className = baseClass + ' text-orange-500';
             popupEl.classList.remove('hidden');
             if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
+            popupEl.addEventListener('click', function dismissPopup() {
+                popupEl.classList.add('hidden');
+                popupEl.removeEventListener('click', dismissPopup);
+                btn.disabled  = false;
+                btn.innerHTML = '<i class="ph-fill ph-microphone text-4xl"></i>';
+                if (audioTimeoutId) clearTimeout(audioTimeoutId);
+                audioTimeoutId = setTimeout(() => playCardAudio(cfg.audioUrl), 600);
+            }, { once: true });
         }
     }
 
