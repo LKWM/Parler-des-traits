@@ -819,25 +819,30 @@
         const baseClass = 'font-bold text-sm text-center w-full transition-colors';
         const popupVerdictEl = document.getElementById('gemini-verdict-popup-' + pageId);
 
-        if (isLastAttempt) {
-            // 2차 시도 (마지막)
+        if (isPass) {
+            // 통과 - 즉시 완료
             state.completed = true;
-            const msg = isPass ? 'Très bien ! Passez à la suite.' : 'Bien essayé ! Passez à la suite.';
-            popupVerdictEl.innerText = msg;
-            popupVerdictEl.className = baseClass + (isPass ? ' text-green-600' : ' text-blue-600');
+            popupVerdictEl.innerText = 'Très bien ! Passez à la suite.';
+            popupVerdictEl.className = baseClass + ' text-green-600';
             popupEl.classList.remove('hidden');
-            if (isPass && correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
-            else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-            disableMicBtn(btn, isPass);
+            if (correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
+            disableMicBtn(btn, true);
+            unlockNextButton(pageId);
+        } else if (isLastAttempt) {
+            // 2차 실패 - 완료
+            state.completed = true;
+            popupVerdictEl.innerText = 'Bien essayé ! Passez à la suite.';
+            popupVerdictEl.className = baseClass + ' text-blue-600';
+            popupEl.classList.remove('hidden');
+            if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
+            disableMicBtn(btn, false);
             unlockNextButton(pageId);
         } else {
-            // 1차 시도 - 팝업 표시, Continuer 누르면 닫히고 재시도 가능
-            const msg = isPass ? 'Très bien, essayons encore une fois.' : 'On y est presque ! Essayons encore une fois.';
-            popupVerdictEl.innerText = msg;
-            popupVerdictEl.className = baseClass + (isPass ? ' text-green-600' : ' text-orange-500');
+            // 1차 실패 - 재시도
+            popupVerdictEl.innerText = 'On y est presque ! Essayons encore une fois.';
+            popupVerdictEl.className = baseClass + ' text-orange-500';
             popupEl.classList.remove('hidden');
-            if (isPass && correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
-            else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
+            if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
         }
     }
 
