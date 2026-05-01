@@ -376,16 +376,13 @@
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
                     <p class="text-base sm:text-lg font-bold text-slate-700">Écouter la question</p>
                 </button>
-                <p id="quiz-14-question" class="hidden text-xl sm:text-2xl font-black text-slate-800 text-center">한국 영화를 좋아합니까?</p>
+                <p id="quiz-14-question" class="invisible text-xl sm:text-2xl font-black text-slate-800 text-center">한국 영화를 좋아합니까?</p>
                 <div id="quiz-14-options" class="quiz-grid flex flex-col gap-2 w-full max-w-sm">
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">1. 아니요, 좋아합니다.</button>
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">2. 네, 좋아합니다.</button>
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">3. 아니요, 싫어합니다.</button>
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">4. 네, 안 좋아합니다.</button>
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">5. 아니요, 안 좋아합니다.</button>
-                </div>
-                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
-                    <p id="quiz-14-status" class="font-bold text-center text-sm w-full transition-colors"></p>
                 </div>
                 <button id="quiz-14-btn" onclick="checkMultiQuiz(14)"
                     class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
@@ -878,7 +875,7 @@
                 o.classList.add('wrong');
                 setTimeout(() => { o.classList.remove('wrong', 'selected'); }, 800);
             });
-            if (attempts >= 2 && questionEl) questionEl.classList.remove('hidden');
+            if (attempts >= 2 && questionEl) questionEl.classList.remove('invisible');
             if (attempts >= 3) {
                 pageStates[pageId].completed = true;
                 opts.forEach(o => {
