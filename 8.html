@@ -392,24 +392,31 @@
         </div>
 
         <div id="page-15" class="page">
-            <div class="content-area">
+            <div class="content-area gap-4">
                 <h2 class="consigne">Répondez à la question.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291271/8-S9_jc8ox2.mp3')"
-                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <p class="text-base sm:text-lg font-bold text-slate-700 text-center mb-2">Écouter la question</p>
-                    <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
+                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
+                    <p class="text-base sm:text-lg font-bold text-slate-700">Écouter la question</p>
                 </button>
                 <button id="gemini-mic-15" onclick="toggleGeminiMic(15)"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="gemini-status-15" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="gemini-transcript-15" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    <p id="gemini-score-15" class="text-slate-700 text-sm font-bold text-center mt-1"></p>
-                    <p id="gemini-feedback-15" class="text-slate-600 text-sm text-center px-4 leading-tight mt-1"></p>
-                    <p id="gemini-verdict-15" class="font-bold text-base text-center mt-1"></p>
+                <p id="gemini-status-15" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                <div id="gemini-popup-15" class="hidden w-full max-w-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shrink-0">
+                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide">Transcription</p>
+                    <p id="gemini-transcript-15" class="text-slate-700 text-sm font-medium italic"></p>
+                    <div class="flex items-center gap-2">
+                        <p class="text-xs text-slate-400 font-semibold">Note :</p>
+                        <p id="gemini-score-15" class="text-slate-700 text-sm font-bold"></p>
+                    </div>
+                    <div id="gemini-feedback-row-15" class="hidden">
+                        <p class="text-xs text-slate-400 font-semibold">Feedback</p>
+                        <p id="gemini-feedback-15" class="text-slate-600 text-sm"></p>
+                    </div>
                 </div>
+                <p id="gemini-verdict-15" class="font-bold text-sm text-center w-full transition-colors" style="min-height:1.25rem;"></p>
             </div>
         </div>
 
@@ -448,24 +455,31 @@
         </div>
 
         <div id="page-17" class="page">
-            <div class="content-area">
+            <div class="content-area gap-4">
                 <h2 class="consigne">Répondez à la question.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291275/8-S10_nehwaq.mp3')"
-                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <p class="text-base sm:text-lg font-bold text-slate-700 text-center mb-2">Écouter la question</p>
-                    <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
+                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
+                    <p class="text-base sm:text-lg font-bold text-slate-700">Écouter la question</p>
                 </button>
                 <button id="gemini-mic-17" onclick="toggleGeminiMic(17)"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <div class="relative flex flex-col items-center w-full mt-3" style="min-height:3rem;">
-                    <p id="gemini-status-17" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-                    <p id="gemini-transcript-17" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
-                    <p id="gemini-score-17" class="text-slate-700 text-sm font-bold text-center mt-1"></p>
-                    <p id="gemini-feedback-17" class="text-slate-600 text-sm text-center px-4 leading-tight mt-1"></p>
-                    <p id="gemini-verdict-17" class="font-bold text-base text-center mt-1"></p>
+                <p id="gemini-status-17" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
+                <div id="gemini-popup-17" class="hidden w-full max-w-sm bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shrink-0">
+                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide">Transcription</p>
+                    <p id="gemini-transcript-17" class="text-slate-700 text-sm font-medium italic"></p>
+                    <div class="flex items-center gap-2">
+                        <p class="text-xs text-slate-400 font-semibold">Note :</p>
+                        <p id="gemini-score-17" class="text-slate-700 text-sm font-bold"></p>
+                    </div>
+                    <div id="gemini-feedback-row-17" class="hidden">
+                        <p class="text-xs text-slate-400 font-semibold">Feedback</p>
+                        <p id="gemini-feedback-17" class="text-slate-600 text-sm"></p>
+                    </div>
                 </div>
+                <p id="gemini-verdict-17" class="font-bold text-sm text-center w-full transition-colors" style="min-height:1.25rem;"></p>
             </div>
         </div>
 
@@ -745,9 +759,7 @@
     async function processGeminiSpeech(pageId, audioBase64, mimeType) {
         const btn        = document.getElementById('gemini-mic-' + pageId);
         const statusEl   = document.getElementById('gemini-status-' + pageId);
-        const transcriptEl = document.getElementById('gemini-transcript-' + pageId);
-        const scoreEl    = document.getElementById('gemini-score-' + pageId);
-        const feedbackEl = document.getElementById('gemini-feedback-' + pageId);
+        const popupEl    = document.getElementById('gemini-popup-' + pageId);
         const verdictEl  = document.getElementById('gemini-verdict-' + pageId);
         const cfg        = geminiPageConfig[pageId];
         const state      = pageStates[pageId];
@@ -783,21 +795,31 @@
         }
         state.attempts++;
         const forcePass = state.attempts >= cfg.maxAttempts;
-        transcriptEl.innerText = transcript;
-        scoreEl.innerText      = score + '%';
-        feedbackEl.innerText   = feedback;
-        statusEl.innerText     = '';
+
+        // 팝업 채우기
+        document.getElementById('gemini-transcript-' + pageId).innerText = transcript;
+        document.getElementById('gemini-score-' + pageId).innerText      = score + '%';
+        const fbRow = document.getElementById('gemini-feedback-row-' + pageId);
+        if (feedback) {
+            document.getElementById('gemini-feedback-' + pageId).innerText = feedback;
+            fbRow.classList.remove('hidden');
+        } else {
+            fbRow.classList.add('hidden');
+        }
+        popupEl.classList.remove('hidden');
+        statusEl.innerText = '';
+
         if (isPass || forcePass) {
             state.completed = true;
             if (correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
             verdictEl.innerText = isPass ? 'Très bien ! Passez à la suite.' : 'Bien essayé ! Passez à la suite.';
-            verdictEl.className = 'font-bold text-base text-center text-green-600';
+            verdictEl.className = 'font-bold text-sm text-center w-full text-green-600 transition-colors';
             disableMicBtn(btn, true);
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
             verdictEl.innerText = 'On y est presque ! Essayons encore une fois.';
-            verdictEl.className = 'font-bold text-base text-center text-orange-500';
+            verdictEl.className = 'font-bold text-sm text-center w-full text-orange-500 transition-colors';
             btn.disabled  = false;
             btn.innerHTML = '<i class="ph-fill ph-microphone text-4xl"></i>';
             if (audioTimeoutId) clearTimeout(audioTimeoutId);
