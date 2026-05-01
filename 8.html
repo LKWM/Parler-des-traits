@@ -798,6 +798,7 @@
         }
         state.attempts++;
         const isLastAttempt = state.attempts >= cfg.maxAttempts;
+        console.log('[Gemini] page:', pageId, '| attempt:', state.attempts, '| score:', score, '| isPass:', isPass, '| isLastAttempt:', isLastAttempt, '| sysPrompt sent:', !!cfg.sysPrompt);
 
         // 팝업 채우기
         document.getElementById('gemini-transcript-' + pageId).innerText = transcript;
