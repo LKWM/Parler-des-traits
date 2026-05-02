@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Leçon 7 - Poser des questions sur les préférences</title>
+    <title>Leçon 8 - Parler de ses préférences</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -90,6 +90,35 @@
         .word-token.correct-token { background: #dcfce7; border-color: #22c55e; color: #15803d; pointer-events: none; }
         .word-token.wrong-token   { background: #fee2e2; border-color: #ef4444; color: #b91c1c; }
         @media (min-width: 1024px) { .word-token { font-size: 1.05rem; padding: 0.55rem 1rem; } }
+
+        /* Gemini result popup overlay */
+        #gemini-overlay {
+            display: none;
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(15,23,42,0.55);
+            align-items: center; justify-content: center;
+            padding: 1.5rem;
+        }
+        #gemini-overlay.active { display: flex; }
+        #gemini-popup {
+            background: white; border-radius: 1.5rem;
+            padding: 1.5rem 1.75rem;
+            width: 100%; max-width: 28rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            display: flex; flex-direction: column; gap: 0.75rem;
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+        .popup-row { display: flex; flex-direction: column; gap: 0.2rem; }
+        .popup-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; }
+        .popup-value { font-size: 1rem; font-weight: 600; color: #1e293b; line-height: 1.4; }
+        .popup-score-bar { height: 0.4rem; border-radius: 9999px; background: #e2e8f0; overflow: hidden; }
+        .popup-score-fill { height: 100%; border-radius: 9999px; transition: width 0.6s ease; }
+        .popup-msg { font-size: 0.9rem; font-weight: 700; text-align: center; padding-top: 0.25rem; }
+        .popup-close-btn {
+            width: 100%; padding: 0.75rem; border-radius: 0.875rem;
+            font-weight: 700; font-size: 0.95rem; cursor: pointer;
+            transition: all 0.15s;
+        }
     </style>
 </head>
 <body>
@@ -109,19 +138,26 @@
                 <p class="text-indigo-600 font-semibold mb-2 text-lg sm:text-xl">Chapitre 2 - Parler des préférences</p>
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-10 px-4">Leçon 8 - Parler de ses préférences</h1>
                 <button onclick="startLesson()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full text-xl shadow-lg transition-transform transform hover:-translate-y-1 active:translate-y-0 flex items-center gap-3">
-                    Commencer <i class="ph-bold ph-arrow-right"></i>
+                    <i class="ph-fill ph-play-circle text-2xl"></i>
+                    Commencer
                 </button>
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 1 — Text 1
+        ══════════════════════════════ -->
         <div id="page-1" class="page">
             <div class="content-area">
                 <p class="text-content text-justify">
-                    Bonjour à tous ! Nous voici arrivés à la dernière leçon du chapitre 2. Aujourd'hui, nous allons découvrir de nouveaux mots de vocabulaire et apprendre à dire ce que nous aimons et ce que nous n'aimons pas.
+                    Bonjour à tous ! Nous voici arrivés à la dernière leçon du chapitre 2. Aujourd'hui, nous allons découvrir de nouveaux mots et apprendre à les utiliser pour exprimer vos préférences, qu'il s'agisse de ce que vous aimez ou de ce que vous n'aimez pas.
                 </p>
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 2 — Card repeat : 음식
+        ══════════════════════════════ -->
         <div id="page-2" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -142,13 +178,20 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 3 — Card repeat (S1)
+        ══════════════════════════════ -->
         <div id="page-3" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291244/8-S1_zrjjrh.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">저</span>는 <span class="text-rose-500">한국</span> <span class="text-green-600">음식</span>을 <span class="text-purple-600">좋아해요</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">je</span> <span class="text-rose-500">Corée</span> <span class="text-green-600">nourriture</span> <span class="text-purple-600">aimer</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-blue-600">저</span>는 <span class="text-indigo-600">한국</span> <span class="text-purple-600">음식</span>을 <span class="text-red-600">좋아해요</span>.
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-blue-600">je</span> · <span class="text-indigo-600">Corée</span> · <span class="text-purple-600">nourriture</span> · <span class="text-red-600">aimer</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">J'aime la nourriture coréenne.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -163,6 +206,9 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 4 — Card repeat : 영화
+        ══════════════════════════════ -->
         <div id="page-4" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -183,13 +229,20 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 5 — Card repeat (S2)
+        ══════════════════════════════ -->
         <div id="page-5" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291247/8-S2_opvmrt.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">저</span>는 <span class="text-rose-500">미국</span> <span class="text-green-600">영화</span>를 <span class="text-purple-600">싫어합니다</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">je</span> <span class="text-rose-500">États-Unis</span> <span class="text-green-600">film</span> <span class="text-purple-600">détester</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-blue-600">저</span>는 <span class="text-indigo-600">미국</span> <span class="text-purple-600">영화</span>를 <span class="text-red-600">싫어합니다</span>.
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-blue-600">je</span> · <span class="text-indigo-600">États-Unis</span> · <span class="text-purple-600">film</span> · <span class="text-red-600">détester</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Je n'aime pas les films américains.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -204,6 +257,9 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 6 — Card repeat : 음악
+        ══════════════════════════════ -->
         <div id="page-6" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -224,13 +280,20 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 7 — Card repeat (S3)
+        ══════════════════════════════ -->
         <div id="page-7" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291251/8-S3_y09x2o.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">친구</span>는 <span class="text-rose-500">프랑스</span> <span class="text-green-600">음악</span>을 <span class="text-purple-600">좋아합니다</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">ami</span> <span class="text-rose-500">France</span> <span class="text-green-600">musique</span> <span class="text-purple-600">aimer</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-blue-600">친구</span>는 <span class="text-indigo-600">프랑스</span> <span class="text-purple-600">음악</span>을 <span class="text-red-600">좋아합니다</span>.
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-blue-600">ami</span> · <span class="text-indigo-600">France</span> · <span class="text-purple-600">musique</span> · <span class="text-red-600">aimer</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Mon ami aime la musique française.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -245,26 +308,42 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 8 — Card audio (7-S5) + Text 2
+        ══════════════════════════════ -->
         <div id="page-8" class="page">
             <div class="content-area gap-4">
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777223997/7-S5_yxjt8i.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-green-600">뭘</span> <span class="text-purple-600">좋아해요</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-green-600">quoi</span> <span class="text-purple-600">aimer</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-blue-600">뭘</span> <span class="text-red-600">좋아해요</span>?
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-blue-600">Quoi</span> · <span class="text-red-600">aimer</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Qu'est-ce que tu aimes ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <p class="text-content text-justify">Pour répondre à une question avec « 무엇 » ou « 뭐 » qui signifient « quoi », il vous suffit de remplacer le mot interrogatif par le nom de la chose que vous aimez.</p>
+                <p class="text-content text-justify">
+                    Pour répondre à une question avec « 무엇 » ou « 뭐 » qui signifient « quoi », il vous suffit de remplacer le mot interrogatif par le nom que vous souhaitez. Les autres éléments grammaticaux comme l'ordre des mots ou les particules restent inchangés.
+                </p>
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 9 — Card repeat (S4)
+        ══════════════════════════════ -->
         <div id="page-9" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291254/8-S4_kpmc0e.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">저</span>는 <span class="text-green-600">운동</span>을 <span class="text-purple-600">좋아해요</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">je</span> <span class="text-green-600">sport</span> <span class="text-purple-600">aimer</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-blue-600">저</span>는 <span class="text-purple-600">운동</span>을 <span class="text-red-600">좋아해요</span>.
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-blue-600">Je</span> · <span class="text-purple-600">sport</span> · <span class="text-red-600">aimer</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">J'aime le sport.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -279,26 +358,42 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 10 — Card audio (S5) + Text 3
+        ══════════════════════════════ -->
         <div id="page-10" class="page">
             <div class="content-area gap-4">
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291257/8-S5_sjivp1.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-green-600">요리</span> <span class="text-purple-600">좋아해요</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-green-600">cuisine</span> <span class="text-purple-600">aimer</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-purple-600">요리</span> <span class="text-red-600">좋아해요</span>?
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-purple-600">cuisine</span> · <span class="text-red-600">aimer</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Aimes-tu la cuisine ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <p class="text-content text-justify">Lorsqu'un objet est déjà défini et que l'on vous demande si vous l'appréciez, on répond en disant « 네 » si vous l'aimez, ou « 아니요 » si vous ne l'aimez pas.</p>
+                <p class="text-content text-justify">
+                    Lorsqu'un objet est déjà défini et que l'on vous demande si vous l'appréciez, on répond en disant « 네 » si vous êtes d'accord et « 아니요 » si vous n'êtes pas d'accord.
+                </p>
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 11 — Card repeat (S6)
+        ══════════════════════════════ -->
         <div id="page-11" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291261/8-S6_nsxwqz.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-orange-500">네</span>, <span class="text-rose-500">한국</span> <span class="text-green-600">요리</span>를 <span class="text-purple-600">좋아해요</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-orange-500">Oui</span> <span class="text-rose-500">Corée</span> <span class="text-green-600">cuisine</span> <span class="text-purple-600">aimer</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-green-600">네</span>, <span class="text-indigo-600">한국</span> <span class="text-purple-600">요리</span>를 <span class="text-red-600">좋아해요</span>.
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-green-600">Oui</span> · <span class="text-indigo-600">Corée</span> · <span class="text-purple-600">cuisine</span> · <span class="text-red-600">aimer</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Oui, j'aime la cuisine coréenne.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -313,13 +408,20 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 12 — Card repeat (S7)
+        ══════════════════════════════ -->
         <div id="page-12" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291264/8-S7_tyedel.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-orange-500">아니요</span>, <span class="text-blue-600">저</span>는 <span class="text-green-600">요리</span>를 <span class="text-purple-600">싫어해요</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-orange-500">Non</span> <span class="text-blue-600">je</span> <span class="text-green-600">cuisine</span> <span class="text-purple-600">détester</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-orange-600">아니요</span>, <span class="text-blue-600">저</span>는 <span class="text-purple-600">요리</span>를 <span class="text-red-600">싫어해요</span>.
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-orange-600">Non</span> · <span class="text-blue-600">je</span> · <span class="text-purple-600">cuisine</span> · <span class="text-red-600">détester</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Non, je n'aime pas la cuisine.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -334,6 +436,9 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 13 — Word-order FR (S8)
+        ══════════════════════════════ -->
         <div id="page-13" class="page">
             <div class="content-area gap-3">
                 <h2 class="consigne">Traduisez la phrase en français.</h2>
@@ -344,6 +449,7 @@
                 </button>
                 <div id="answer-area-13" class="flex flex-wrap justify-center gap-2 min-h-[3rem] mt-1 px-2"></div>
                 <div id="bank-13" class="flex flex-wrap justify-center gap-2 mt-1 px-2">
+                    <button class="word-token" onclick="placeToken(this,13)">la</button>
                     <button class="word-token" onclick="placeToken(this,13)">pas</button>
                     <button class="word-token" onclick="placeToken(this,13)">natation</button>
                     <button class="word-token" onclick="placeToken(this,13)">n'</button>
@@ -356,7 +462,6 @@
                     <button class="word-token" onclick="placeToken(this,13)">sport</button>
                     <button class="word-token" onclick="placeToken(this,13)">aimez</button>
                     <button class="word-token" onclick="placeToken(this,13)">Non</button>
-                    <button class="word-token" onclick="placeToken(this,13)">la</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="word-status-13" class="font-bold text-sm text-center w-full transition-colors"></p>
@@ -368,21 +473,32 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 14 — Multi-select MCQ
+        ══════════════════════════════ -->
         <div id="page-14" class="page">
-            <div class="content-area gap-3">
+            <div class="content-area gap-4">
                 <h2 class="consigne">Choisissez toutes les réponses possibles.</h2>
+
+                <!-- Audio card (always playable) -->
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777553224/8-S11_mti2pd.wav')"
-                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-center">
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
-                    <p class="text-base sm:text-lg font-bold text-slate-700">Écouter la question</p>
+                    <span class="font-bold text-slate-700 text-base">Écouter la question</span>
                 </button>
-                <p id="quiz-14-question" class="invisible text-xl sm:text-2xl font-black text-slate-800 text-center">한국 영화를 좋아합니까?</p>
-                <div id="quiz-14-options" class="quiz-grid flex flex-col gap-2 w-full max-w-sm">
-                    <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">1. 아니요, 좋아합니다.</button>
-                    <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">2. 네, 좋아합니다.</button>
-                    <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">3. 아니요, 싫어합니다.</button>
-                    <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">4. 네, 안 좋아합니다.</button>
-                    <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">5. 아니요, 안 좋아합니다.</button>
+
+                <!-- Question text (hidden until 2nd wrong) -->
+                <p id="q14-text" class="hidden text-lg font-black text-slate-800">한국 영화를 좋아합니까?</p>
+
+                <div id="quiz-14-options" class="quiz-grid flex flex-col gap-3 w-full max-w-sm">
+                    <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-idx="1" data-correct="false">1. 아니요, 좋아합니다.</button>
+                    <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-idx="2" data-correct="true">2. 네, 좋아합니다.</button>
+                    <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-idx="3" data-correct="true">3. 아니요, 싫어합니다.</button>
+                    <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-idx="4" data-correct="false">4. 네, 안 좋아합니다.</button>
+                    <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-idx="5" data-correct="true">5. 아니요, 안 좋아합니다.</button>
+                </div>
+                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                    <p id="quiz-14-status" class="font-bold text-center text-sm w-full transition-colors"></p>
                 </div>
                 <button id="quiz-14-btn" onclick="checkMultiQuiz(14)"
                     class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
@@ -391,42 +507,35 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 15 — Card with speaking (Gemini, 음악을 좋아해요?)
+        ══════════════════════════════ -->
         <div id="page-15" class="page">
-            <div class="content-area gap-4">
+            <div class="content-area gap-5">
                 <h2 class="consigne">Répondez à la question.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291271/8-S9_jc8ox2.mp3')"
-                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
-                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
-                    <p class="text-base sm:text-lg font-bold text-slate-700">Écouter la question</p>
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                    <i class="ph-fill ph-speaker-high text-4xl text-indigo-400 mb-1"></i>
+                    <p class="text-sm font-semibold text-slate-500">Écouter la question</p>
                 </button>
-                <button id="gemini-mic-15" onclick="toggleGeminiMic(15)"
+                <button id="mic-btn-15" onclick="toggleRecordGemini(this, 15)"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <p id="gemini-status-15" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-            </div>
-            <div id="gemini-popup-15" class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 rounded-2xl p-6 z-20">
-                <div class="w-full max-w-xs bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shadow-lg">
-                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide">Transcription</p>
-                    <p id="gemini-transcript-15" class="text-slate-700 text-sm font-medium italic"></p>
-                    <div class="flex items-center gap-2">
-                        <p class="text-xs text-slate-400 font-semibold">Note :</p>
-                        <p id="gemini-score-15" class="text-slate-700 text-sm font-bold"></p>
-                    </div>
-                    <div id="gemini-feedback-row-15" class="hidden">
-                        <p class="text-xs text-slate-400 font-semibold mt-1">Feedback</p>
-                        <p id="gemini-feedback-15" class="text-slate-600 text-sm"></p>
-                    </div>
-                    <p id="gemini-verdict-popup-15" class="font-bold text-sm text-center w-full pt-1 transition-colors"></p>
+                <div class="relative flex flex-col items-center w-full" style="min-height:2rem;">
+                    <p id="status-15" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
                 </div>
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 16 — Word-order KR
+        ══════════════════════════════ -->
         <div id="page-16" class="page">
             <div class="content-area gap-3">
                 <h2 class="consigne">Traduisez la phrase en coréen.</h2>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0">
-                    <h3 class="text-xl sm:text-2xl font-black text-slate-800 text-center">Oui, j'aime la nourriture coréenne.</h3>
+                    <p class="text-xl sm:text-2xl font-black text-slate-800">Oui, j'aime la nourriture coréenne.</p>
                 </div>
                 <div id="answer-area-16" class="flex flex-wrap justify-center gap-2 min-h-[3rem] mt-1 px-2"></div>
                 <div id="bank-16" class="flex flex-wrap justify-center gap-2 mt-1 px-2">
@@ -456,44 +565,37 @@
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 17 — Card with speaking (Gemini, 무엇을 좋아해요?)
+        ══════════════════════════════ -->
         <div id="page-17" class="page">
-            <div class="content-area gap-4">
+            <div class="content-area gap-5">
                 <h2 class="consigne">Répondez à la question.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291275/8-S10_nehwaq.mp3')"
-                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
-                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
-                    <p class="text-base sm:text-lg font-bold text-slate-700">Écouter la question</p>
+                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                    <i class="ph-fill ph-speaker-high text-4xl text-indigo-400 mb-1"></i>
+                    <p class="text-sm font-semibold text-slate-500">Écouter la question</p>
                 </button>
-                <button id="gemini-mic-17" onclick="toggleGeminiMic(17)"
+                <button id="mic-btn-17" onclick="toggleRecordGemini(this, 17)"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
-                <p id="gemini-status-17" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
-            </div>
-            <div id="gemini-popup-17" class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center gap-3 rounded-2xl p-6 z-20">
-                <div class="w-full max-w-xs bg-white border border-slate-200 rounded-2xl p-4 flex flex-col gap-2 shadow-lg">
-                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wide">Transcription</p>
-                    <p id="gemini-transcript-17" class="text-slate-700 text-sm font-medium italic"></p>
-                    <div class="flex items-center gap-2">
-                        <p class="text-xs text-slate-400 font-semibold">Note :</p>
-                        <p id="gemini-score-17" class="text-slate-700 text-sm font-bold"></p>
-                    </div>
-                    <div id="gemini-feedback-row-17" class="hidden">
-                        <p class="text-xs text-slate-400 font-semibold mt-1">Feedback</p>
-                        <p id="gemini-feedback-17" class="text-slate-600 text-sm"></p>
-                    </div>
-                    <p id="gemini-verdict-popup-17" class="font-bold text-sm text-center w-full pt-1 transition-colors"></p>
+                <div class="relative flex flex-col items-center w-full" style="min-height:2rem;">
+                    <p id="status-17" class="text-slate-500 font-bold text-sm text-center w-full transition-colors"></p>
                 </div>
             </div>
         </div>
 
+        <!-- ══════════════════════════════
+             PAGE 18 — Outro
+        ══════════════════════════════ -->
         <div id="page-18" class="page justify-center items-center bg-green-50">
             <div class="content-area">
                 <div class="bg-white p-5 rounded-full shadow-md mb-6">
                     <i class="ph-fill ph-check-circle text-5xl text-green-500"></i>
                 </div>
                 <p class="text-content text-green-900 font-medium text-sm sm:text-base leading-relaxed text-justify">
-                    Bon travail ! Vous êtes désormais capables d'interroger quelqu'un sur ses préférences et d'y répondre vous-mêmes. Continuez à pratiquer pour maîtriser ces expressions naturellement !
+                    Bon travail ! Vous êtes désormais capables d'interroger quelqu'un sur ses préférences et d'y répondre vous-mêmes. Dans le chapitre 3, nous enrichirons les phrases apprises avec diverses expressions d'insistance. Alors, à très bientôt !
                 </p>
             </div>
         </div>
@@ -512,6 +614,37 @@
     </div>
 
 </div><!-- end app-container -->
+
+<!-- ══════════════════════════════
+     GEMINI RESULT OVERLAY POPUP
+══════════════════════════════ -->
+<div id="gemini-overlay">
+    <div id="gemini-popup">
+        <div class="popup-row">
+            <span class="popup-label">Transcription</span>
+            <span id="popup-transcript" class="popup-value"></span>
+        </div>
+        <div class="popup-row">
+            <span class="popup-label">Note</span>
+            <div class="flex items-center gap-2">
+                <span id="popup-score-text" class="popup-value"></span>
+                <span class="text-xs text-slate-400">/ 100</span>
+            </div>
+            <div class="popup-score-bar mt-1">
+                <div id="popup-score-fill" class="popup-score-fill" style="width:0%"></div>
+            </div>
+        </div>
+        <div id="popup-feedback-row" class="popup-row hidden">
+            <span class="popup-label">Feedback</span>
+            <span id="popup-feedback" class="popup-value text-sm text-slate-600"></span>
+        </div>
+        <div class="border-t border-slate-100 my-1"></div>
+        <p id="popup-msg" class="popup-msg"></p>
+        <button id="popup-close-btn" onclick="closeGeminiPopup()" class="popup-close-btn text-white bg-indigo-600 hover:bg-indigo-700 mt-1">
+            Continuer
+        </button>
+    </div>
+</div>
 
 <script>
     /* ═══════════════════════════════════════
@@ -532,16 +665,15 @@
     let audioTimeoutId = null;
     let activeRecorder = null;
     let recordingTimeout = null;
-    let quizAttempts = 0;
 
     let correctSound = null, errorSound = null, completionSynth = null, transitionSynth = null;
 
+    // Page auto-play audios
     const pageTextAudios = {
         1:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777290262/8-1_ss9nk9.mp3',
         18: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777290259/8-4_qz2lx0.mp3',
     };
 
-    // text+audio combo pages: auto-play the explanation audio
     const pageExplanationAudios = {
         8:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777291241/8-2_ofahmx.mp3',
         10: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777290257/8-3_x8nkx2.mp3',
@@ -557,17 +689,28 @@
         9:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777291254/8-S4_kpmc0e.mp3',
         11: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777291261/8-S6_nsxwqz.mp3',
         12: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777291264/8-S7_tyedel.mp3',
+        15: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777291271/8-S9_jc8ox2.mp3',
+        17: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777291275/8-S10_nehwaq.mp3',
     };
 
-    // Word-order correct answers by pageId
-    const wordOrderCorrectAnswers13 = [
-        ["Non", "je", "n'", "aime", "pas", "la", "natation"]
-    ];
-    const wordOrderCorrectAnswers16 = [
-        ["네", "저는", "한국", "음식", "을", "좋아해요"]
-    ];
+    // Word-order page 13 — multiple correct answers
+    const wordOrderAnswers = {
+        13: [
+            ['Non','je','n\'','aime','pas','la','natation'],
+        ],
+        16: [
+            ['네','저는','한국','음식','을','좋아해요'],
+        ],
+    };
+
     const wordOrderState = {};
     [13, 16].forEach(id => { wordOrderState[id] = { placed: [], attempts: 0 }; });
+
+    // Gemini page state
+    const geminiState = {
+        15: { attempts: 0, completed: false, pendingClose: null },
+        17: { attempts: 0, completed: false, pendingClose: null },
+    };
 
     /* ═══════════════════════════════════════
        INIT
@@ -619,7 +762,6 @@
         currentPage = Math.max(1, Math.min(currentPage + dir, TOTAL_PAGES - 1));
         document.getElementById(`page-${currentPage}`).classList.add('active');
 
-        quizAttempts = pageStates[currentPage].attempts;
         updateProgress();
 
         const btnPrev = document.getElementById('btn-prev');
@@ -649,6 +791,7 @@
             const textAudio   = pageTextAudios[currentPage];
             const exAudio     = pageExplanationAudios[currentPage];
             const repeatAudio = repeatCardAudios[currentPage];
+
             if (textAudio) {
                 audioTimeoutId = setTimeout(() => playCardAudio(textAudio), 300);
             } else if (exAudio) {
@@ -656,29 +799,20 @@
             } else if (repeatAudio) {
                 audioTimeoutId = setTimeout(() => playCardAudio(repeatAudio), 300);
             }
-            // word-order: auto-play sentence audio
+            // word-order pages: auto-play sentence audio
             if (currentPage === 13) {
                 audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291268/8-S8_oancq2.mp3'), 300);
             }
-            if (currentPage === 16) {
-                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291244/8-S1_zrjjrh.mp3'), 300);
+            // MCQ page: auto-play question audio
+            if (currentPage === 14) {
+                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777553224/8-S11_mti2pd.wav'), 300);
             }
-            // Gemini speaking: 오디오 자동재생 → 끝나면 mic 활성화
-            if (geminiPageConfig[currentPage]) {
-                const gBtn = document.getElementById(`gemini-mic-${currentPage}`);
-                const gCfg = geminiPageConfig[currentPage];
-                if (gBtn && !pageStates[currentPage].completed) gBtn.disabled = true;
-                const pid = currentPage;
-                audioTimeoutId = setTimeout(() => {
-                    playCardAudio(gCfg.audioUrl);
-                    if (currentAudio) {
-                        currentAudio.addEventListener('ended', () => {
-                            if (currentPage !== pid) return;
-                            const b = document.getElementById(`gemini-mic-${pid}`);
-                            if (b && !pageStates[pid].completed) b.disabled = false;
-                        });
-                    }
-                }, 300);
+            // Speaking pages: auto-play question audio
+            if (currentPage === 15) {
+                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291271/8-S9_jc8ox2.mp3'), 300);
+            }
+            if (currentPage === 17) {
+                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777291275/8-S10_nehwaq.mp3'), 300);
             }
         }
     }
@@ -699,220 +833,6 @@
     function triggerLessonComplete() {
         window.parent.postMessage({ type: 'lesson_complete' }, '*');
     }
-
-    /* ═══════════════════════════════════════
-       GEMINI SPEAKING
-    ═══════════════════════════════════════ */
-    const geminiPageConfig = {
-        15: {
-            audioUrl:   'https://res.cloudinary.com/de76i94ia/video/upload/v1777291271/8-S9_jc8ox2.mp3',
-            sysPrompt:  '"음악을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력 (약간의 오류 - 80점, 큰 오류 - 50점, 이해할 수 없는 문장 - 30점 미만)\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 요인 예시 - 네/아니요로 답하지 않는 경우, 조사 생략, 문법 오류, 비문.',
-            threshold:  80,
-            maxAttempts: 2,
-        },
-        17: {
-            audioUrl:   'https://res.cloudinary.com/de76i94ia/video/upload/v1777291275/8-S10_nehwaq.mp3',
-            sysPrompt:  '"무엇을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.\n[transcription] 학습자의 발화값을 그대로 전사\n[Note] 100점 만점으로 점수 출력 (약간의 오류 - 80점, 큰 오류 - 50점, 이해할 수 없는 문장 - 30점 미만)\n[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명\n감점 기준 - 조사 생략, 문법 오류, 비문.',
-            threshold:  80,
-            maxAttempts: 2,
-        },
-    };
-
-    async function toggleGeminiMic(pageId) {
-        const btn      = document.getElementById('gemini-mic-' + pageId);
-        const statusEl = document.getElementById('gemini-status-' + pageId);
-        if (btn.classList.contains('recording-pulse')) {
-            if (activeRecorder && activeRecorder.state === 'recording') {
-                activeRecorder.stop(); clearTimeout(recordingTimeout);
-            }
-            return;
-        }
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mr     = new MediaRecorder(stream);
-            const chunks = [];
-            mr.ondataavailable = e => chunks.push(e.data);
-            mr.onstop = async () => {
-                btn.classList.remove('recording-pulse');
-                btn.innerHTML      = '<i class="ph ph-spinner animate-spin text-3xl"></i>';
-                btn.disabled       = true;
-                statusEl.innerText = 'Analyse...';
-                statusEl.className = 'text-slate-500 font-medium text-sm text-center';
-                const blob     = new Blob(chunks, { type: 'audio/webm' });
-                const mimeType = blob.type.split(';')[0] || 'audio/webm';
-                const reader   = new FileReader();
-                reader.readAsDataURL(blob);
-                reader.onloadend = async () => {
-                    const b64 = reader.result.split(',')[1];
-                    await processGeminiSpeech(pageId, b64, mimeType);
-                };
-                stream.getTracks().forEach(t => t.stop());
-            };
-            mr.start(); activeRecorder = mr;
-            btn.classList.add('recording-pulse');
-            btn.innerHTML      = '<i class="ph-fill ph-stop text-4xl"></i>';
-            statusEl.innerText = 'Enregistrement...';
-            statusEl.className = 'text-red-500 font-bold text-sm text-center animate-pulse';
-            recordingTimeout   = setTimeout(() => { if (mr.state === 'recording') mr.stop(); }, 6000);
-        } catch (e) {
-            statusEl.innerText = 'Erreur de microphone.';
-            statusEl.className = 'text-red-500 font-medium text-sm text-center';
-        }
-    }
-
-    async function processGeminiSpeech(pageId, audioBase64, mimeType) {
-        const btn      = document.getElementById('gemini-mic-' + pageId);
-        const statusEl = document.getElementById('gemini-status-' + pageId);
-        const popupEl  = document.getElementById('gemini-popup-' + pageId);
-        const cfg      = geminiPageConfig[pageId];
-        const state      = pageStates[pageId];
-        const payload = {
-            model: 'gemini-2.5-flash',
-            contents: [{ role: 'user', parts: [
-                { text: 'Analyze the audio response.' },
-                { inline_data: { mime_type: mimeType, data: audioBase64 } }
-            ]}],
-            systemInstruction: cfg.sysPrompt
-        };
-        let transcript = '???', score = 0, feedback = '', isPass = false;
-        try {
-            const res  = await fetch('https://coreeno.base44.app/api/functions/Geminichat', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
-            });
-            if (!res.ok) throw new Error('API error ' + res.status);
-            const data = await res.json();
-            const txt  = data.text || '';
-            const tM   = txt.match(/\[transcription\]\s*(.*?)(?=\[Note\]|\[Feedback\]|$)/si);
-            const nM   = txt.match(/\[Note\]\s*(\d+)/i);
-            const fM   = txt.match(/\[Feedback\]\s*(.*)/si);
-            if (tM && tM[1].trim()) transcript = tM[1].trim();
-            if (nM) score = parseInt(nM[1]);
-            if (fM && fM[1].trim()) feedback = fM[1].trim();
-            isPass = score >= cfg.threshold;
-        } catch (e) {
-            statusEl.innerText = 'Erreur de connexion. Réessayez.';
-            statusEl.className = 'text-red-500 font-bold text-sm text-center';
-            btn.disabled  = false;
-            btn.innerHTML = '<i class="ph-fill ph-microphone text-4xl"></i>';
-            return;
-        }
-        state.attempts++;
-        const isLastAttempt = state.attempts >= cfg.maxAttempts;
-        console.log('[Gemini] page:', pageId, '| attempt:', state.attempts, '| score:', score, '| isPass:', isPass, '| isLastAttempt:', isLastAttempt, '| sysPrompt sent:', !!cfg.sysPrompt);
-
-        // 팝업 채우기
-        document.getElementById('gemini-transcript-' + pageId).innerText = transcript;
-        document.getElementById('gemini-score-' + pageId).innerText      = score + '%';
-        const fbRow = document.getElementById('gemini-feedback-row-' + pageId);
-        if (feedback) {
-            document.getElementById('gemini-feedback-' + pageId).innerText = feedback;
-            fbRow.classList.remove('hidden');
-        } else {
-            fbRow.classList.add('hidden');
-        }
-        statusEl.innerText = '';
-
-        const baseClass = 'font-bold text-sm text-center w-full transition-colors';
-        const popupVerdictEl = document.getElementById('gemini-verdict-popup-' + pageId);
-
-        if (isPass) {
-            // 통과 - 즉시 완료
-            state.completed = true;
-            popupVerdictEl.innerText = 'Très bien ! Passez à la suite.';
-            popupVerdictEl.className = baseClass + ' text-green-600';
-            popupEl.classList.remove('hidden');
-            if (correctSound) correctSound.triggerAttackRelease('C5', '0.2s');
-            disableMicBtn(btn, true);
-            unlockNextButton(pageId);
-        } else if (isLastAttempt) {
-            // 2차 실패 - 완료
-            state.completed = true;
-            popupVerdictEl.innerText = 'Bien essayé ! Passez à la suite.';
-            popupVerdictEl.className = baseClass + ' text-blue-600';
-            popupEl.classList.remove('hidden');
-            if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-            disableMicBtn(btn, false);
-            unlockNextButton(pageId);
-        } else {
-            // 1차 실패 - 팝업 표시, 유저가 탭하면 닫히고 마이크 재활성화
-            popupVerdictEl.innerText = 'On y est presque ! Essayons encore une fois.';
-            popupVerdictEl.className = baseClass + ' text-orange-500';
-            popupEl.classList.remove('hidden');
-            if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-            popupEl.addEventListener('click', function dismissPopup() {
-                popupEl.classList.add('hidden');
-                popupEl.removeEventListener('click', dismissPopup);
-                btn.disabled  = false;
-                btn.innerHTML = '<i class="ph-fill ph-microphone text-4xl"></i>';
-                if (audioTimeoutId) clearTimeout(audioTimeoutId);
-                audioTimeoutId = setTimeout(() => playCardAudio(cfg.audioUrl), 600);
-            }, { once: true });
-        }
-    }
-
-    /* ═══════════════════════════════════════
-       MCQ QUIZ
-    ═══════════════════════════════════════ */
-    document.querySelectorAll(`#quiz-14-options .multi-opt`).forEach(opt => {
-        opt.addEventListener('click', function () {
-            if (pageStates[14].completed) return;
-            this.classList.toggle('selected');
-        });
-    });
-
-    function checkMultiQuiz(pageId) {
-        if (pageStates[pageId].completed) return;
-        if (!pageStates[pageId].mcqAttempts) pageStates[pageId].mcqAttempts = 0;
-        pageStates[pageId].mcqAttempts++;
-        const attempts = pageStates[pageId].mcqAttempts;
-
-        const opts       = document.querySelectorAll(`#quiz-${pageId}-options .multi-opt`);
-        const statusEl   = document.getElementById(`quiz-${pageId}-status`);
-        const questionEl = document.getElementById(`quiz-${pageId}-question`);
-        const selected   = Array.from(opts).filter(o => o.classList.contains('selected'));
-
-        if (selected.length === 0) return;
-
-        const correctOpts = Array.from(opts).filter(o => o.dataset.correct === 'true');
-        const selOK       = selected.filter(o => o.dataset.correct === 'true');
-        const selWrong    = selected.filter(o => o.dataset.correct === 'false');
-        const isCorrect   = selOK.length === correctOpts.length && selWrong.length === 0;
-
-        if (isCorrect) {
-            pageStates[pageId].completed = true;
-            if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            statusEl.innerText = 'Très bien ! Passez à la suite.';
-            statusEl.className = 'font-bold text-center text-green-500 text-sm w-full transition-colors';
-            opts.forEach(o => {
-                o.style.pointerEvents = 'none';
-                if (o.dataset.correct === 'true') { o.classList.remove('selected'); o.classList.add('correct'); }
-            });
-            document.getElementById(`quiz-${pageId}-btn`).disabled = true;
-            document.getElementById(`quiz-${pageId}-btn`).classList.add('opacity-40', 'cursor-not-allowed');
-            unlockNextButton(pageId);
-        } else {
-            if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
-            selWrong.forEach(o => {
-                o.classList.add('wrong');
-                setTimeout(() => { o.classList.remove('wrong', 'selected'); }, 800);
-            });
-            if (attempts >= 2 && questionEl) questionEl.classList.remove('invisible');
-            if (attempts >= 3) {
-                pageStates[pageId].completed = true;
-                opts.forEach(o => {
-                    o.style.pointerEvents = 'none';
-                    o.classList.remove('selected', 'wrong');
-                    if (o.dataset.correct === 'true') o.classList.add('correct');
-                });
-                document.getElementById(`quiz-${pageId}-btn`).disabled = true;
-                document.getElementById(`quiz-${pageId}-btn`).classList.add('opacity-40', 'cursor-not-allowed');
-                statusEl.innerText = 'Bien essayé ! Passez à la suite.';
-                statusEl.className = 'font-bold text-center text-blue-500 text-sm w-full transition-colors';
-                unlockNextButton(pageId);
-            }
-        }
-    }
-
 
     /* ═══════════════════════════════════════
        MIC UI HELPERS
@@ -945,7 +865,85 @@
     }
 
     /* ═══════════════════════════════════════
-       WORD-ORDER QUIZ (multiple correct answers)
+       MULTI-SELECT MCQ (Page 14)
+    ═══════════════════════════════════════ */
+    document.querySelectorAll('#quiz-14-options .multi-opt').forEach(opt => {
+        opt.addEventListener('click', function () {
+            if (pageStates[14].completed) return;
+            this.classList.toggle('selected');
+        });
+    });
+
+    let q14Attempts = 0;
+
+    function checkMultiQuiz(pageId) {
+        if (pageStates[pageId].completed) return;
+        q14Attempts++;
+
+        const options  = document.querySelectorAll(`#quiz-${pageId}-options .multi-opt`);
+        const statusEl = document.getElementById(`quiz-${pageId}-status`);
+        const selected = Array.from(options).filter(o => o.classList.contains('selected'));
+
+        if (selected.length === 0) {
+            statusEl.innerText = "Veuillez choisir au moins une option.";
+            statusEl.className = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
+            return;
+        }
+
+        const correctIdxs = Array.from(options).filter(o => o.dataset.correct === 'true').map(o => o.dataset.idx);
+        const selectedIdxs = selected.map(o => o.dataset.idx);
+
+        const isCorrect =
+            correctIdxs.length === selectedIdxs.length &&
+            correctIdxs.every(i => selectedIdxs.includes(i));
+
+        if (isCorrect) {
+            pageStates[pageId].completed = true;
+            if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+            statusEl.innerText = "Très bien ! Passez à la suite.";
+            statusEl.className = "font-bold text-center text-green-500 text-sm w-full transition-colors";
+            options.forEach(o => {
+                o.style.pointerEvents = 'none';
+                if (o.dataset.correct === 'true') { o.classList.remove('selected'); o.classList.add('correct'); }
+                else { o.classList.remove('selected'); }
+            });
+            document.getElementById(`quiz-${pageId}-btn`).disabled = true;
+            document.getElementById(`quiz-${pageId}-btn`).classList.add('opacity-40','cursor-not-allowed');
+            unlockNextButton(pageId);
+        } else {
+            if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+
+            if (q14Attempts >= 3) {
+                // Reveal correct answers and unlock
+                pageStates[pageId].completed = true;
+                options.forEach(o => {
+                    o.style.pointerEvents = 'none';
+                    o.classList.remove('selected','wrong');
+                    if (o.dataset.correct === 'true') o.classList.add('correct');
+                });
+                statusEl.innerText = "Voici les bonnes réponses.";
+                statusEl.className = "font-bold text-center text-blue-500 text-sm w-full transition-colors";
+                document.getElementById(`quiz-${pageId}-btn`).disabled = true;
+                document.getElementById(`quiz-${pageId}-btn`).classList.add('opacity-40','cursor-not-allowed');
+                unlockNextButton(pageId);
+            } else {
+                // After 2nd wrong: reveal question text
+                if (q14Attempts >= 2) {
+                    document.getElementById('q14-text').classList.remove('hidden');
+                }
+                // Flash wrong highlight then reset selections
+                selected.forEach(o => {
+                    o.classList.add('wrong');
+                    setTimeout(() => { o.classList.remove('wrong','selected'); }, 700);
+                });
+                statusEl.innerText = "Incorrect. Réessayez !";
+                statusEl.className = "font-bold text-center text-red-500 text-sm w-full transition-colors";
+            }
+        }
+    }
+
+    /* ═══════════════════════════════════════
+       WORD-ORDER QUIZ
     ═══════════════════════════════════════ */
     function placeToken(btn, pageId) {
         if (btn.disabled || pageStates[pageId].completed) return;
@@ -989,11 +987,14 @@
 
         state.attempts++;
 
-        const wordOrderCorrectAnswers = pageId === 13 ? wordOrderCorrectAnswers13 : wordOrderCorrectAnswers16;
+        const answers = wordOrderAnswers[pageId];
+        // Compare ignoring punctuation (순서만 맞으면 정답)
+        const normalize = s => s.replace(/[\s.,?!]/g,'').toLowerCase();
+        const placedNorm = state.placed.map(normalize);
 
-        const isCorrect = wordOrderCorrectAnswers.some(ans =>
-            state.placed.length === ans.length &&
-            state.placed.every((w, i) => w.toLowerCase() === ans[i].toLowerCase())
+        const isCorrect = answers.some(ans =>
+            ans.length === state.placed.length &&
+            ans.map(normalize).every((w, i) => w === placedNorm[i])
         );
 
         if (isCorrect) {
@@ -1011,10 +1012,12 @@
                 t.classList.add('wrong-token');
                 setTimeout(() => t.classList.remove('wrong-token'), 700);
             });
+
             if (state.attempts >= 3) {
+                // Show correct answer
                 const answerArea = document.getElementById(`answer-area-${pageId}`);
                 answerArea.innerHTML = '';
-                wordOrderCorrectAnswers[0].forEach(w => {
+                answers[0].forEach(w => {
                     const t = document.createElement('span');
                     t.className = 'word-token correct-token'; t.innerText = w;
                     answerArea.appendChild(t);
@@ -1043,10 +1046,9 @@
     }
 
     /* ═══════════════════════════════════════
-       SPEECH RECOGNITION
+       CLOVA SPEECH RECOGNITION (repeat pages)
     ═══════════════════════════════════════ */
-    const BASE_44_ORIGIN = "https://coreeno.base44.app";
-    const CLOVA_API_FUNCTION_URL = BASE_44_ORIGIN + '/api/functions/naverClovaSpeech';
+    const CLOVA_API_FUNCTION_URL = "https://coreeno.base44.app/api/functions/naverClovaSpeech";
 
     function calculateSimilarity(str1, str2) {
         const s1 = str1.replace(/[\s.,?!]/g,'').toLowerCase();
@@ -1113,8 +1115,6 @@
         if (!pageStates[currentPage][attemptsKey]) pageStates[currentPage][attemptsKey] = 0;
         pageStates[currentPage][attemptsKey]++;
         const currentAttempts = pageStates[currentPage][attemptsKey];
-
-        quizAttempts = currentAttempts;
         pageStates[currentPage].attempts = currentAttempts;
 
         let score = 0, recognizedText = "";
@@ -1187,6 +1187,200 @@
             if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.1s');
         }
     }
+
+    /* ═══════════════════════════════════════
+       GEMINI SPEAKING QUIZ (Pages 15, 17)
+    ═══════════════════════════════════════ */
+    const GEMINI_API_URL = "https://coreeno.base44.app/api/functions/Geminichat";
+
+    const geminiSystemPrompts = {
+        15: `"음악을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.
+[transcription] 학습자의 발화값을 그대로 전사
+[Note] 100점 만점으로 점수 출력 (약간의 오류 - 80점, 큰 오류 - 50점, 이해할 수 없는 문장 - 30점 미만)
+[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명
+감점 요인 예시 - 네/아니요로 답하지 않는 경우, 조사 생략, 문법 오류, 비문 (네,아니요, 좋아요,싫어요가 호응되지 않는 경우, 별로 뒤에 부정형 부사가 오지 않는 경우 등). 질문에 대한 답을 하지 않고 주제를 바꾸는 경우.`,
+        17: `"무엇을 좋아해요?"라는 질문에 대한 한국어 학습자의 답안을 듣고 다음 3개 카테고리로 응답을 출력한다.
+[transcription] 학습자의 발화값을 그대로 전사
+[Note] 100점 만점으로 점수 출력 (약간의 오류 - 80점, 큰 오류 - 50점, 이해할 수 없는 문장 - 30점 미만)
+[Feedback] 감점 요인이 있는 경우에만, 프랑스어 1-2문장 내외로 간결하게 설명
+감점 기준 - 조사 생략, 문법 오류, 비문 ("별로" 뒤에 부정형 부사가 오지 않는 경우 등). 질문에 대한 답을 하지 않고 주제를 바꾸는 경우.`,
+    };
+
+    async function toggleRecordGemini(btn, pageId) {
+        const statusEl = document.getElementById(`status-${pageId}`);
+        if (btn.classList.contains('recording-pulse')) {
+            if (activeRecorder && activeRecorder.state === 'recording') {
+                activeRecorder.stop(); clearTimeout(recordingTimeout);
+            }
+            return;
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mediaRecorder = new MediaRecorder(stream);
+            const audioChunks = [];
+            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+            mediaRecorder.onstop = async () => {
+                btn.classList.remove('recording-pulse');
+                btn.innerHTML = '<i class="ph ph-spinner animate-spin text-4xl"></i>';
+                btn.disabled = true;
+                statusEl.innerText = "Analyse...";
+                statusEl.className = "text-slate-500 font-bold text-sm text-center w-full transition-colors";
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const mimeType = audioBlob.type.split(';')[0] || 'audio/webm';
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+                reader.onloadend = async () => {
+                    await processGeminiSpeech(reader.result.split(',')[1], mimeType, btn, statusEl, pageId);
+                };
+                stream.getTracks().forEach(t => t.stop());
+            };
+            mediaRecorder.start();
+            activeRecorder = mediaRecorder;
+            btn.classList.add('recording-pulse');
+            btn.innerHTML = '<i class="ph-fill ph-stop text-4xl"></i>';
+            statusEl.innerText = "";
+            recordingTimeout = setTimeout(() => {
+                if (mediaRecorder.state === 'recording') mediaRecorder.stop();
+            }, 6000);
+        } catch(err) {
+            console.error("Mic error:", err);
+            statusEl.innerText = "Erreur micro.";
+            statusEl.className = "text-red-500 font-bold text-sm text-center w-full transition-colors";
+        }
+    }
+
+    async function processGeminiSpeech(audioBase64, mimeType, btn, statusEl, pageId) {
+        const gs = geminiState[pageId];
+        gs.attempts++;
+
+        let transcript = "", note = 0, feedback = "";
+        try {
+            const payload = {
+                model: "gemini-2.5-flash",
+                contents: [{ role: "user", parts: [
+                    { text: "Analyse the audio response." },
+                    { inline_data: { mime_type: mimeType, data: audioBase64 } }
+                ]}],
+                systemInstruction: geminiSystemPrompts[pageId]
+            };
+            const res = await fetch(GEMINI_API_URL, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!res.ok) throw new Error("API " + res.status);
+            const data = await res.json();
+            const text = data.text || "";
+
+            const tMatch = text.match(/\[transcription\]\s*(.*?)(?:\[Note\]|$)/si);
+            const nMatch = text.match(/\[Note\]\s*(\d+)/i);
+            const fMatch = text.match(/\[Feedback\]\s*(.*)/si);
+
+            if (tMatch && tMatch[1]) transcript = tMatch[1].trim();
+            if (nMatch && nMatch[1]) note = parseInt(nMatch[1]);
+            if (fMatch && fMatch[1]) feedback = fMatch[1].trim();
+            if (!transcript) transcript = "???";
+        } catch(e) {
+            console.warn("Gemini fallback:", e);
+            transcript = "Reconnaissance impossible.";
+            note = 70;
+            feedback = "";
+        }
+
+        const isPass = note >= 80;
+
+        // Determine message
+        let popupMsg = "";
+        let isFinal = false;
+
+        if (gs.attempts === 1) {
+            if (isPass) {
+                popupMsg = "Très bien ! Passez à la suite.";
+                isFinal = true;
+            } else {
+                popupMsg = "On y est presque ! Essayons encore une fois.";
+                isFinal = false;
+            }
+        } else {
+            // 2nd attempt — always final
+            popupMsg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
+            isFinal = true;
+        }
+
+        // Play sound
+        if (isPass && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
+        else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+
+        // Show popup
+        showGeminiPopup(transcript, note, feedback, popupMsg, isPass, isFinal, btn, statusEl, pageId);
+    }
+
+    function showGeminiPopup(transcript, note, feedback, msg, isPass, isFinal, btn, statusEl, pageId) {
+        document.getElementById('popup-transcript').innerText = transcript || "—";
+        document.getElementById('popup-score-text').innerText = note;
+
+        const fill = document.getElementById('popup-score-fill');
+        fill.style.width = '0%';
+        fill.style.background = note >= 80 ? '#22c55e' : note >= 50 ? '#f59e0b' : '#ef4444';
+        setTimeout(() => { fill.style.width = note + '%'; }, 50);
+
+        const feedbackRow = document.getElementById('popup-feedback-row');
+        if (feedback && feedback.length > 0) {
+            document.getElementById('popup-feedback').innerText = feedback;
+            feedbackRow.classList.remove('hidden');
+        } else {
+            feedbackRow.classList.add('hidden');
+        }
+
+        const msgEl = document.getElementById('popup-msg');
+        msgEl.innerText = msg;
+        msgEl.className = `popup-msg ${isPass ? 'text-green-600' : isFinal ? 'text-blue-600' : 'text-orange-500'}`;
+
+        const closeBtn = document.getElementById('popup-close-btn');
+        if (isFinal) {
+            closeBtn.innerText = "Passez à la suite";
+            closeBtn.className = "popup-close-btn text-white bg-green-500 hover:bg-green-600 mt-1";
+        } else {
+            closeBtn.innerText = "Réessayer";
+            closeBtn.className = "popup-close-btn text-white bg-indigo-600 hover:bg-indigo-700 mt-1";
+        }
+
+        // Store what to do on close
+        geminiState[pageId].pendingClose = { btn, statusEl, pageId, isFinal, isPass };
+
+        document.getElementById('gemini-overlay').classList.add('active');
+    }
+
+    function closeGeminiPopup() {
+        document.getElementById('gemini-overlay').classList.remove('active');
+
+        // Find which page's pending close
+        let pending = null;
+        for (const pid of [15, 17]) {
+            if (geminiState[pid].pendingClose) {
+                pending = { ...geminiState[pid].pendingClose, pid };
+                geminiState[pid].pendingClose = null;
+                break;
+            }
+        }
+        if (!pending) return;
+
+        const { btn, statusEl, pageId, isFinal, isPass } = pending;
+
+        if (isFinal) {
+            // Disable mic, unlock next
+            disableMicBtn(btn, isPass);
+            pageStates[pageId].completed = true;
+            if (isPass && completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+            unlockNextButton(pageId);
+            statusEl.innerText = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
+            statusEl.className = `font-bold text-sm text-center w-full transition-colors ${isPass ? 'text-green-600' : 'text-blue-600'}`;
+        } else {
+            // Reset mic for 2nd attempt
+            resetMicBtnState(btn);
+            statusEl.innerText = "";
+        }
+    }
+
 </script>
 </body>
 </html>
