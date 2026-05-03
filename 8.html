@@ -477,27 +477,23 @@
              PAGE 14 — Multi-select MCQ
         ══════════════════════════════ -->
         <div id="page-14" class="page">
-            <div class="content-area gap-4">
-                <h2 class="consigne">Choisissez toutes les réponses possibles.</h2>
-
-                <!-- Audio card (always playable) -->
+            <div class="content-area" style="justify-content:space-evenly; gap:0; padding-top:5%; padding-bottom:5%;">
+                <h2 class="consigne" style="margin-bottom:0; flex-shrink:0;">Choisissez toutes les réponses possibles.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777553224/8-S11_mti2pd.wav')"
                     class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100 w-full max-w-sm justify-center">
                     <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
                     <span class="font-bold text-slate-700 text-base">Écouter la question</span>
                 </button>
-
-                <!-- Question text (hidden until 2nd wrong) -->
-                <p id="q14-text" class="hidden text-lg font-black text-slate-800">한국 영화를 좋아합니까?</p>
-
-                <div id="quiz-14-options" class="quiz-grid flex flex-col gap-3 w-full max-w-sm">
+                <!-- Space always reserved; visibility toggled not display -->
+                <p id="q14-text" style="visibility:hidden; flex-shrink:0;" class="text-lg font-black text-slate-800">한국 영화를 좋아합니까?</p>
+                <div id="quiz-14-options" class="flex flex-col w-full max-w-sm shrink-0" style="gap:0.45rem;">
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-idx="1" data-correct="false">1. 아니요, 좋아합니다.</button>
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-idx="2" data-correct="true">2. 네, 좋아합니다.</button>
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-idx="3" data-correct="true">3. 아니요, 싫어합니다.</button>
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-idx="4" data-correct="false">4. 네, 안 좋아합니다.</button>
                     <button class="quiz-option multi-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-idx="5" data-correct="true">5. 아니요, 안 좋아합니다.</button>
                 </div>
-                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                <div style="height:1.5rem; flex-shrink:0; display:flex; align-items:center; justify-content:center; width:100%;">
                     <p id="quiz-14-status" class="font-bold text-center text-sm w-full transition-colors"></p>
                 </div>
                 <button id="quiz-14-btn" onclick="checkMultiQuiz(14)"
@@ -929,7 +925,7 @@
             } else {
                 // After 2nd wrong: reveal question text
                 if (q14Attempts >= 2) {
-                    document.getElementById('q14-text').classList.remove('hidden');
+                    document.getElementById('q14-text').style.visibility = 'visible';
                 }
                 // Flash wrong highlight then reset selections
                 selected.forEach(o => {
@@ -1367,13 +1363,12 @@
         const { btn, statusEl, pageId, isFinal, isPass } = pending;
 
         if (isFinal) {
-            // Disable mic, unlock next
             disableMicBtn(btn, isPass);
             pageStates[pageId].completed = true;
+            completedPages.add(pageId);
             if (isPass && completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-            unlockNextButton(pageId);
-            statusEl.innerText = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
-            statusEl.className = `font-bold text-sm text-center w-full transition-colors ${isPass ? 'text-green-600' : 'text-blue-600'}`;
+            // Navigate directly to next page
+            changePage(1);
         } else {
             // Reset mic for 2nd attempt
             resetMicBtnState(btn);
