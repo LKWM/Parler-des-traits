@@ -248,6 +248,7 @@
                     <p id="transcript-7" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
+        
         </div>
 
         <!-- PAGE 8 — Card with audio (별로) + Text 4 (auto-play 9-4) -->
@@ -271,8 +272,8 @@
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379885/9-S5_gzzlrz.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">커피</span>가 <span class="text-orange-500">별로 안</span> <span class="text-purple-600">시원해요</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">café</span>, <span class="text-orange-500">particulièrement, ne pas</span>, <span class="text-purple-600">être frais</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">커피가 별로 안 시원해요.</h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">café particulièrement ne pas être frais</p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Le café n'est pas assez froid.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -285,6 +286,7 @@
                     <p id="transcript-9" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
+        
         </div>
 
         <!-- PAGE 10 — Card with repeat (S6): 형은 프랑스 음식을 별로 안 좋아합니다. -->
@@ -293,8 +295,8 @@
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379889/9-S6_cgmkjh.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1"><span class="text-blue-600">형</span>은 <span class="text-green-600">프랑스 음식</span>을 <span class="text-orange-500">별로 안</span> <span class="text-purple-600">좋아합니다</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">frère</span>, <span class="text-green-600">France, cuisine</span>, <span class="text-orange-500">particulièrement, ne pas</span>, <span class="text-purple-600">aimer</span></p>
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1">형은 프랑스 음식을 별로 안 좋아합니다.</h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">frère France cuisine particulièrement ne pas aimer</p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Mon frère n'aime pas trop la cuisine française.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -307,22 +309,23 @@
                     <p id="transcript-10" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
+        
         </div>
 
         <!-- PAGE 11 — MCQ single: Mon papa n'est pas très fatigué. (맞출때까지, 선택값 초기화) -->
         <div id="page-11" class="page">
-            <div class="content-area gap-4">
+            <div class="content-area gap-3">
                 <h2 class="consigne">Choisissez la bonne traduction.</h2>
-                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0">
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 w-full max-w-sm shrink-0">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">Mon papa n'est pas très fatigué.</p>
                     <p class="text-xs text-slate-400 mt-1">présent poli</p>
                 </div>
-                <div id="quiz-11-options" class="quiz-grid flex flex-col gap-3 w-full max-w-sm">
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">1. 엄마는 별로 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">2. 아빠는 별로 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">3. 엄마는 안 별로 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">4. 아빠는 별로 안 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">5. 아빠는 안 피곤 별로 해요.</button>
+                <div id="quiz-11-options" class="flex flex-col gap-2 w-full max-w-sm">
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-sm" data-correct="false">1. 엄마는 별로 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-sm" data-correct="false">2. 아빠는 별로 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-sm" data-correct="false">3. 엄마는 안 별로 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-sm" data-correct="true">4. 아빠는 별로 안 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-sm" data-correct="false">5. 아빠는 안 피곤 별로 해요.</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="quiz-11-status" class="font-bold text-center text-sm w-full transition-colors"></p>
@@ -333,6 +336,7 @@
                 </button>
             </div>
         
+        
         </div>
 
         <!-- PAGE 12 — Word order FR: 형은 수영을 안 싫어합니다. (auto-play S7, max 3회) -->
@@ -340,13 +344,12 @@
             <div class="content-area gap-3">
                 <h2 class="consigne">Traduisez la phrase en français.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379893/9-S7_yeoc7k.mp3')"
-                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">형은 수영을 안 싫어합니다.</h3>
-                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">&nbsp;</p>
-                    <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
+                    class="card-btn bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 flex items-center gap-3 shrink-0 hover:bg-indigo-100">
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-800">형은 수영을 안 싫어합니다.</h3>
+                    <i class="ph-fill ph-speaker-high text-2xl text-indigo-400"></i>
                 </button>
-                <div id="answer-area-12" class="flex flex-wrap justify-center gap-2 px-2" style="height:8rem; align-content:flex-start;"></div>
-                <div id="bank-12" class="flex flex-wrap justify-center gap-2 px-2">
+                <div id="answer-area-12" class="flex flex-wrap justify-center gap-2 min-h-[3rem] mt-1 px-2"></div>
+                <div id="bank-12" class="flex flex-wrap justify-center gap-2 mt-1 px-2">
                     <button class="word-token" onclick="placeToken(this,12)">la</button>
                     <button class="word-token" onclick="placeToken(this,12)">déteste</button>
                     <button class="word-token" onclick="placeToken(this,12)">ma</button>
@@ -367,6 +370,7 @@
                     Valider
                 </button>
             </div>
+        
         </div>
 
         <!-- PAGE 13 — Card with repeat (S8): 회사원은 별로 안 행복해요. -->
@@ -376,7 +380,7 @@
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379896/9-S8_f8lo7n.wav')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">회사원</span>은 <span class="text-orange-500">별로 안</span> <span class="text-purple-600">행복해요</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">employé</span>, <span class="text-orange-500">particulièrement, ne pas</span>, <span class="text-purple-600">heureux</span></p>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">employé</span> <span class="text-orange-500">particulièrement ne pas</span> <span class="text-purple-600">heureux</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">L'employé n'est pas très heureux.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
