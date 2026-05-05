@@ -317,12 +317,12 @@
                     <p class="text-xl sm:text-2xl font-black text-slate-800">Mon papa n'est pas très fatigué.</p>
                     <p class="text-xs text-slate-400 mt-1">présent poli</p>
                 </div>
-                <div id="quiz-11-options" class="flex flex-col gap-2 w-full max-w-sm">
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-sm" data-correct="false">1. 엄마는 별로 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-sm" data-correct="false">2. 아빠는 별로 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-sm" data-correct="false">3. 엄마는 안 별로 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-sm" data-correct="true">4. 아빠는 별로 안 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-sm" data-correct="false">5. 아빠는 안 피곤 별로 해요.</button>
+                <div id="quiz-11-options" class="quiz-grid flex flex-col gap-3 w-full max-w-sm">
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">1. 엄마는 별로 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">2. 아빠는 별로 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">3. 엄마는 안 별로 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">4. 아빠는 별로 안 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">5. 아빠는 안 피곤 별로 해요.</button>
                 </div>
                 <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
                     <p id="quiz-11-status" class="font-bold text-center text-sm w-full transition-colors"></p>
@@ -638,30 +638,43 @@
     document.querySelectorAll(`#quiz-11-options .single-opt`).forEach(opt => {
         opt.addEventListener('click', function () {
             if (pageStates[11].completed) return;
-            document.querySelectorAll(`#quiz-11-options .single-opt`).forEach(s => s.classList.remove('selected','border-indigo-500','bg-indigo-50','text-indigo-700'));
-            this.classList.add('selected','border-indigo-500','bg-indigo-50','text-indigo-700');
+            document.querySelectorAll(`#quiz-11-options .single-opt`).forEach(s => s.classList.remove('selected'));
+            this.classList.add('selected');
         });
     });
 
         function checkSingleQuiz(pageId) {
         if (pageStates[pageId].completed) return;
+        quizAttempts++;
+        pageStates[pageId].attempts = quizAttempts;
+
         const options  = document.querySelectorAll(`#quiz-${pageId}-options .single-opt`);
         const statusEl = document.getElementById(`quiz-${pageId}-status`);
         const selected = Array.from(options).find(o => o.classList.contains('selected'));
+
         if (!selected) {
             statusEl.innerText = "Veuillez choisir une option.";
             statusEl.className = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
             return;
         }
-        if (selected.dataset.correct === 'true') {
-            options.forEach(o => { o.disabled = true; if (o.dataset.correct === 'true') o.classList.add('border-green-500','bg-green-50','text-green-700'); });
-            statusEl.innerText = "Correct !";
-            statusEl.className = "font-bold text-center text-green-600 text-sm w-full transition-colors";
+
+        const isCorrect = selected.dataset.correct === "true";
+
+        if (isCorrect) {
             pageStates[pageId].completed = true;
+            if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+            statusEl.innerText = "Très bien ! Passez à la suite.";
+            statusEl.className = "font-bold text-center text-green-500 text-sm w-full transition-colors";
+            selected.classList.remove('selected'); selected.classList.add('correct');
+            document.getElementById(`quiz-${pageId}-btn`).disabled = true;
+            document.getElementById(`quiz-${pageId}-btn`).classList.add('opacity-40','cursor-not-allowed');
+            options.forEach(o => o.style.pointerEvents = 'none');
             unlockNextButton(pageId);
         } else {
-            options.forEach(o => o.classList.remove('selected','border-indigo-500','bg-indigo-50','text-indigo-700'));
-            statusEl.innerText = "Ce n'est pas la bonne réponse. Réessayez !";
+            if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+            selected.classList.remove('selected'); selected.classList.add('wrong');
+            setTimeout(() => selected.classList.remove('wrong'), 800);
+            statusEl.innerText = "Incorrect. Réessayez !";
             statusEl.className = "font-bold text-center text-red-500 text-sm w-full transition-colors";
         }
     }
