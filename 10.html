@@ -969,10 +969,13 @@
         const baseClass = "font-bold text-sm text-center w-full transition-colors";
         let msg = "", isComplete = false;
 
-        /* ── repeat2: 2회 고정 (pass 여부 무관) ── */
+        /* ── repeat2: 1회 80점 이상이면 즉시 통과, 미달이면 2회차 활성화, 2회차는 점수 무관 종료 ── */
         if (mode === 'repeat2') {
-            if (currentAttempts === 1) {
-                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
+            if (currentAttempts === 1 && isPass) {
+                msg = "Très bien ! Passez à la suite.";
+                isComplete = true;
+            } else if (currentAttempts === 1 && !isPass) {
+                msg = "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
                 const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                 if (cardBtns.length > 0) {
@@ -1021,18 +1024,17 @@
                     isComplete = true;
                 } else {
                     if (currentAttempts >= 2) {
-                        // 2회 실패: 정답 공개 (카드 빈칸 → 전체 문장)
+                        // 2회 실패: 두 정답 중 점수가 더 높은 쪽 공개
                         const cardEl = document.getElementById('speaking-card-15');
-                        if (cardEl) cardEl.innerHTML = '저는 커피를 정말 좋아해요(좋아합니다).';
+                        if (cardEl && Array.isArray(referenceData)) {
+                            const scores = referenceData.map(r => calculateSimilarity(recognizedText, r));
+                            const bestIdx = scores[0] >= scores[1] ? 0 : 1;
+                            const answers = ['저는 커피를 정말 좋아해요.', '저는 커피를 정말 좋아합니다.'];
+                            cardEl.innerHTML = answers[bestIdx];
+                        }
                     }
                     msg = "On y est presque ! Essayons encore une fois.";
                     isComplete = false;
-                    const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
-                    if (cardBtns.length > 0) {
-                        const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
-                        if (audioTimeoutId) clearTimeout(audioTimeoutId);
-                        audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
-                    }
                 }
             }
         }
