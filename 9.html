@@ -166,7 +166,6 @@
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379875/9-S2_mf4pgr.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">집이 안 깨끗합니다.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">maison ne pas propre</p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">La maison n'est pas propre.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -273,7 +272,6 @@
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379885/9-S5_gzzlrz.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">커피가 별로 안 시원해요.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">café particulièrement ne pas être frais</p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Le café n'est pas assez froid.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -296,7 +294,6 @@
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379889/9-S6_cgmkjh.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
                     <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1">형은 프랑스 음식을 별로 안 좋아합니다.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">frère France cuisine particulièrement ne pas aimer</p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Mon frère n'aime pas trop la cuisine française.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -379,8 +376,8 @@
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379896/9-S8_f8lo7n.wav')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">회사원</span>은 <span class="text-orange-500">별로 안</span> <span class="text-purple-600">행복해요</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">employé</span> <span class="text-orange-500">particulièrement ne pas</span> <span class="text-purple-600">heureux</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">회사원</span>은 <span class="text-orange-500">별로</span> <span class="text-orange-500">안</span> <span class="text-purple-600">행복해요</span>.</h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">employé</span> <span class="text-orange-500">particulièrement</span> <span class="text-orange-500">ne pas</span> <span class="text-purple-600">heureux</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">L'employé n'est pas très heureux.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -418,9 +415,12 @@
         </div>
 
         <!-- PAGE 15 — Outro (auto-play 9-5) -->
-        <div id="page-15" class="page">
+        <div id="page-15" class="page justify-center items-center bg-green-50">
             <div class="content-area">
-                <p class="text-content text-justify">
+                <div class="bg-white p-5 rounded-full shadow-md mb-6">
+                    <i class="ph-fill ph-check-circle text-5xl text-green-500"></i>
+                </div>
+                <p class="text-content text-green-900 font-medium text-sm sm:text-base leading-relaxed text-justify">
                     Bravo ! Vous n'avez désormais plus aucun problème pour poser des questions et y répondre à la forme négative. Dans la prochaine leçon, nous apprendrons à renforcer le sens des mots en utilisant une plus grande variété d'adverbes. Alors, on se retrouve à la leçon 10 !
                 </p>
             </div>
@@ -472,6 +472,7 @@
 
     // card-audio pages with explanation text: auto-play card audio
     const pageExplanationAudios = {
+        3:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777379872/9-S1_zgadji.mp3',
         8:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777379865/9-4_ryuz1q.mp3',
         12: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777379893/9-S7_yeoc7k.mp3',
     };
@@ -488,7 +489,7 @@
 
     // Word-order: correct answer
     const wordOrderAnswers = {
-        12: ['Mon frère', 'ne', 'déteste', 'pas', 'la', 'natation', '.'],
+        12: ['Mon frère', 'ne', 'déteste', 'pas', 'la', 'natation'],
     };
     const wordOrderMaxAttempts = { 12: 3 };
     const wordOrderState = {};
