@@ -376,8 +376,8 @@
                 <h2 class="consigne">Répétez après moi.</h2>
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379896/9-S8_f8lo7n.wav')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">회사원</span>은 <span class="text-orange-500">별로</span> <span class="text-orange-500">안</span> <span class="text-purple-600">행복해요</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">employé</span> <span class="text-orange-500">particulièrement</span> <span class="text-orange-500">ne pas</span> <span class="text-purple-600">heureux</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">회사원</span>은 <span class="text-rose-500">별로</span> <span class="text-orange-500">안</span> <span class="text-purple-600">행복해요</span>.</h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">employé</span> <span class="text-rose-500">particulièrement</span> <span class="text-orange-500">ne pas</span> <span class="text-purple-600">heureux</span></p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">L'employé n'est pas très heureux.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
@@ -876,7 +876,8 @@
                 if (cardBtns.length > 0) {
                     const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
                     if (audioTimeoutId) clearTimeout(audioTimeoutId);
-                    audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
+                    if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+                    audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 800);
                 }
             } else {
                 msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
