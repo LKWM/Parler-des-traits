@@ -464,7 +464,7 @@
                     <h3 id="speaking-card-15" class="text-2xl sm:text-3xl font-black text-slate-800 mb-1 text-center">__ 커피를 정말 ____.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center">J'aime vraiment le café.</p>
                 </div>
-                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15','저는 커피를 정말 좋아해요','speaking3')"
+                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15',['저는 커피를 정말 좋아해요','저는 커피를 정말 좋아합니다'],'speaking3')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -1023,7 +1023,7 @@
                     if (currentAttempts >= 2) {
                         // 2회 실패: 정답 공개 (카드 빈칸 → 전체 문장)
                         const cardEl = document.getElementById('speaking-card-15');
-                        if (cardEl) cardEl.innerHTML = '저는 커피를 정말 좋아해요.';
+                        if (cardEl) cardEl.innerHTML = '저는 커피를 정말 좋아해요(좋아합니다).';
                     }
                     msg = "On y est presque ! Essayons encore une fois.";
                     isComplete = false;
