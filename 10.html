@@ -183,7 +183,7 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Mon ami aime vraiment le café.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-4" onclick="toggleRecordSpeech(this,'status-4','제 친구는 커피를 정말 좋아해요','repeat2')"
+                <button id="mic-btn-4" onclick="toggleRecordSpeech(this,'status-4','제 친구는 커피를 정말 좋아해요','repeat_pass2')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -251,7 +251,7 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Mon ami est très intelligent.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-7" onclick="toggleRecordSpeech(this,'status-7','제 친구는 아주 똑똑해요','repeat2')"
+                <button id="mic-btn-7" onclick="toggleRecordSpeech(this,'status-7','제 친구는 아주 똑똑해요','repeat_pass2')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -319,7 +319,7 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Je suis trop fatigué aujourd'hui.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-10" onclick="toggleRecordSpeech(this,'status-10','저는 오늘 너무 피곤해요','repeat2')"
+                <button id="mic-btn-10" onclick="toggleRecordSpeech(this,'status-10','저는 오늘 너무 피곤해요','repeat_pass2')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -969,13 +969,10 @@
         const baseClass = "font-bold text-sm text-center w-full transition-colors";
         let msg = "", isComplete = false;
 
-        /* ── repeat2: 1회 80점 이상이면 즉시 통과, 미달이면 2회차 활성화, 2회차는 점수 무관 종료 ── */
+        /* ── repeat2: 점수 무관 2회 고정 (pages 3,6,9) ── */
         if (mode === 'repeat2') {
-            if (currentAttempts === 1 && isPass) {
-                msg = "Très bien ! Passez à la suite.";
-                isComplete = true;
-            } else if (currentAttempts === 1 && !isPass) {
-                msg = "On y est presque ! Essayons encore une fois.";
+            if (currentAttempts === 1) {
+                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
                 const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                 if (cardBtns.length > 0) {
@@ -985,6 +982,26 @@
                 }
             } else {
                 msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
+                isComplete = true;
+            }
+        }
+
+        /* ── repeat_pass2: 80점 이상 즉시 통과, 실패시 1회 더, 최대 2회 (pages 4,7,10) ── */
+        if (mode === 'repeat_pass2') {
+            if (isPass) {
+                msg = "Très bien ! Passez à la suite.";
+                isComplete = true;
+            } else if (currentAttempts < 2) {
+                msg = "On y est presque ! Essayons encore une fois.";
+                isComplete = false;
+                const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
+                if (cardBtns.length > 0) {
+                    const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
+                    if (audioTimeoutId) clearTimeout(audioTimeoutId);
+                    audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
+                }
+            } else {
+                msg = "Bien essayé ! Passez à la suite.";
                 isComplete = true;
             }
         }
