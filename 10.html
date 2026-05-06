@@ -733,6 +733,7 @@
         if (isCorrect) {
             pageStates[pageId].completed = true;
             if (completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+            document.getElementById('q12-text').style.visibility = 'visible';
             statusEl.innerText = "Très bien ! Passez à la suite.";
             statusEl.className = "font-bold text-center text-green-500 text-sm w-full transition-colors";
             selected.classList.remove('selected'); selected.classList.add('correct');
