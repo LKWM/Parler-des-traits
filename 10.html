@@ -464,7 +464,7 @@
                     <h3 id="speaking-card-15" class="text-2xl sm:text-3xl font-black text-slate-800 mb-1 text-center">__ 커피를 정말 ____.</h3>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center">J'aime vraiment le café.</p>
                 </div>
-                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15',['저는 커피를 정말 좋아해요','저는 커피를 정말 좋아합니다'],'speaking3')"
+                <button id="mic-btn-15" onclick="toggleRecordSpeech(this,'status-15',['저는 커피를 정말 좋아해요','저는 커피를 정말 좋아합니다'],'speaking_p15')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -1030,30 +1030,43 @@
             }
         }
 
-        /* ── speaking3: 80점 이상 통과, 2회 실패시 정답 공개, 최대 3회 ── */
-        if (mode === 'speaking3') {
-            if (isPass) {
+        /* ── speaking_p15: threshold 90점, 2회 실패시 정답 공개, 최대 3회, 종료시 항상 카드 공개 ── */
+        if (mode === 'speaking_p15') {
+            const speakingPass = score >= 90;
+            const cardEl = document.getElementById('speaking-card-15');
+            const revealCard = () => {
+                if (cardEl && Array.isArray(referenceData)) {
+                    const s = referenceData.map(r => calculateSimilarity(recognizedText, r));
+                    cardEl.innerHTML = s[0] >= s[1] ? '저는 커피를 정말 좋아해요.' : '저는 커피를 정말 좋아합니다.';
+                }
+            };
+            if (speakingPass) {
+                revealCard();
                 msg = "Très bien ! Passez à la suite.";
                 isComplete = true;
+            } else if (currentAttempts >= 3) {
+                revealCard();
+                msg = "Bien essayé ! Passez à la suite.";
+                isComplete = true;
             } else {
-                if (currentAttempts >= 3) {
-                    msg = "Bien essayé ! Passez à la suite.";
-                    isComplete = true;
-                } else {
-                    if (currentAttempts >= 2) {
-                        // 2회 실패: 두 정답 중 점수가 더 높은 쪽 공개
-                        const cardEl = document.getElementById('speaking-card-15');
-                        if (cardEl && Array.isArray(referenceData)) {
-                            const scores = referenceData.map(r => calculateSimilarity(recognizedText, r));
-                            const bestIdx = scores[0] >= scores[1] ? 0 : 1;
-                            const answers = ['저는 커피를 정말 좋아해요.', '저는 커피를 정말 좋아합니다.'];
-                            cardEl.innerHTML = answers[bestIdx];
-                        }
-                    }
-                    msg = "On y est presque ! Essayons encore une fois.";
-                    isComplete = false;
-                }
+                if (currentAttempts >= 2) revealCard();
+                msg = "On y est presque ! Essayons encore une fois.";
+                isComplete = false;
             }
+            statusEl.innerHTML = msg;
+            if (isComplete) {
+                statusEl.className = `${baseClass} ${speakingPass ? 'text-green-600' : 'text-blue-600'}`;
+                disableMicBtn(btn, speakingPass);
+                pageStates[currentPage].completed = true;
+                if (speakingPass && completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+                else if (!speakingPass && errorSound) errorSound.triggerAttackRelease('C4','0.15s');
+                unlockNextButton(currentPage);
+            } else {
+                statusEl.className = `${baseClass} text-orange-500`;
+                resetMicBtnState(btn);
+                if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
+            }
+            return;
         }
 
         statusEl.innerHTML = msg;
