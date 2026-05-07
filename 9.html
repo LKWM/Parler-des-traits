@@ -74,10 +74,6 @@
         .quiz-option.selected { background-color: #e0e7ff; border-color: #6366f1; color: #4338ca; }
         .quiz-option.correct  { background-color: #dcfce7; border-color: #22c55e; color: #15803d; }
         .quiz-option.wrong    { background-color: #fee2e2; border-color: #ef4444; color: #b91c1c; }
-        @media (min-width: 1024px) {
-            .quiz-option { font-size: 1.1rem; padding: 1rem 1.25rem !important; }
-            .quiz-grid   { max-width: 28rem !important; gap: 0.875rem !important; }
-        }
         .word-token {
             cursor: pointer; transition: all 0.15s;
             background: white; border: 2px solid #e2e8f0;
@@ -90,6 +86,9 @@
         .word-token.correct-token { background: #dcfce7; border-color: #22c55e; color: #15803d; pointer-events: none; }
         .word-token.wrong-token   { background: #fee2e2; border-color: #ef4444; color: #b91c1c; }
         @media (min-width: 1024px) { .word-token { font-size: 1.05rem; padding: 0.55rem 1rem; } }
+        /* multi-card pages: scale proportionally to viewport */
+        .card-text-sm h3 { font-size: clamp(0.85rem, 2.2vw, 1.5rem) !important; line-height: 1.4 !important; }
+        .card-text-sm p  { font-size: clamp(0.7rem, 1.6vw, 1rem) !important; }
     </style>
 </head>
 <body>
@@ -115,7 +114,9 @@
             </div>
         </div>
 
-        <!-- PAGE 1 — Text 1 (auto-play 9-1) -->
+        <!-- ══════════════════════════════
+             PAGE 1 — Text 1
+        ══════════════════════════════ -->
         <div id="page-1" class="page">
             <div class="content-area">
                 <p class="text-content text-justify">
@@ -124,42 +125,53 @@
             </div>
         </div>
 
-        <!-- PAGE 2 — Card with text x2 + Text 2 (auto-play 9-2) -->
+        <!-- ══════════════════════════════
+             PAGE 2 — Card with text x2 + Text 2
+        ══════════════════════════════ -->
         <div id="page-2" class="page">
-            <div class="content-area gap-4">
-                <div class="bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center shrink-0">
-                    <h3 class="text-xl sm:text-2xl font-black text-slate-800">안 + Adjectif</h3>
+            <div class="content-area" style="justify-content:stretch; gap:0; padding-top:4%; padding-bottom:4%; flex-direction:column;">
+                <div class="bg-white border-2 border-slate-200 shadow-md rounded-2xl px-6 w-full max-w-sm flex flex-col items-center justify-center shrink-0" style="flex:1; margin-bottom:2%;">
+                    <h3 class="font-black text-slate-800" style="font-size:clamp(1rem,3vh,2rem);">안 + Adjectif</h3>
                 </div>
-                <div class="bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center shrink-0">
-                    <h3 class="text-xl sm:text-2xl font-black text-slate-800">Objet + 을/를 + 안 + Verbe</h3>
+                <div class="bg-white border-2 border-slate-200 shadow-md rounded-2xl px-6 w-full max-w-sm flex flex-col items-center justify-center shrink-0" style="flex:1; margin-bottom:2%;">
+                    <h3 class="font-black text-slate-800" style="font-size:clamp(1rem,3vh,2rem);">Objet + 을/를 + 안 + Verbe</h3>
                 </div>
-                <p class="text-content text-justify">
+                <p class="text-content text-justify" style="flex:1; display:flex; align-items:center; font-size:clamp(0.9rem,2.2vh,1.4rem); line-height:1.6;">
                     L'adverbe « 안 » qui exprime la négation se place devant le prédicat, c'est-à-dire devant l'adjectif ou le verbe.
                 </p>
             </div>
-        
         </div>
 
-        <!-- PAGE 3 — Card with audio x2 (S1, S2) -->
+        <!-- ══════════════════════════════
+             PAGE 3 — Card with audio x2 (S1, S2)
+        ══════════════════════════════ -->
         <div id="page-3" class="page">
-            <div class="content-area gap-4">
+            <div class="content-area" style="justify-content:space-evenly; gap:0; padding-top:4%; padding-bottom:4%;">
+                <!-- S1: no colour coding, subtitle 2 only -->
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379872/9-S1_zgadji.mp3')"
-                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">저는 운전을 안 합니다.</h3>
-                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Je ne conduis pas.</p>
-                    <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
+                    class="card-btn card-text-sm bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1">저는 운전을 안 합니다.</h3>
+                    <p class="text-sm text-slate-500 font-semibold w-full text-center mb-2">Je ne conduis pas.</p>
+                    <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
                 </button>
+                <!-- S2: colour coding 집(파랑/sujet) 안(빨강/adv1) 깨끗합니다(보라/prédicat) -->
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379875/9-S2_mf4pgr.mp3')"
-                    class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">집</span>이 <span class="text-orange-500">안</span> <span class="text-purple-600">깨끗합니다</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">maison</span> <span class="text-orange-500">ne pas</span> <span class="text-purple-600">propre</span></p>
-                    <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">La maison n'est pas propre.</p>
-                    <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
+                    class="card-btn card-text-sm bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1">
+                        <span class="text-blue-600">집</span>이 <span class="text-red-600">안</span> <span class="text-purple-600">깨끗합니다</span>.
+                    </h3>
+                    <p class="text-sm text-slate-400 font-semibold w-full text-center">
+                        <span class="text-blue-600">maison</span> <span class="text-red-600">ne pas</span> <span class="text-purple-600">propre</span>
+                    </p>
+                    <p class="text-sm text-slate-500 font-semibold w-full text-center mb-2">La maison n'est pas propre.</p>
+                    <i class="ph-fill ph-play-circle text-3xl text-indigo-400"></i>
                 </button>
             </div>
         </div>
 
-        <!-- PAGE 4 — Card with repeat (S2): 집이 안 깨끗합니다. -->
+        <!-- ══════════════════════════════
+             PAGE 4 — Card with repeat (S2)
+        ══════════════════════════════ -->
         <div id="page-4" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -169,7 +181,7 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">La maison n'est pas propre.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-4" onclick="toggleRecordSpeech(this,'status-4','집이 안 깨끗합니다','repeat')"
+                <button id="mic-btn-4" onclick="toggleRecordSpeech(this,'status-4','집이 안 깨끗합니다','repeat_fixed2')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -180,44 +192,52 @@
             </div>
         </div>
 
-        <!-- PAGE 5 — Card with text x4 + Text 3 (auto-play 9-3) -->
+        <!-- ══════════════════════════════
+             PAGE 5 — Card with text x4 + Text 3
+        ══════════════════════════════ -->
         <div id="page-5" class="page">
-            <div class="content-area gap-3">
-                <div class="bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-6 w-full max-w-sm flex flex-col items-center justify-center shrink-0">
-                    <h3 class="text-base sm:text-lg font-black text-slate-800">Objet + 을/를 + 좋아하다</h3>
-                    <p class="text-xs sm:text-sm text-slate-500 font-semibold w-full text-center mt-1">Aimer [Objet]</p>
+            <div class="content-area" style="justify-content:stretch; gap:0; padding-top:3%; padding-bottom:3%; flex-direction:column;">
+                <div class="bg-white border-2 border-slate-200 shadow-md rounded-2xl px-5 w-full max-w-sm flex flex-col items-center justify-center shrink-0" style="flex:1; margin-bottom:1.5%;">
+                    <h3 class="font-black text-slate-800" style="font-size:clamp(0.8rem,2vh,1.4rem);">Objet + 을/를 + 좋아하다</h3>
+                    <p class="font-semibold text-slate-500" style="font-size:clamp(0.65rem,1.6vh,1.1rem);">Aimer [Objet]</p>
                 </div>
-                <div class="bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-6 w-full max-w-sm flex flex-col items-center justify-center shrink-0">
-                    <h3 class="text-base sm:text-lg font-black text-slate-800">Objet + 을/를 + 안 + 좋아하다</h3>
-                    <p class="text-xs sm:text-sm text-slate-500 font-semibold w-full text-center mt-1">Ne pas aimer [objet]</p>
+                <div class="bg-white border-2 border-slate-200 shadow-md rounded-2xl px-5 w-full max-w-sm flex flex-col items-center justify-center shrink-0" style="flex:1; margin-bottom:1.5%;">
+                    <h3 class="font-black text-slate-800" style="font-size:clamp(0.8rem,2vh,1.4rem);">Objet + 을/를 + 안 + 좋아하다</h3>
+                    <p class="font-semibold text-slate-500" style="font-size:clamp(0.65rem,1.6vh,1.1rem);">Ne pas aimer [objet]</p>
                 </div>
-                <div class="bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-6 w-full max-w-sm flex flex-col items-center justify-center shrink-0">
-                    <h3 class="text-base sm:text-lg font-black text-slate-800">Objet + 을/를 + 싫어하다</h3>
-                    <p class="text-xs sm:text-sm text-slate-500 font-semibold w-full text-center mt-1">Détester [Objet]</p>
+                <div class="bg-white border-2 border-slate-200 shadow-md rounded-2xl px-5 w-full max-w-sm flex flex-col items-center justify-center shrink-0" style="flex:1; margin-bottom:1.5%;">
+                    <h3 class="font-black text-slate-800" style="font-size:clamp(0.8rem,2vh,1.4rem);">Objet + 을/를 + 싫어하다</h3>
+                    <p class="font-semibold text-slate-500" style="font-size:clamp(0.65rem,1.6vh,1.1rem);">Détester [Objet]</p>
                 </div>
-                <div class="bg-white border-2 border-slate-200 shadow-md rounded-3xl py-4 px-6 w-full max-w-sm flex flex-col items-center justify-center shrink-0">
-                    <h3 class="text-base sm:text-lg font-black text-slate-800">Objet + 을/를 + 안 + 싫어하다</h3>
-                    <p class="text-xs sm:text-sm text-slate-500 font-semibold w-full text-center mt-1">Ne pas détester [objet]</p>
+                <div class="bg-white border-2 border-slate-200 shadow-md rounded-2xl px-5 w-full max-w-sm flex flex-col items-center justify-center shrink-0" style="flex:1; margin-bottom:1.5%;">
+                    <h3 class="font-black text-slate-800" style="font-size:clamp(0.8rem,2vh,1.4rem);">Objet + 을/를 + 안 + 싫어하다</h3>
+                    <p class="font-semibold text-slate-500" style="font-size:clamp(0.65rem,1.6vh,1.1rem);">Ne pas détester [objet]</p>
                 </div>
-                <p class="text-content text-justify" style="font-size:0.78rem; line-height:1.5;">
-                    L'opposé de « 좋아하다 » est « 싫어하다 », mais il est aussi possible d'exprimer la négation avec « 안 좋아하다 ». Comme « 싫어하다 » a un sens moins fort que le verbe « détester » en français, ces deux expressions sont pratiquement équivalentes.
+                <p class="text-content text-justify" style="flex:1; display:flex; align-items:center; font-size:clamp(0.75rem,1.8vh,1.25rem); line-height:1.6;">
+                    L'opposé de « 좋아하다 » est « 싫어하다 », mais il est aussi possible d'exprimer la négation avec « 안 좋아하다 ». Comme « 싫어하다 » a un sens moins fort que le verbe « détester » en français, ces deux expressions sont souvent traduites par « ne pas aimer ».
                 </p>
             </div>
-        
         </div>
 
-        <!-- PAGE 6 — Card with repeat (S3): 저는 운전을 안 좋아해요. -->
+        <!-- ══════════════════════════════
+             PAGE 6 — Card with repeat (S3)
+        ══════════════════════════════ -->
         <div id="page-6" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
+                <!-- colour coding: 저(파랑/sujet) 운전(초록/COD) 안(빨강/adv1) 좋아해요(보라/prédicat) -->
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379879/9-S3_kx5ryk.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">저</span>는 <span class="text-green-600">운전</span>을 <span class="text-orange-500">안</span> <span class="text-purple-600">좋아해요</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">Je</span> <span class="text-green-600">conduite</span> <span class="text-orange-500">ne pas</span> <span class="text-purple-600">aimer</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-blue-600">저</span>는 <span class="text-green-600">운전</span>을 <span class="text-red-600">안</span> <span class="text-purple-600">좋아해요</span>.
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-blue-600">Je</span> <span class="text-green-600">conduite</span> <span class="text-red-600">ne pas</span> <span class="text-purple-600">aimer</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Je n'aime pas conduire.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-6" onclick="toggleRecordSpeech(this,'status-6','저는 운전을 안 좋아해요','repeat')"
+                <button id="mic-btn-6" onclick="toggleRecordSpeech(this,'status-6','저는 운전을 안 좋아해요','repeat_fixed2')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -228,7 +248,9 @@
             </div>
         </div>
 
-        <!-- PAGE 7 — Card with repeat (S4): 저는 영어를 안 싫어해요. -->
+        <!-- ══════════════════════════════
+             PAGE 7 — Card with repeat (S4) — no colour coding
+        ══════════════════════════════ -->
         <div id="page-7" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -238,7 +260,7 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Je ne déteste pas l'anglais.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-7" onclick="toggleRecordSpeech(this,'status-7','저는 영어를 안 싫어해요','repeat')"
+                <button id="mic-btn-7" onclick="toggleRecordSpeech(this,'status-7','저는 영어를 안 싫어해요','repeat_fixed2')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -247,10 +269,11 @@
                     <p id="transcript-7" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
-        
         </div>
 
-        <!-- PAGE 8 — Card with audio (별로) + Text 4 (auto-play 9-4) -->
+        <!-- ══════════════════════════════
+             PAGE 8 — Card with audio : 별로 + Text 4
+        ══════════════════════════════ -->
         <div id="page-8" class="page">
             <div class="content-area gap-4">
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379903/%E1%84%87%E1%85%A7%E1%86%AF%E1%84%85%E1%85%A9_p7wgzt.mp3')"
@@ -265,7 +288,9 @@
             </div>
         </div>
 
-        <!-- PAGE 9 — Card with repeat (S5): 커피가 별로 안 시원해요. -->
+        <!-- ══════════════════════════════
+             PAGE 9 — Card with repeat (S5) — no colour coding
+        ══════════════════════════════ -->
         <div id="page-9" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -275,7 +300,7 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Le café n'est pas assez froid.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-9" onclick="toggleRecordSpeech(this,'status-9','커피가 별로 안 시원해요','repeat')"
+                <button id="mic-btn-9" onclick="toggleRecordSpeech(this,'status-9','커피가 별로 안 시원해요','repeat_fixed2')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -284,10 +309,11 @@
                     <p id="transcript-9" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
-        
         </div>
 
-        <!-- PAGE 10 — Card with repeat (S6): 형은 프랑스 음식을 별로 안 좋아합니다. -->
+        <!-- ══════════════════════════════
+             PAGE 10 — Card with repeat (S6) — no colour coding
+        ══════════════════════════════ -->
         <div id="page-10" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
@@ -297,7 +323,7 @@
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Mon frère n'aime pas trop la cuisine française.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-10" onclick="toggleRecordSpeech(this,'status-10','형은 프랑스 음식을 별로 안 좋아합니다','repeat')"
+                <button id="mic-btn-10" onclick="toggleRecordSpeech(this,'status-10','형은 프랑스 음식을 별로 안 좋아합니다','repeat_fixed2')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -306,37 +332,38 @@
                     <p id="transcript-10" class="text-slate-700 text-sm text-center px-4 leading-tight mt-1"></p>
                 </div>
             </div>
-        
         </div>
 
-        <!-- PAGE 11 — MCQ single: Mon papa n'est pas très fatigué. (맞출때까지, 선택값 초기화) -->
+        <!-- ══════════════════════════════
+             PAGE 11 — MCQ single, unlimited retries
+        ══════════════════════════════ -->
         <div id="page-11" class="page">
-            <div class="content-area gap-3">
-                <h2 class="consigne">Choisissez la bonne traduction.</h2>
-                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 w-full max-w-sm shrink-0">
-                    <p class="text-xl sm:text-2xl font-black text-slate-800">Mon papa n'est pas très fatigué.</p>
+            <div class="content-area" style="justify-content:space-evenly; gap:0; padding-top:5%; padding-bottom:5%;">
+                <h2 class="consigne" style="margin-bottom:0; flex-shrink:0;">Choisissez la bonne traduction.</h2>
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm text-center">
+                    <p class="text-lg sm:text-xl font-black text-slate-800">Mon papa n'est pas très fatigué.</p>
                     <p class="text-xs text-slate-400 mt-1">présent poli</p>
                 </div>
-                <div id="quiz-11-options" class="quiz-grid flex flex-col gap-3 w-full max-w-sm">
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">1. 엄마는 별로 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">2. 아빠는 별로 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">3. 엄마는 안 별로 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">4. 아빠는 별로 안 피곤해요.</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">5. 아빠는 안 피곤 별로 해요.</button>
+                <div id="quiz-11-options" class="flex flex-col w-full max-w-sm shrink-0" style="gap:0.4rem;">
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-left text-sm" data-correct="false">1. 엄마는 별로 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-left text-sm" data-correct="false">2. 아빠는 별로 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-left text-sm" data-correct="false">3. 엄마는 안 별로 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-left text-sm" data-correct="true">4. 아빠는 별로 안 피곤해요.</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-2 px-4 font-bold text-slate-700 text-left text-sm" data-correct="false">5. 아빠는 안 피곤 별로 해요.</button>
                 </div>
-                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                <div style="height:1.5rem; flex-shrink:0; display:flex; align-items:center; justify-content:center; width:100%;">
                     <p id="quiz-11-status" class="font-bold text-center text-sm w-full transition-colors"></p>
                 </div>
-                <button id="quiz-11-btn" onclick="checkSingleQuiz(11)"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0">
+                <button id="quiz-11-btn" onclick="checkSingleQuizUnlimited(11)"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition-all shrink-0">
                     Valider
                 </button>
             </div>
-        
-        
         </div>
 
-        <!-- PAGE 12 — Word order FR: 형은 수영을 안 싫어합니다. (auto-play S7, max 3회) -->
+        <!-- ══════════════════════════════
+             PAGE 12 — Word-order FR (S7)
+        ══════════════════════════════ -->
         <div id="page-12" class="page">
             <div class="content-area gap-3">
                 <h2 class="consigne">Traduisez la phrase en français.</h2>
@@ -353,7 +380,7 @@
                     <button class="word-token" onclick="placeToken(this,12)">natation</button>
                     <button class="word-token" onclick="placeToken(this,12)">pas</button>
                     <button class="word-token" onclick="placeToken(this,12)">est-ce que</button>
-                    <button class="word-token" onclick="placeToken(this,12)">Mon frère</button>
+                    <button class="word-token" onclick="placeToken(this,12)">mon frère</button>
                     <button class="word-token" onclick="placeToken(this,12)">ne</button>
                     <button class="word-token" onclick="placeToken(this,12)">mon père</button>
                     <button class="word-token" onclick="placeToken(this,12)">aime</button>
@@ -367,21 +394,27 @@
                     Valider
                 </button>
             </div>
-        
         </div>
 
-        <!-- PAGE 13 — Card with repeat (S8): 회사원은 별로 안 행복해요. -->
+        <!-- ══════════════════════════════
+             PAGE 13 — Card with repeat (S8) — colour coding
+        ══════════════════════════════ -->
         <div id="page-13" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
-                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379896/9-S8_f8lo7n.mp3')"
+                <!-- colour coding: 회사원(파랑/sujet) 별로(주황/adv2) 안(빨강/adv1) 행복해요(보라/prédicat) -->
+                <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379896/9-S8_f8lo7n.wav')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-blue-600">회사원</span>은 <span class="text-red-500">별로</span> <span class="text-orange-500">안</span> <span class="text-purple-600">행복해요</span>.</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-blue-600">employé</span> <span class="text-red-500">particulièrement</span> <span class="text-orange-500">ne pas</span> <span class="text-purple-600">heureux</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-blue-600">회사원</span>은 <span class="text-orange-600">별로</span> <span class="text-red-600">안</span> <span class="text-purple-600">행복해요</span>.
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-blue-600">employé</span> <span class="text-orange-600">particulièrement</span> <span class="text-red-600">ne pas</span> <span class="text-purple-600">heureux</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">L'employé n'est pas très heureux.</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-13" onclick="toggleRecordSpeech(this,'status-13','회사원은 별로 안 행복해요','repeat')"
+                <button id="mic-btn-13" onclick="toggleRecordSpeech(this,'status-13','회사원은 별로 안 행복해요','repeat_fixed2')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -392,18 +425,25 @@
             </div>
         </div>
 
-        <!-- PAGE 14 — Card with repeat (S9): 무엇을 안 좋아해요? -->
+        <!-- ══════════════════════════════
+             PAGE 14 — Card with repeat (S9) — colour coding
+        ══════════════════════════════ -->
         <div id="page-14" class="page">
             <div class="content-area">
                 <h2 class="consigne">Répétez après moi.</h2>
+                <!-- colour coding: 무엇(초록/COD) 안(빨강/adv1) 좋아해요(보라/prédicat) -->
                 <button onclick="playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379900/9-S9_klgsdf.mp3')"
                     class="card-btn bg-white border-2 border-slate-200 shadow-md rounded-3xl py-5 px-8 mb-6 w-full max-w-sm flex flex-col items-center justify-center hover:bg-slate-50 shrink-0">
-                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1"><span class="text-green-600">무엇</span>을 <span class="text-orange-500">안</span> <span class="text-purple-600">좋아해요</span>?</h3>
-                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center"><span class="text-green-600">quoi</span> <span class="text-orange-500">ne pas</span> <span class="text-purple-600">aimer</span></p>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">
+                        <span class="text-green-600">무엇</span>을 <span class="text-red-600">안</span> <span class="text-purple-600">좋아해요</span>?
+                    </h3>
+                    <p class="text-sm sm:text-base text-slate-400 font-semibold w-full text-center">
+                        <span class="text-green-600">quoi</span> <span class="text-red-600">ne pas</span> <span class="text-purple-600">aimer</span>
+                    </p>
                     <p class="text-sm sm:text-base text-slate-500 font-semibold w-full text-center mb-2">Qu'est-ce que vous n'aimez pas ?</p>
                     <i class="ph-fill ph-play-circle text-4xl text-indigo-400"></i>
                 </button>
-                <button id="mic-btn-14" onclick="toggleRecordSpeech(this,'status-14','무엇을 안 좋아해요','repeat')"
+                <button id="mic-btn-14" onclick="toggleRecordSpeech(this,'status-14','무엇을 안 좋아해요','repeat_fixed2')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -414,7 +454,9 @@
             </div>
         </div>
 
-        <!-- PAGE 15 — Outro (auto-play 9-5) -->
+        <!-- ══════════════════════════════
+             PAGE 15 — Outro
+        ══════════════════════════════ -->
         <div id="page-15" class="page justify-center items-center bg-green-50">
             <div class="content-area">
                 <div class="bg-white p-5 rounded-full shadow-md mb-6">
@@ -425,6 +467,7 @@
                 </p>
             </div>
         </div>
+
     </div><!-- end pages-wrapper -->
 
     <div id="bottom-nav" class="w-full h-16 sm:h-20 bg-white border-t border-slate-200 flex items-center justify-between px-6 sm:px-10 hidden">
@@ -444,7 +487,7 @@
     /* ═══════════════════════════════════════
        STATE & CONFIG
     ═══════════════════════════════════════ */
-    const TOTAL_PAGES = 16; // pages 0–20
+    const TOTAL_PAGES = 16; // pages 0–15
 
     const interactivePages = new Set([4,6,7,9,10,11,12,13,14]);
 
@@ -459,21 +502,18 @@
     let audioTimeoutId = null;
     let activeRecorder = null;
     let recordingTimeout = null;
-    let quizAttempts = 0;
 
     let correctSound = null, errorSound = null, completionSynth = null, transitionSynth = null;
 
     const pageTextAudios = {
         1:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777379856/9-1_w5zp0e.mp3',
-        2:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777379858/9-2_qlbppk.mp3',
-        5:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777379861/9-3_r6vg4s.mp3',
         15: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777379869/9-5_v6xolx.wav',
     };
 
-    // card-audio pages with explanation text: auto-play card audio
     const pageExplanationAudios = {
+        2:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777379858/9-2_qlbppk.mp3',
+        5:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777379861/9-3_r6vg4s.mp3',
         8:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777379865/9-4_ryuz1q.mp3',
-        12: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777379893/9-S7_yeoc7k.mp3',
     };
 
     const repeatCardAudios = {
@@ -482,15 +522,13 @@
         7:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777379882/9-S4_gka35l.mp3',
         9:  'https://res.cloudinary.com/de76i94ia/video/upload/v1777379885/9-S5_gzzlrz.mp3',
         10: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777379889/9-S6_cgmkjh.mp3',
-        13: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777379896/9-S8_f8lo7n.mp3',
+        13: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777379896/9-S8_f8lo7n.wav',
         14: 'https://res.cloudinary.com/de76i94ia/video/upload/v1777379900/9-S9_klgsdf.mp3',
     };
 
-    // Word-order: correct answer
     const wordOrderAnswers = {
-        12: ['Mon frère', 'ne', 'déteste', 'pas', 'la', 'natation'],
+        12: [['mon frère','ne','déteste','pas','la','natation']],
     };
-    const wordOrderMaxAttempts = { 12: 3 };
     const wordOrderState = {};
     [12].forEach(id => { wordOrderState[id] = { placed: [], attempts: 0 }; });
 
@@ -544,7 +582,6 @@
         currentPage = Math.max(1, Math.min(currentPage + dir, TOTAL_PAGES - 1));
         document.getElementById(`page-${currentPage}`).classList.add('active');
 
-        quizAttempts = pageStates[currentPage].attempts;
         updateProgress();
 
         const btnPrev = document.getElementById('btn-prev');
@@ -581,7 +618,12 @@
             } else if (repeatAudio) {
                 audioTimeoutId = setTimeout(() => playCardAudio(repeatAudio), 300);
             }
-
+            if (currentPage === 12) {
+                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379893/9-S7_yeoc7k.mp3'), 300);
+            }
+            if (currentPage === 3) {
+                audioTimeoutId = setTimeout(() => playCardAudio('https://res.cloudinary.com/de76i94ia/video/upload/v1777379872/9-S1_zgadji.mp3'), 300);
+            }
         }
     }
 
@@ -633,21 +675,18 @@
     }
 
     /* ═══════════════════════════════════════
-       MCQ QUIZ
+       MCQ — unlimited retries (Page 11)
     ═══════════════════════════════════════ */
-    document.querySelectorAll(`#quiz-11-options .single-opt`).forEach(opt => {
+    document.querySelectorAll('#quiz-11-options .single-opt').forEach(opt => {
         opt.addEventListener('click', function () {
             if (pageStates[11].completed) return;
-            document.querySelectorAll(`#quiz-11-options .single-opt`).forEach(s => s.classList.remove('selected'));
+            document.querySelectorAll('#quiz-11-options .single-opt').forEach(s => s.classList.remove('selected'));
             this.classList.add('selected');
         });
     });
 
-        function checkSingleQuiz(pageId) {
+    function checkSingleQuizUnlimited(pageId) {
         if (pageStates[pageId].completed) return;
-        quizAttempts++;
-        pageStates[pageId].attempts = quizAttempts;
-
         const options  = document.querySelectorAll(`#quiz-${pageId}-options .single-opt`);
         const statusEl = document.getElementById(`quiz-${pageId}-status`);
         const selected = Array.from(options).find(o => o.classList.contains('selected'));
@@ -672,14 +711,17 @@
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
-            selected.classList.remove('selected'); selected.classList.add('wrong');
-            setTimeout(() => selected.classList.remove('wrong'), 800);
-            statusEl.innerText = "On y est presque ! Essayons encore une fois.";
+            // 선택값 초기화, 정답 공개 없음
+            selected.classList.add('wrong');
+            setTimeout(() => { selected.classList.remove('wrong','selected'); }, 700);
+            statusEl.innerText = "Incorrect. Réessayez !";
             statusEl.className = "font-bold text-center text-red-500 text-sm w-full transition-colors";
         }
     }
 
-
+    /* ═══════════════════════════════════════
+       WORD-ORDER QUIZ
+    ═══════════════════════════════════════ */
     function placeToken(btn, pageId) {
         if (btn.disabled || pageStates[pageId].completed) return;
         const state = wordOrderState[pageId];
@@ -721,11 +763,12 @@
         }
 
         state.attempts++;
-
-        const correctAns = wordOrderAnswers[pageId];
-        const isCorrect = correctAns &&
-            state.placed.length === correctAns.length &&
-            state.placed.every((w, i) => w.toLowerCase() === correctAns[i].toLowerCase());
+        const normalize = s => s.replace(/[\s.,?!]/g,'').toLowerCase();
+        const placedNorm = state.placed.map(normalize);
+        const isCorrect = wordOrderAnswers[pageId].some(ans =>
+            ans.length === state.placed.length &&
+            ans.map(normalize).every((w, i) => w === placedNorm[i])
+        );
 
         if (isCorrect) {
             pageStates[pageId].completed = true;
@@ -742,11 +785,10 @@
                 t.classList.add('wrong-token');
                 setTimeout(() => t.classList.remove('wrong-token'), 700);
             });
-            const maxAtt = (wordOrderMaxAttempts && wordOrderMaxAttempts[pageId]) || 3;
-            if (state.attempts >= maxAtt) {
+            if (state.attempts >= 3) {
                 const answerArea = document.getElementById(`answer-area-${pageId}`);
                 answerArea.innerHTML = '';
-                correctAns.forEach(w => {
+                wordOrderAnswers[pageId][0].forEach(w => {
                     const t = document.createElement('span');
                     t.className = 'word-token correct-token'; t.innerText = w;
                     answerArea.appendChild(t);
@@ -775,10 +817,9 @@
     }
 
     /* ═══════════════════════════════════════
-       SPEECH RECOGNITION
+       CLOVA SPEECH RECOGNITION
     ═══════════════════════════════════════ */
-    const BASE_44_ORIGIN = "https://coreeno.base44.app";
-    const CLOVA_API_FUNCTION_URL = BASE_44_ORIGIN + '/api/functions/naverClovaSpeech';
+    const CLOVA_API_FUNCTION_URL = "https://coreeno.base44.app/api/functions/naverClovaSpeech";
 
     function calculateSimilarity(str1, str2) {
         const s1 = str1.replace(/[\s.,?!]/g,'').toLowerCase();
@@ -845,8 +886,6 @@
         if (!pageStates[currentPage][attemptsKey]) pageStates[currentPage][attemptsKey] = 0;
         pageStates[currentPage][attemptsKey]++;
         const currentAttempts = pageStates[currentPage][attemptsKey];
-
-        quizAttempts = currentAttempts;
         pageStates[currentPage].attempts = currentAttempts;
 
         let score = 0, recognizedText = "";
@@ -877,9 +916,11 @@
         }
 
         const isPass = score >= 80;
+        const baseClass = "font-bold text-sm text-center w-full transition-colors";
         let msg = "", isComplete = false;
 
-        if (mode === 'repeat') {
+        /* ── repeat_fixed2: 점수 무관 2회 고정 ── */
+        if (mode === 'repeat_fixed2') {
             if (currentAttempts === 1) {
                 msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
@@ -887,8 +928,7 @@
                 if (cardBtns.length > 0) {
                     const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
                     if (audioTimeoutId) clearTimeout(audioTimeoutId);
-                    if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
-                    audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 800);
+                    audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 600);
                 }
             } else {
                 msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
@@ -896,23 +936,15 @@
             }
         }
 
-        const baseClass = "font-bold text-sm text-center w-full transition-colors";
         statusEl.innerHTML = msg;
 
         if (isComplete) {
             statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-blue-600'}`;
             disableMicBtn(btn, isPass);
-            const allMics = document.querySelectorAll(`#page-${currentPage} .mic-req`);
-            const allDone = Array.from(allMics).every(b => b.disabled);
-            if (allDone) {
-                pageStates[currentPage].completed = true;
-                if (isPass && completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
-                else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4','0.15s');
-                unlockNextButton(currentPage);
-            } else {
-                if (isPass  && correctSound) correctSound.triggerAttackRelease('C5','0.2s');
-                if (!isPass && errorSound)   errorSound.triggerAttackRelease('C4','0.15s');
-            }
+            pageStates[currentPage].completed = true;
+            if (isPass && completionSynth) completionSynth.triggerAttackRelease(["C5","E5","G5"], "8n");
+            else if (!isPass && errorSound) errorSound.triggerAttackRelease('C4','0.15s');
+            unlockNextButton(currentPage);
         } else {
             statusEl.className = `${baseClass} ${isPass ? 'text-green-600' : 'text-orange-500'}`;
             resetMicBtnState(btn);
