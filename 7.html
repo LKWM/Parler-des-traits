@@ -412,19 +412,19 @@
              PAGE 15 — MCQ : Qu'est-ce que vous détestez?
         ══════════════════════════════ -->
         <div id="page-14" class="page">
-            <div class="content-area gap-4">
-                <h2 class="consigne">Choisissez la bonne traduction.</h2>
-                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0">
+            <div class="content-area" style="justify-content:space-evenly; gap:0; padding-top:5%; padding-bottom:5%;">
+                <h2 class="consigne" style="margin-bottom:0; flex-shrink:0;">Choisissez la bonne traduction.</h2>
+                <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 w-full max-w-sm shrink-0">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">Qu'est-ce que vous détestez ?</p>
                     <p class="text-xs text-slate-400 mt-1">présent / formel</p>
                 </div>
-                <div id="quiz-14-options" class="quiz-grid flex flex-col gap-3 w-full max-w-sm">
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">1. 무엇이 싫어해요?</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">2. 누구를 좋아합니까?</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="true">3. 무엇을 싫어합니까?</button>
-                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700" data-correct="false">4. 뭐 싫어이에요?</button>
+                <div id="quiz-14-options" class="flex flex-col w-full max-w-sm shrink-0" style="gap:0.45rem;">
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700 text-left" data-correct="false">1. 무엇이 싫어해요?</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700 text-left" data-correct="false">2. 누구를 좋아합니까?</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700 text-left" data-correct="true">3. 무엇을 싫어합니까?</button>
+                    <button class="quiz-option single-opt border-2 border-slate-200 rounded-2xl py-3 px-4 font-bold text-slate-700 text-left" data-correct="false">4. 뭐 싫어이에요?</button>
                 </div>
-                <div style="min-height:1.5rem;" class="w-full flex items-center justify-center">
+                <div style="height:1.5rem; flex-shrink:0; display:flex; align-items:center; justify-content:center; width:100%;">
                     <p id="quiz-14-status" class="font-bold text-center text-sm w-full transition-colors"></p>
                 </div>
                 <button id="quiz-14-btn" onclick="checkSingleQuiz(14)"
@@ -799,7 +799,7 @@
             if (errorSound) errorSound.triggerAttackRelease('C4','0.1s');
             selected.classList.remove('selected'); selected.classList.add('wrong');
             setTimeout(() => selected.classList.remove('wrong'), 800);
-            statusEl.innerText = "Incorrect. Réessayez !";
+            statusEl.innerText = "On y est presque ! Essayons encore une fois.";
             statusEl.className = "font-bold text-center text-red-500 text-sm w-full transition-colors";
         }
     }
