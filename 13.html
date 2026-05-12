@@ -524,8 +524,13 @@
         let msg = "", isComplete = false;
 
         if (mode === 'repeat') {
-            if (currentAttempts === 1) {
-                msg = isPass ? "Très bien, essayons encore une fois." : "On y est presque ! Essayons encore une fois.";
+            if (isPass) {
+                // 성공 → 바로 완료
+                msg = "Très bien ! Passez à la suite.";
+                isComplete = true;
+            } else if (currentAttempts === 1) {
+                // 1회차 실패 → 1회 더
+                msg = "On y est presque ! Essayons encore une fois.";
                 isComplete = false;
                 const cardBtns = btn.closest('.content-area').querySelectorAll('button[onclick^="playCardAudio"]');
                 if (cardBtns.length > 0) {
@@ -535,7 +540,8 @@
                     audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 800);
                 }
             } else {
-                msg = isPass ? "Très bien ! Passez à la suite." : "Bien essayé ! Passez à la suite.";
+                // 2회차 실패 → 완료
+                msg = "Bien essayé ! Passez à la suite.";
                 isComplete = true;
             }
         }
