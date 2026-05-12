@@ -362,7 +362,11 @@
     function playCardAudio(url) {
         if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
         currentAudio = new Audio(url);
-        currentAudio.play().catch(() => {});
+        currentAudio.addEventListener('play',  () => toggleActiveMic(true));
+        currentAudio.addEventListener('ended', () => toggleActiveMic(false));
+        currentAudio.addEventListener('pause', () => toggleActiveMic(false));
+        const p = currentAudio.play();
+        if (p !== undefined) p.catch(e => { console.warn('Audio:', e); toggleActiveMic(false); });
     }
 
     function triggerLessonComplete() {
