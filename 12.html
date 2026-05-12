@@ -369,7 +369,7 @@
                 </button>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">엄마는 커피를 <span id="fillin-blank-9">____</span> 좋아해요.</p>
-                    <p id="fillin-subtitle-9" class="text-sm text-slate-500 italic mt-1 hidden">Maman aime un peu le café.</p>
+                    <p id="fillin-subtitle-9" class="text-sm text-slate-500 italic mt-1 invisible">Maman aime un peu le café.</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">poli</span>
@@ -425,7 +425,7 @@
                 </button>
                 <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl py-3 px-6 shrink-0 w-full max-w-sm">
                     <p class="text-xl sm:text-2xl font-black text-slate-800">아빠를 <span id="fillin-blank-11">____</span> 좋아해요?</p>
-                    <p id="fillin-subtitle-11" class="text-sm text-slate-500 italic mt-1 hidden">Tu n'aimes pas trop ton papa ?</p>
+                    <p id="fillin-subtitle-11" class="text-sm text-slate-500 italic mt-1 invisible">Tu n'aimes pas trop ton papa ?</p>
                     <div class="flex items-center justify-center gap-3 mt-2">
                         <span class="text-xs font-semibold bg-indigo-100 text-indigo-600 rounded-full px-3 py-0.5">présent</span>
                         <span class="text-xs font-semibold bg-violet-100 text-violet-600 rounded-full px-3 py-0.5">poli</span>
@@ -457,7 +457,7 @@
                         <span class="text-xs font-semibold bg-slate-100 text-slate-600 rounded-full px-3 py-0.5">formel</span>
                     </div>
                 </div>
-                <button id="mic-btn-12" onclick="toggleRecordSpeech(this,'status-12',['선생님은 너무 친절합니다','선생님은 정말 친절합니다','선생님은 아주 친절합니다'],'speak','은 너무 친절합니다')"
+                <button id="mic-btn-12" onclick="toggleRecordSpeech(this,'status-12',['선생님은 정말 친절합니다','선생님은 너무 친절합니다','선생님은 아주 친절합니다'],'speak','은 정말 친절합니다')"
                     class="mic-req mic-btn-lg bg-red-500 text-white rounded-full p-6 shadow-xl transition-transform hover:scale-105 active:scale-95 relative z-10 shrink-0">
                     <i class="ph-fill ph-microphone text-4xl"></i>
                 </button>
@@ -474,7 +474,9 @@
         <div id="page-13" class="page justify-center items-center bg-green-50">
             <div class="content-area gap-6">
                 <i class="ph-fill ph-check-circle text-7xl text-green-500"></i>
-                <p class="text-lg sm:text-xl font-bold text-slate-700 text-center px-4">Félicitations ! Vous pouvez maintenant utiliser tous les mots appris dans ce programme. Répétez-les plusieurs fois pour ne pas les oublier et utilisez-les aussi dans la vie quotidienne. La prochaine leçon est disponible !</p>
+                <p class="text-content text-green-900 font-medium text-sm sm:text-base leading-relaxed text-justify">
+                    Félicitations ! Vous pouvez maintenant utiliser tous les mots appris dans ce programme. Répétez-les plusieurs fois pour ne pas les oublier et utilisez-les aussi dans la vie quotidienne. La prochaine leçon est disponible !
+                </p>
             </div>
         </div>
 
@@ -583,6 +585,9 @@
 
         updateProgress();
 
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+
         if (currentPage === TOTAL_PAGES - 1) {
             document.getElementById('bottom-nav').classList.add('hidden');
             if (completionSynth) {
@@ -591,27 +596,17 @@
                 if (outroAudio) audioTimeoutId = setTimeout(() => playCardAudio(outroAudio), 700);
             }
             triggerLessonComplete();
-            return;
+        } else {
+            document.getElementById('bottom-nav').classList.remove('hidden');
+            btnPrev.style.display = 'flex';
+            btnNext.style.display = 'flex';
+            btnPrev.disabled = (currentPage <= 1);
+            btnNext.disabled = interactivePages.has(currentPage) && !completedPages.has(currentPage);
         }
 
-        updateNav();
-
-        // Auto-play audio on entry
-        if (pageAudios[currentPage]) {
+        // Auto-play audio on page entry
+        if (pageAudios[currentPage] && currentPage < TOTAL_PAGES - 1) {
             audioTimeoutId = setTimeout(() => playCardAudio(pageAudios[currentPage]), 400);
-        }
-    }
-
-    function updateNav() {
-        const btnPrev = document.getElementById('btn-prev');
-        const btnNext = document.getElementById('btn-next');
-        if (btnPrev) btnPrev.disabled = (currentPage <= 1);
-        if (btnNext) {
-            if (interactivePages.has(currentPage)) {
-                btnNext.disabled = !completedPages.has(currentPage);
-            } else {
-                btnNext.disabled = false;
-            }
         }
     }
 
@@ -758,6 +753,7 @@
             input.disabled = true;
             document.getElementById(`fillin-btn-${pageId}`).disabled = true;
             if (blankEl) { blankEl.textContent = correctAnswer; blankEl.style.color = '#16a34a'; blankEl.style.fontWeight = '900'; }
+            if (subtitleEl) subtitleEl.classList.remove('invisible');
             unlockNextButton(pageId);
         } else {
             if (errorSound) errorSound.triggerAttackRelease('C4', '0.1s');
@@ -773,7 +769,7 @@
                 if (blankEl) { blankEl.textContent = correctAnswer; blankEl.style.color = '#2563eb'; blankEl.style.fontWeight = '900'; }
                 unlockNextButton(pageId);
             } else {
-                if (attempts === 2 && subtitleEl) subtitleEl.classList.remove('hidden');
+                if (attempts === 2 && subtitleEl) subtitleEl.classList.remove('invisible');
                 setTimeout(() => { input.classList.remove('border-red-400','bg-red-50'); input.value = ''; input.focus(); }, 700);
                 statusEl.textContent = "On y est presque ! Essayons encore une fois.";
                 statusEl.className   = "font-bold text-center text-orange-500 text-sm w-full transition-colors";
@@ -895,24 +891,28 @@
                 } else {
                     if (currentAttempts === 2) {
                         // 2회 오답 → 빈칸 공개
-                        const revealText = blankAnswer || (Array.isArray(referenceData) ? referenceData[0] : referenceData);
-                        const blankEl2 = document.getElementById(`speak-blank-${currentPage}`);
-                        if (blankEl2) {
-                            blankEl2.textContent = revealText;
-                            blankEl2.style.color = '#2563eb';
-                            blankEl2.style.fontWeight = '900';
-                        }
-                        // P12: speak-blank-12 에 전체 정답 표시
                         if (currentPage === 12) {
                             const blankEl12 = document.getElementById('speak-blank-12');
                             if (blankEl12) {
-                                // 발화값과 가장 가까운 정답 표시
                                 const scores = Array.isArray(referenceData) ? referenceData.map(r => calculateSimilarity(recognizedText, r)) : [score];
                                 const bestIdx = scores.indexOf(Math.max(...scores));
                                 const bestAns = Array.isArray(referenceData) ? referenceData[bestIdx] : referenceData;
                                 blankEl12.textContent = bestAns.replace('선생님', '');
                                 blankEl12.style.color = '#2563eb';
                                 blankEl12.style.fontWeight = '900';
+                            }
+                        } else if (currentPage === 10) {
+                            const b1 = document.getElementById('speak-blank-10');
+                            const b2 = document.getElementById('speak-blank2-10');
+                            if (b1) { b1.textContent = '사과가'; b1.style.color = '#2563eb'; b1.style.fontWeight = '900'; }
+                            if (b2) { b2.textContent = '딱딱해요'; b2.style.color = '#2563eb'; b2.style.fontWeight = '900'; }
+                        } else {
+                            const revealText = blankAnswer || (Array.isArray(referenceData) ? referenceData[0] : referenceData);
+                            const blankEl2 = document.getElementById(`speak-blank-${currentPage}`);
+                            if (blankEl2) {
+                                blankEl2.textContent = revealText;
+                                blankEl2.style.color = '#2563eb';
+                                blankEl2.style.fontWeight = '900';
                             }
                         }
                     }
@@ -932,6 +932,12 @@
                         blankEl12.style.color = isPass ? '#16a34a' : '#2563eb';
                         blankEl12.style.fontWeight = '900';
                     }
+                } else if (currentPage === 10) {
+                    // P10: 두 개 span 모두 공개
+                    const b1 = document.getElementById('speak-blank-10');
+                    const b2 = document.getElementById('speak-blank2-10');
+                    if (b1) { b1.textContent = '사과가'; b1.style.color = isPass ? '#16a34a' : '#2563eb'; b1.style.fontWeight = '900'; }
+                    if (b2) { b2.textContent = '딱딱해요'; b2.style.color = isPass ? '#16a34a' : '#2563eb'; b2.style.fontWeight = '900'; }
                 } else {
                     const revealText = blankAnswer || (Array.isArray(referenceData) ? referenceData[0] : referenceData);
                     const blankEl = document.getElementById(`speak-blank-${currentPage}`);
