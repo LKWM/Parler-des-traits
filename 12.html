@@ -617,9 +617,7 @@
     }
 
     function triggerLessonComplete() {
-        try {
-            window.parent.postMessage({ type: 'LESSON_COMPLETE' }, '*');
-        } catch(e) {}
+        window.parent.postMessage({ type: 'lesson_complete' }, '*');
     }
 
     /* ═══════════════════════════════════════
