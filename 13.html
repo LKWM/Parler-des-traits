@@ -359,8 +359,23 @@
         if (btn) btn.disabled = false;
     }
 
+    function toggleActiveMic(disable) {
+        document.querySelectorAll(`#page-${currentPage} .mic-req`).forEach(btn => {
+            if (btn.classList.contains('bg-green-500') || btn.classList.contains('recording-pulse')) return;
+            if (disable) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50','bg-slate-400','cursor-not-allowed');
+                btn.classList.remove('bg-red-500');
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50','bg-slate-400','cursor-not-allowed');
+                btn.classList.add('bg-red-500');
+            }
+        });
+    }
+
     function playCardAudio(url) {
-        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
         currentAudio = new Audio(url);
         currentAudio.addEventListener('play',  () => toggleActiveMic(true));
         currentAudio.addEventListener('ended', () => toggleActiveMic(false));
@@ -376,7 +391,7 @@
     function changePage(dir) {
         if (dir !== 0 && transitionSynth) transitionSynth.triggerAttackRelease('C6', '0.05s');
 
-        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
         if (audioTimeoutId) { clearTimeout(audioTimeoutId); audioTimeoutId = null; }
         if (activeRecorder && activeRecorder.state === 'recording') {
             activeRecorder.stop(); clearTimeout(recordingTimeout);
@@ -540,7 +555,7 @@
                 if (cardBtns.length > 0) {
                     const audioUrl = cardBtns[0].getAttribute('onclick').match(/'([^']+)'/)[1];
                     if (audioTimeoutId) clearTimeout(audioTimeoutId);
-                    if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+                    if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
                     audioTimeoutId = setTimeout(() => playCardAudio(audioUrl), 800);
                 }
             } else {
