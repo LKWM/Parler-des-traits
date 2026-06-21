@@ -348,8 +348,8 @@ const pages = [
 // ── Q9  MCQ
 {
     type:'mcq', qNum:9,
-    instruction:"Choisissez la phrase correcte pour dire « L'employé n'est pas très heureux. »",
-    question:"",
+    instruction:"Choisissez la phrase correcte pour traduire la phrase suivante.",
+    question:"L'employé n'est pas très heureux.",
     options:[
         "회사원은 행복 별로 안 해요.",
         "회사원은 별로 안 행복해요.",
@@ -386,7 +386,13 @@ const pages = [
         "누나는 우유를 싫어해요","제 누나는 우유를 싫어해요",
         "누나는 우유를 싫어합니다","제 누나는 우유를 싫어합니다",
         "언니는 우유를 싫어해","내 언니는 우유를 싫어해",
-        "누나는 우유를 싫어해","내 누나는 우유를 싫어해"
+        "누나는 우유를 싫어해","내 누나는 우유를 싫어해",
+        "언니는 우유를 안 좋아해요","제 언니는 우유를 안 좋아해요",
+        "언니는 우유를 안 좋아합니다","제 언니는 우유를 안 좋아합니다",
+        "누나는 우유를 안 좋아해요","제 누나는 우유를 안 좋아해요",
+        "누나는 우유를 안 좋아합니다","제 누나는 우유를 안 좋아합니다",
+        "언니는 우유를 안 좋아해","내 언니는 우유를 안 좋아해",
+        "누나는 우유를 안 좋아해","내 누나는 우유를 안 좋아해"
     ]
 },
 
@@ -994,8 +1000,8 @@ function setupClovaRecording(page){
         if(isRecording){clearTimeout(recordingTimeout);stopSpeakRecording(btn,fb);return;}
         if(state.attemptsUsed>=page.maxAttempts){return;}
         try{
-            await initAudio();
             const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+            initAudio();
             mediaRecorder=new MediaRecorder(stream);
             audioChunks=[];
             mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);
@@ -1094,8 +1100,8 @@ function setupGeminiRecording(page){
     btn.onclick=async()=>{
         if(isRecording){clearTimeout(recordingTimeout);stopSpeakRecording(btn,fb);return;}
         try{
-            await initAudio();
             const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+            initAudio();
             mediaRecorder=new MediaRecorder(stream);
             audioChunks=[];
             mediaRecorder.ondataavailable=e=>{if(e.data.size>0)audioChunks.push(e.data);};
