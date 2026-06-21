@@ -16,7 +16,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #1f2937;
             margin: 0; padding: 0;
-            width: 100vw; height: 100vh;
+            width: 100vw; height: 100vh; height: 100dvh;
             display: flex; justify-content: center; align-items: center;
             overflow: hidden;
         }
@@ -37,7 +37,7 @@
             html { font-size: 2.5vh; }
         }
         @media (max-width: 1023px) {
-            #app-container { width: 100%; height: 100%; }
+            #app-container { width: 100%; height: 100%; height: 100dvh; }
             html { font-size: 16px; }
         }
 
@@ -109,7 +109,7 @@
             font-family: 'Noto Sans KR', sans-serif;
             outline: none; text-align: center; background: white;
             transition: border-color 0.2s;
-            font-size: clamp(0.9rem,2.5vmin,1.5rem);
+            font-size: max(16px, clamp(1rem,2.5vmin,1.5rem));
         }
         .write-input:focus { border-color:#6366f1; }
 
@@ -838,7 +838,6 @@ function renderWriting(page){
       </div>
     </div>`;
     if(savedVal.trim())enableNext();else disableNext();
-    setTimeout(()=>{const inp=document.getElementById('write-input');if(inp)inp.focus();},300);
 }
 function onWriteInput(val){
     if(!pageAnswers[currentPage])pageAnswers[currentPage]={};
